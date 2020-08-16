@@ -12,12 +12,10 @@ import {
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, finalize } from 'rxjs/operators';
-import { LoadingComponent } from '@shared/components/loading/loading.component';
 
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {
-  constructor(
-  ) {}
+  constructor() {}
 
   intercept(
     request: HttpRequest<any>,
@@ -29,7 +27,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           const errorMessage = `Code: ${error.status}\nERROR Message: ${error.message}`;
           return throwError(errorMessage);
         }
-      }),
+      })
     );
   }
 }

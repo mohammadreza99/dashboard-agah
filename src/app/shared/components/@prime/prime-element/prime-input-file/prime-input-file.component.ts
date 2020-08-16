@@ -83,16 +83,14 @@ export class PrimeInputFileComponent extends PrimeInputBaseComponent
   }
 
   _onRemove(event) {
-    if (this.hasValueAccessor)
-      this.controlOnChange(this.value);
+    if (this.hasValueAccessor) this.controlOnChange(this.value);
     this.onRemove.emit(event);
   }
 
   _onSelect(event) {
     this.selectedFiles = event.currentFiles;
     this.value = this.selectedFiles;
-    if (this.hasValueAccessor)
-      this.controlOnChange(this.value);
+    if (this.hasValueAccessor) this.controlOnChange(this.value);
     this.onSelect.emit(event);
   }
 

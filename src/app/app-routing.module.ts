@@ -4,6 +4,9 @@ import { HomePage } from '@modules/home/pages/home/home.page';
 import { ProductsListPage } from './modules/products/pages/products-list/products-list.page';
 import { ProductModifyPage } from './modules/products/pages/product-modify/product-modify.page';
 import { LoginPage } from './modules/auth/pages/login/login.page';
+import { PartnersPage } from './modules/products/pages/partners/partners.page';
+import { ProcessPage } from './modules/products/pages/process/process.page';
+import { FeaturesPage } from './modules/products/pages/features/features.page';
 
 const routes: Routes = [
   {
@@ -42,18 +45,18 @@ const routes: Routes = [
           },
           {
             path: 'features',
-            component: ProductModifyPage,
-            data: { breadcrumb: 'edit product' },
+            component: FeaturesPage,
+            data: { breadcrumb: 'features' },
           },
           {
             path: 'process',
-            component: ProductModifyPage,
-            data: { breadcrumb: 'edit product' },
+            component: ProcessPage,
+            data: { breadcrumb: 'process' },
           },
           {
             path: 'partners',
-            component: ProductModifyPage,
-            data: { breadcrumb: 'edit product' },
+            component: PartnersPage,
+            data: { breadcrumb: 'partners' },
           },
         ],
       },

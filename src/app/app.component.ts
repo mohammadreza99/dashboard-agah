@@ -1,17 +1,8 @@
-import {
-  Component,
-  ChangeDetectorRef,
-  ViewChild,
-  ElementRef,
-  HostListener,
-} from '@angular/core';
-import { MenuItem } from 'primeng';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
- 
-}
+export class AppComponent {}

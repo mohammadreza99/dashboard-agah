@@ -28,45 +28,51 @@
             [formGroup]="basicInfoForm"
             (ngSubmit)="onSubmitBasicInfo()"
           >
-            <div class="d-flex flex-column col-lg-8">
-              <prm-input-text
-                formControlName="title"
-                [errors]="[{type:'required',message:'این فیلد الزامیست.'}]"
-                labelWidth="80"
-                label="عنوان"
-              >
-              </prm-input-text>
+            <prm-input-text
+              class="col-8 mb-4"
+              formControlName="title"
+              [errors]="[{type:'required',message:'این فیلد الزامیست.'}]"
+              labelWidth="80"
+              label="عنوان"
+            >
+            </prm-input-text>
 
-              <prm-input-text
-                formControlName="website"
-                [errors]="[{type:'required',message:'این فیلد الزامیست.'}]"
-                labelWidth="80"
-                label="وبسایت"
-              >
-              </prm-input-text>
+            <prm-input-text
+              class="col-8 mb-4"
+              formControlName="website"
+              [errors]="[{type:'required',message:'این فیلد الزامیست.'}]"
+              labelWidth="80"
+              label="وبسایت"
+            >
+            </prm-input-text>
 
-              <prm-input-date-time-picker
-                formControlName="time_estimate"
-                [errors]="[{type:'required',message:'این فیلد الزامیست.'}]"
-                class="flex-grow-1"
-                labelWidth="80"
-                label="تاریخ ارائه"
-              >
-              </prm-input-date-time-picker>
-              <prm-input-file
-                formControlName="image"
-                [errors]="[{type:'required',message:'این فیلد الزامیست.'}]"
-                labelWidth="80"
-                label="تصویر"
-              ></prm-input-file>
-              <prm-input-textarea
-                formControlName="description"
-                [errors]="[{type:'required',message:'این فیلد الزامیست.'}]"
-                labelWidth="80"
-                label="توضیحات"
-              ></prm-input-textarea>
-              <prm-button type="submit" label="ثبت"></prm-button>
-            </div>
+            <prm-input-date-time-picker
+              class="col-8 mb-4"
+              formControlName="time_estimate"
+              [errors]="[{type:'required',message:'این فیلد الزامیست.'}]"
+              labelWidth="80"
+              label="تاریخ ارائه"
+            >
+            </prm-input-date-time-picker>
+            <prm-input-file
+              class="col-8 mb-4"
+              formControlName="image"
+              [errors]="[{type:'required',message:'این فیلد الزامیست.'}]"
+              labelWidth="80"
+              label="تصویر"
+            ></prm-input-file>
+            <prm-input-textarea
+              class="col-8 mb-4"
+              formControlName="description"
+              [errors]="[{type:'required',message:'این فیلد الزامیست.'}]"
+              labelWidth="80"
+              label="توضیحات"
+            ></prm-input-textarea>
+            <prm-button
+              class="col-8 mb-4"
+              type="submit"
+              label="ثبت"
+            ></prm-button>
           </form>
         </p-tabPanel>
         <p-tabPanel [disabled]="disableTabs[1]" header="عمومی">

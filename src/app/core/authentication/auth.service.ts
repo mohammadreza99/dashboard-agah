@@ -12,9 +12,10 @@ export class AuthService {
   constructor(private apiService: ApiService, private constants: Constants) {}
 
   private tokenSubject = new BehaviorSubject<string>(null);
+  private readonly endPoint = 'auth/login';
 
   login(user: User): Observable<User> {
-    return this.apiService.post<User>(`auth/login`, user);
+    return this.apiService.post<User>(`${this.endPoint}`, user);
   }
 
   saveToken(token: string) {

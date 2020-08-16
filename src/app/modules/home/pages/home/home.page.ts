@@ -1,4 +1,11 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef, HostListener } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectorRef,
+  ViewChild,
+  ElementRef,
+  HostListener,
+} from '@angular/core';
 import { MenuItem } from 'primeng';
 
 @Component({
@@ -37,7 +44,6 @@ export class HomePage {
   }
 
   onHambergurClick() {
-    console.log('aaa');
     this.showSidebar = !this.showSidebar;
     if (!this.isModalSidebar) {
       this.mainContent.nativeElement.classList.toggle('mr-278');
