@@ -1,0 +1,61 @@
+<div class="container-fluid pb-5">
+  <div class="row">
+    <div class="col-12">
+      <toolbar class="page-header">
+        <left>
+          <prm-button
+            label="ذخیره"
+            icon="fa fa-plus"
+            color="success"
+            class="mr-2"
+            (click)="onSaveClick()"
+          ></prm-button>
+          <prm-button
+            label="انصراف"
+            icon="fa fa-times"
+            color="danger"
+            (click)="onCancelClick()"
+          ></prm-button>
+        </left>
+        <right>
+          <h1>{{ pageTitle }}</h1>
+        </right>
+      </toolbar>
+      <p-tabView>
+        <p-tabPanel header="عمومی">
+          <product-general-tab
+            (onChange)="onGeneralChange($event)"
+          ></product-general-tab>
+        </p-tabPanel>
+        <p-tabPanel header="قیمت">
+          <product-price-tab
+            (onChange)="onPriceChange($event)"
+          ></product-price-tab>
+        </p-tabPanel>
+        <p-tabPanel header="دسته بندی">
+          <product-category-tab
+            (onChange)="onCategoryChange($event)"
+          ></product-category-tab>
+        </p-tabPanel>
+        <p-tabPanel header=" مشخصات اضافی">
+          <product-extra-fields-tab
+            *ngIf="showExtraFields"
+          ></product-extra-fields-tab>
+          <empty
+            *ngIf="!showExtraFields"
+            [message]="extraFieldEmptyMessage"
+          ></empty>
+        </p-tabPanel>
+        <p-tabPanel header="خصوصیات محصول">
+          <product-features-tab></product-features-tab>
+        </p-tabPanel>
+        <p-tabPanel header="تـگ ها">
+          <product-tags-tab></product-tags-tab>
+        </p-tabPanel>
+        <p-tabPanel header="تصاویر محصول">
+          <product-images-tab></product-images-tab>
+        </p-tabPanel>
+      </p-tabView>
+    </div>
+  </div>
+</div>

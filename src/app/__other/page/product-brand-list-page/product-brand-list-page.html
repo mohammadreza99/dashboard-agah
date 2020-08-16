@@ -1,0 +1,26 @@
+<div class="container-fluid" *ngIf="brands && brands.length > 0">
+  <div class="row">
+    <div class="col-12">
+      <toolbar class="page-header">
+        <left>
+          <prm-button
+            (click)="onAddNewBrandClick()"
+            label="افزودن"
+            icon="fas fa-plus"
+            class="mr-2"
+            color="success"
+          ></prm-button>
+        </left>
+        <right>
+          <h1>برند ها</h1>
+        </right>
+      </toolbar>
+      <prm-table
+        [items]="brands"
+        [columns]="columns"
+        [actions]="actions"
+        (actionClick)="onActionClick($event)"
+      ></prm-table>
+    </div>
+  </div>
+</div>

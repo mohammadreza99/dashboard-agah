@@ -1,0 +1,17 @@
+<div class="container-fluid pb-5">
+    <div class="row">
+      <div class="col-12">
+        <toolbar class="page-header">
+          <left>
+            <prm-button label="افزودن" icon="fa fa-plus" color="success" [routerLink]="['/product/extra-field/add']"
+              [queryParams]="{groupId:group.id,groupLabel:group.label}"></prm-button>
+          </left>
+          <right>
+            <h1>{{ pageTitle }}</h1>
+          </right>
+        </toolbar>
+        <prm-table *ngIf="extraFields.length > 0" [items]="extraFields" [actions]="actions" [columns]="columns"
+          (actionClick)="onActionClick($event)"></prm-table>
+      </div>
+    </div>
+  </div>

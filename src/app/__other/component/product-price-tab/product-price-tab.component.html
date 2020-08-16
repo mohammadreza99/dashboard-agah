@@ -1,0 +1,39 @@
+<form class="form-row justify-content-end" [formGroup]="form">
+  <div class="d-flex flex-column col-lg-8">
+    <prm-input-text
+      [beforeAfterConfig]="{ after: { type: 'text', text: 'تومان' } }"
+      formControlName="price"
+      labelWidth="80"
+      label="قیمت"
+    >
+    </prm-input-text>
+    <prm-input-radio
+      formControlName="discountType"
+      labelWidth="80"
+      label="تخفیف"
+      [inline]="true"
+      [items]="discountList"
+      field="label"
+    ></prm-input-radio>
+    <prm-input-number
+      formControlName="discountValue"
+      [disabled]="
+        form.get('discountType').value == null ||
+        form.get('discountType').value == 'بدون تخفیف'
+      "
+      labelWidth="80"
+      label="میزان تخفیف"
+      [beforeAfterConfig]="discountInputAfterConfig"
+    >
+    </prm-input-number>
+    <prm-input-date-picker
+      [disabled]="
+        form.get('discountType').value == null ||
+        form.get('discountType').value == 'بدون تخفیف'
+      "
+      formControlName="discountExpireDate"
+      labelWidth="80"
+      label="پایان تخفیف"
+    ></prm-input-date-picker>
+  </div>
+</form>

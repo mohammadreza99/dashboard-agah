@@ -1,0 +1,145 @@
+<div class="container-fluid pb-5">
+  <div class="row">
+    <div class="col-12">
+      <toolbar class="page-header">
+        <left>
+          <prm-button
+            label="ذخیره"
+            icon="fa fa-plus"
+            color="success"
+            class="mr-2"
+            (click)="onSaveClick()"
+          ></prm-button>
+          <prm-button
+            label="انصراف"
+            icon="fa fa-times"
+            color="danger"
+            (click)="onCancelClick()"
+          ></prm-button>
+        </left>
+        <right>
+          <h1>{{ pageTitle }}</h1>
+        </right>
+      </toolbar>s
+      <p-tabView>
+        <p-tabPanel header="اطلاعات شخصی">
+          <form class="form-row justify-content-end" [formGroup]="personalForm">
+            <div class="d-flex flex-column col-lg-8">
+              <prm-input-text
+                formControlName="firstName"
+                labelWidth="80"
+                label="نام"
+              >
+              </prm-input-text>
+
+              <prm-input-text
+                formControlName="lastName"
+                labelWidth="80"
+                label="نام خانوادگی"
+              >
+              </prm-input-text>
+
+              <prm-input-date-picker
+                labelWidth="80"
+                label="تاریخ تولد"
+                formControlName="birthDate"
+              ></prm-input-date-picker>
+
+              <prm-input-text
+                formControlName="nationalCode"
+                labelWidth="80"
+                label="کد ملی"
+              >
+              </prm-input-text>
+
+              <prm-input-radio
+                formControlName="gender"
+                labelWidth="80"
+                label="جنسیت"
+                [inline]="true"
+                [items]="genders"
+              ></prm-input-radio>
+            </div>
+          </form>
+        </p-tabPanel>
+        <p-tabPanel header="آدرس ها">
+          <form class="form-row justify-content-end" [formGroup]="addressForm">
+            <div class="d-flex flex-column col-lg-8">
+              <prm-input-dropdown
+                formControlName="state"
+                labelWidth="80"
+                label="استان"
+                [items]="states"
+                optionLabel=""
+              ></prm-input-dropdown>
+              <prm-input-dropdown
+                formControlName="city"
+                labelWidth="80"
+                label="شهر"
+                [options]="cities"
+              ></prm-input-dropdown>
+              <prm-input-text
+                formControlName="address"
+                labelWidth="80"
+                label="آدرس"
+              >
+              </prm-input-text>
+              <prm-input-text
+                formControlName="postalCode"
+                labelWidth="80"
+                label="کد پستی"
+              >
+              </prm-input-text>
+            </div>
+          </form>
+        </p-tabPanel>
+        <p-tabPanel header="اطلاعات تماس">
+          <form class="form-row justify-content-end" [formGroup]="contactForm">
+            <div class="d-flex flex-column col-lg-8">
+              <prm-input-text
+                maxlength="11"
+                formControlName="mobile"
+                labelWidth="80"
+                label="شماره موبایل"
+                [errors]="[{type:'minlength',message:'شماره همراه معتبر نیست'}]"
+              >
+              </prm-input-text>
+              <prm-input-text
+                maxlength="11"
+                [errors]="[{type:'minlength',message:'شماره تلفن معتبر نیست'}]"
+                formControlName="phone"
+                labelWidth="80"
+                label="شماره تلفن"
+              >
+              </prm-input-text>
+              <prm-input-text
+                [errors]="[{type:'email',message:'ایمیل معتبر نیست'}]"
+                formControlName="email"
+                labelWidth="80"
+                label="ایمیل"
+              >
+              </prm-input-text>
+            </div>
+          </form>
+        </p-tabPanel>
+        <p-tabPanel header="حساب کاربری">
+          <form class="form-row justify-content-end" [formGroup]="accountForm">
+            <div class="d-flex flex-column col-lg-8">
+              <prm-input-password
+                formControlName="password"
+                labelWidth="80"
+                label="رمز عبور"
+              >
+              </prm-input-password>
+              <prm-input-checkbox-single
+                formControlName="subscription"
+                labelWidth="80"
+                label="اشتراک خبر نامه"
+              ></prm-input-checkbox-single>
+            </div>
+          </form>
+        </p-tabPanel>
+      </p-tabView>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,21 @@
+.col-lg-8 > * {
+    display: block;
+    margin-bottom: 15px;
+  }
+  
+  div.d-flex {
+    > span {
+      width: 150px;
+    }
+  }
+  
+  .list-items {
+    margin-top: 10px;
+  }
+  
+  @media (min-width: 576px) {
+    .list-items {
+      margin-right: 165px;
+    }
+  }
+  

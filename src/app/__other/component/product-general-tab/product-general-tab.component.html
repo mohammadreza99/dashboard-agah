@@ -1,0 +1,50 @@
+<form class="form-row justify-content-end" [formGroup]="form">
+  <div class="d-flex flex-column col-lg-8">
+    <prm-input-text
+      formControlName="nationalCode"
+      labelWidth="80"
+      label="کد محصول"
+    >
+    </prm-input-text>
+
+    <prm-input-text formControlName="name" labelWidth="80" label="نام محصول">
+    </prm-input-text>
+
+    <prm-input-radio
+      formControlName="stock"
+      labelWidth="80"
+      label="وضعیت"
+      [inline]="true"
+      [items]="stockList"
+      field="label"
+    ></prm-input-radio>
+
+    <prm-input-number
+      [disabled]="form.get('stock').value != 'موجود - محدود'"
+      formControlName="count"
+      labelWidth="80"
+      label="تعداد"
+    ></prm-input-number>
+
+    <div class="d-flex align-items-center">
+      <prm-input-date-time-picker
+        formControlName="releaseDate"
+        [disabled]="form.get('isActive').value == false"
+        class="flex-grow-1"
+        labelWidth="80"
+        label="تاریخ انتشار"
+      >
+      </prm-input-date-time-picker>
+      <prm-input-checkbox-single
+        formControlName="isActive"
+        label="انتشار در آینده"
+        class="ml-5"
+      ></prm-input-checkbox-single>
+    </div>
+  </div>
+  <p-editor
+    formControlName="description"
+    class="col-12"
+    [style]="{ height: '320px' }"
+  ></p-editor>
+</form>

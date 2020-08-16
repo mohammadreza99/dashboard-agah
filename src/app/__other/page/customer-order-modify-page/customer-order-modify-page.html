@@ -1,0 +1,51 @@
+<div class="container-fluid pb-4">
+    <div class="row">
+      <div class="col-12">
+        <toolbar class="page-header">
+          <left>
+            <prm-button
+              label="بروزرسانی"
+              icon="fa fa-repeat"
+              color="success"
+              class="mr-2"
+            ></prm-button>
+            <prm-button
+              label="مشاهده فاکتور"
+              icon="fa fa-file-pdf"
+              color="secondary"
+            ></prm-button>
+          </left>
+          <right>
+            <h1>ویرایش سفارش - رهگیری : {{order.trackingCode}}</h1>
+          </right>
+        </toolbar>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col-lg-6">
+        <p><span class="font-bold fa-sm">مشتری :</span> {{''}}</p>
+        <p><span class="font-bold fa-sm">تلفن همراه :</span> {{''}}</p>
+        <p><span class="font-bold fa-sm">آدرس تحویل :</span> {{''}}</p>
+        <p><span class="font-bold fa-sm">ایمیل :</span> {{''}}</p>
+      </div>
+      <div class="col-lg-6">
+        <p><span class="font-bold fa-sm">کد رهگیری :</span> {{''}}</p>
+        <p><span class="font-bold fa-sm">ارسال فاکتور :</span> {{''}}</p>
+        <p><span class="font-bold fa-sm">روش پرداخت :</span> {{''}}</p>
+      </div>
+      <div class="col-12">
+        <prm-table
+          [items]="products"
+          [columns]="columns"
+          [showDeleteAction]="false"
+        >
+          <summary>
+            <p class="text-left mb-0">
+              <span class="font-bold">مجموع : </span>{{'3153513' | number}} تومان
+            </p>
+          </summary>
+        </prm-table>
+      </div>
+    </div>
+  </div>
+  

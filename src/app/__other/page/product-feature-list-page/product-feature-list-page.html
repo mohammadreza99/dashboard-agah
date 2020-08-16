@@ -1,0 +1,27 @@
+<div class="container-fluid" *ngIf="features && features.length > 0">
+    <div class="row">
+      <div class="col-12">
+        <toolbar class="page-header">
+          <left
+            ><prm-button
+              label="افزودن"
+              icon="fa fa-plus"
+              color="success"
+              (click)="onAddFeatureClick()"
+            ></prm-button
+          ></left>
+          <right>
+            <h1>خصوصیات</h1>
+          </right>
+        </toolbar>
+        <prm-table
+          [items]="features"
+          [columns]="columns"
+          [actions]="actions"
+          (actionClick)="onActionClick($event)"
+          (listItemClick)="onFeatureValueClick($event)"
+        ></prm-table>
+      </div>
+    </div>
+  </div>
+  

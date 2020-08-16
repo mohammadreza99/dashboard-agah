@@ -1,0 +1,29 @@
+<div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <toolbar class="page-header">
+          <left>
+            <prm-button
+              label="افزودن"
+              icon="fa fa-plus"
+              color="success"
+              routerLink="/product/add"
+            >
+            </prm-button>
+          </left>
+          <right>
+            <h1>محصولات</h1>
+          </right>
+        </toolbar>
+        <prm-table
+          #cTable
+          [items]="products"
+          [columns]="columns"
+          [actions]="actions"
+          (actionClick)="onActionClick($event)"
+        >
+        </prm-table>
+      </div>
+    </div>
+  </div>
+  

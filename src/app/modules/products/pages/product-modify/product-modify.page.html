@@ -1,0 +1,86 @@
+<div class="container-fluid pb-5">
+  <div class="row">
+    <div class="col-12">
+      <toolbar class="page-header">
+        <left>
+          <prm-button
+            label="ذخیره"
+            icon="fa fa-plus"
+            color="success"
+            class="mr-2"
+            (click)="onSaveClick()"
+          ></prm-button>
+          <prm-button
+            label="انصراف"
+            icon="fa fa-times"
+            color="danger"
+            (click)="onCancelClick()"
+          ></prm-button>
+        </left>
+        <right>
+          <h1>{{ pageTitle }}</h1>
+        </right>
+      </toolbar>
+      <p-tabView orientation="right" #tabView [activeIndex]="tabViewIndex">
+        <p-tabPanel [disabled]="disableTabs[0]" header="اطلاعات پایه">
+          <form
+            class="form-row justify-content-end"
+            [formGroup]="basicInfoForm"
+            (ngSubmit)="onSubmitBasicInfo()"
+          >
+            <div class="d-flex flex-column col-lg-8">
+              <prm-input-text
+                formControlName="title"
+                [errors]="[{type:'required',message:'این فیلد الزامیست.'}]"
+                labelWidth="80"
+                label="عنوان"
+              >
+              </prm-input-text>
+
+              <prm-input-text
+                formControlName="website"
+                [errors]="[{type:'required',message:'این فیلد الزامیست.'}]"
+                labelWidth="80"
+                label="وبسایت"
+              >
+              </prm-input-text>
+
+              <prm-input-date-time-picker
+                formControlName="time_estimate"
+                [errors]="[{type:'required',message:'این فیلد الزامیست.'}]"
+                class="flex-grow-1"
+                labelWidth="80"
+                label="تاریخ ارائه"
+              >
+              </prm-input-date-time-picker>
+              <prm-input-file
+                formControlName="image"
+                [errors]="[{type:'required',message:'این فیلد الزامیست.'}]"
+                labelWidth="80"
+                label="تصویر"
+              ></prm-input-file>
+              <prm-input-textarea
+                formControlName="description"
+                [errors]="[{type:'required',message:'این فیلد الزامیست.'}]"
+                labelWidth="80"
+                label="توضیحات"
+              ></prm-input-textarea>
+              <prm-button type="submit" label="ثبت"></prm-button>
+            </div>
+          </form>
+        </p-tabPanel>
+        <p-tabPanel [disabled]="disableTabs[1]" header="عمومی">
+          <prm-button (click)="goPrevTab()" label="بازگشت"></prm-button>
+          <prm-button (click)="onSubmitBasicInfo()" label="ثبت"></prm-button>
+        </p-tabPanel>
+        <p-tabPanel [disabled]="disableTabs[2]" header="عمومی">
+          <prm-button (click)="goPrevTab()" label="بازگشت"></prm-button>
+          <prm-button (click)="onSubmitBasicInfo()" label="ثبت"></prm-button>
+        </p-tabPanel>
+        <p-tabPanel [disabled]="disableTabs[3]" header="عمومی">
+          <prm-button (click)="goPrevTab()" label="بازگشت"></prm-button>
+        </p-tabPanel>
+      </p-tabView>
+    </div>
+  </div>
+</div>

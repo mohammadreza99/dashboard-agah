@@ -1,0 +1,16 @@
+<prm-table
+[items]="selectedFeatures"
+[columns]="featuresColumns"
+[actions]="featuresActions"
+(actionClick)="featuresActionClick($event)"
+>
+<caption>
+  <prm-button
+    (click)="onAddNewFeature()"
+    label="افزودن خصیصه جدید"
+    icon="fas fa-plus"
+    class="mr-2"
+    color="secondary"
+  ></prm-button>
+</caption>
+</prm-table>
