@@ -22,27 +22,41 @@
     class="form-row align-items-center justify-content-end mb-5"
     (ngSubmit)="onSubmit()"
   >
+    <input type="hidden" formControlName="id" />
     <prm-input-text
       [disabled]="disabled"
       formControlName="title"
+      [errors]="[{type:'required',message:'این فیلد الزامیست.'}]"
       class="col-8 mb-4"
       labelWidth="90"
       label="عنوان"
     ></prm-input-text>
     <prm-input-file
       [disabled]="disabled"
+      [files]="imageToShow"
       formControlName="logo"
+      [errors]="[{type:'required',message:'این فیلد الزامیست.'}]"
       class="col-8 mb-4"
       labelWidth="90"
       label="تصویر"
       (onSelect)="onSelectImage($event)"
     ></prm-input-file>
-    <prm-button
-      [disabled]="disabled"
-      class="col-8"
-      type="submit"
-      label="ثبت"
-    ></prm-button>
+    <div class="col-8">
+      <div class="d-flex">
+        <prm-button
+          [disabled]="disabled"
+          type="submit"
+          label="ثبت"
+        ></prm-button>
+        <prm-button
+          (click)="onCancelClick()"
+          color="danger"
+          class="mx-4"
+          [disabled]="disabled"
+          label="انصراف"
+        ></prm-button>
+      </div>
+    </div>
   </form>
 
   <div class="row">

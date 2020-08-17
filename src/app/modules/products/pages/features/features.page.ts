@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Feature } from '@app/shared/models/product.model';
 import { Observable } from 'rxjs';
 import { PrimeTableColumn } from '@app/shared/components/@prime/prime-model/prime-table-column.model';
 import { PrimeTableAction } from '@app/shared/components/@prime/prime-model/prime-table-action.model';
 import { FeatureService } from '@app/core/http/feature/feature.service';
-import { UploadService } from '@app/core/http/upload/upload.service';
-import { ImageSnippet } from '@app/shared/models/image-snippet';
+import { DataService } from '@app/core/services/data.service';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'ag-features',
@@ -16,16 +16,19 @@ import { ImageSnippet } from '@app/shared/models/image-snippet';
 export class FeaturesPage implements OnInit {
   constructor(
     private featureService: FeatureService,
-    private uploadService: UploadService
+    private dataService: DataService,
+    private vcRef: ViewContainerRef
   ) {}
 
   form = new FormGroup({
+    id: new FormControl(null),
     title: new FormControl(null, Validators.required),
     logo: new FormControl(null, Validators.required),
   });
   disabled = true;
   editMode = false;
   features$: Observable<Feature[]>;
+  featureFormData = new FormData();
   columns: PrimeTableColumn[] = [
     {
       field: 'id',
@@ -41,7 +44,7 @@ export class FeaturesPage implements OnInit {
     },
     {
       field: 'logo',
-      header: 'وبسایت',
+      header: 'تصویر',
       filterType: 'input',
       type: 'image',
     },
@@ -49,13 +52,10 @@ export class FeaturesPage implements OnInit {
   actions: PrimeTableAction[] = [
     { tooltip: 'ویرایش', icon: 'fas fa-pencil', color: 'info' },
   ];
+  imageToShow: any[];
 
   ngOnInit(): void {
     this.features$ = this.featureService.get();
-  }
-
-  onSubmit() {
-    this.featureService.post(this.form.value).subscribe();
   }
 
   addFeature() {
@@ -65,22 +65,65 @@ export class FeaturesPage implements OnInit {
   }
 
   onActionClick(event) {
+    const feature = event.row as Feature;
     if (event.action === 'ویرایش') {
+      this.disabled = false;
+      this.editMode = true;
+      this.form.setValue({
+        id: feature.id,
+        title: feature.title,
+        logo: feature.logo,
+      });
+      this.getImage('http://via.placeholder.com/150x150').subscribe(
+        (data: any) => {
+          this.createImageFromBlob(data);
+        }
+      );
     } else if (event.action === 'حذف') {
+      this.featureService
+        .delete(+feature.id)
+        .subscribe((res) => this.dataService.successfullMessage(this.vcRef));
     }
   }
 
   onSelectImage(imageInput: any) {
     const file: File = imageInput.files[0];
+    this.featureFormData.append('logo', file);
+  }
+
+  onSubmit() {
+    this.featureFormData.append('title', this.form.get('title').value);
+    if (this.editMode) {
+      this.featureService
+        .put(this.featureFormData)
+        .subscribe((res) => this.dataService.successfullMessage(this.vcRef));
+    } else {
+      this.featureService
+        .post(this.featureFormData)
+        .subscribe((res) => this.dataService.successfullMessage(this.vcRef));
+    }
+  }
+
+  onCancelClick() {
+    this.disabled = true;
+    this.form.reset();
+  }
+
+  getImage(imageUrl: string) {
+    return this.dataService.getImage(imageUrl, { responseType: 'blob' });
+  }
+
+  createImageFromBlob(image: Blob) {
     const reader = new FileReader();
-    let selectedFile: ImageSnippet;
-    reader.addEventListener('load', (event: any) => {
-      selectedFile = new ImageSnippet(event.target.result, file);
-      this.uploadService.uploadImage(selectedFile.file).subscribe(
-        (res) => {},
-        (err) => {}
-      );
-    });
-    reader.readAsDataURL(file);
+    reader.addEventListener(
+      'load',
+      () => {
+        this.imageToShow = [reader.result];
+      },
+      false
+    );
+    if (image) {
+      reader.readAsDataURL(image);
+    }
   }
 }

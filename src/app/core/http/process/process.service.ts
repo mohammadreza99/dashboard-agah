@@ -22,4 +22,19 @@ export class ProcessService {
   getById(processId: number): Observable<Process> {
     return this.apiService.get<Process>(`${this.endPoint}/${processId}`);
   }
+
+  post(process: Process): Observable<Process> {
+    return this.apiService.post<Process>(`${this.endPoint}`, process);
+  }
+
+  put(process: Process): Observable<Process> {
+    return this.apiService.post<Process>(`${this.endPoint}/${process.id}`, {
+      ...process,
+      _method: 'PATCH',
+    });
+  }
+
+  delete(processId: number) {
+    return this.apiService.delete<Process>(`${this.endPoint}/${processId}`);
+  }
 }

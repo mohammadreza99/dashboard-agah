@@ -22,4 +22,19 @@ export class PostService {
   getById(postId: SVGAnimatedString): Observable<Post> {
     return this.apiService.get<Post>(`${this.endPoint}/${postId}`);
   }
+
+  post(post: Post): Observable<Post> {
+    return this.apiService.post<Post>(`${this.endPoint}`, post);
+  }
+
+  put(post: Post): Observable<Post> {
+    return this.apiService.post<Post>(`${this.endPoint}/${post.id}`, {
+      ...post,
+      _method: 'PATCH',
+    });
+  }
+
+  delete(partnerId: number) {
+    return this.apiService.delete<Post>(`${this.endPoint}/${partnerId}`);
+  }
 }

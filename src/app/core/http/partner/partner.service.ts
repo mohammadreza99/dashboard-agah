@@ -22,4 +22,19 @@ export class PartnerService {
   getById(partnerId: number): Observable<Partner> {
     return this.apiService.get<Partner>(`${this.endPoint}/${partnerId}`);
   }
+
+  post(partner: Partner): Observable<Partner> {
+    return this.apiService.post<Partner>(`${this.endPoint}`, partner);
+  }
+
+  put(partner: Partner): Observable<Partner> {
+    return this.apiService.post<Partner>(`${this.endPoint}/${partner.id}`, {
+      ...partner,
+      _method: 'PATCH',
+    });
+  }
+
+  delete(partnerId: number) {
+    return this.apiService.delete<Partner>(`${this.endPoint}/${partnerId}`);
+  }
 }

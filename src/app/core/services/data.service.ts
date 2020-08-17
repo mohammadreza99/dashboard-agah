@@ -54,12 +54,21 @@ export class DataService {
       ],
     },
     {
-      label: 'مشتری ها',
+      label: 'فرصت های شغلی',
       icon: 'pi pi-pw pi-file',
       items: [
-        { label: 'لیست مشتری ها', routerLink: ['/customer/group/list'] },
-        { label: 'سفارشات', routerLink: ['/customer/order/list'] },
+        { label: 'لیست فرصت های شغلی', routerLink: ['/customer/group/list'] },
       ],
+    },
+    {
+      label: 'مقالات',
+      icon: 'pi pi-pw pi-file',
+      items: [{ label: 'لیست مقالات', routerLink: ['/customer/group/list'] }],
+    },
+    {
+      label: 'اخبار',
+      icon: 'pi pi-pw pi-file',
+      items: [{ label: 'لیست اخبار', routerLink: ['/customer/group/list'] }],
     },
   ];
 
@@ -165,6 +174,8 @@ export class DataService {
       })
     );
   }
-
+  getImage(imageUrl: string, options: any) {
+    return this.http.get(imageUrl, options);
+  }
   //#endregion GENERAL
 }

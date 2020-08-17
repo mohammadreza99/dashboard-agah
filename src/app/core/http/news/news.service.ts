@@ -22,4 +22,19 @@ export class NewsService {
   getById(newsId: number): Observable<News> {
     return this.apiService.get<News>(`${this.endPoint}/${newsId}`);
   }
+
+  news(news: News): Observable<News> {
+    return this.apiService.post<News>(`${this.endPoint}`, news);
+  }
+
+  put(news: News): Observable<News> {
+    return this.apiService.post<News>(`${this.endPoint}/${news.id}`, {
+      ...news,
+      _method: 'PATCH',
+    });
+  }
+
+  delete(newsId: number) {
+    return this.apiService.delete<News>(`${this.endPoint}/${newsId}`);
+  }
 }

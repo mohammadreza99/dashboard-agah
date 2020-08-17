@@ -7,14 +7,22 @@ import {
   AfterViewInit,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { throwError, Observable, of } from 'rxjs';
 
 import { ProductService } from '@core/http/product/product.service';
-import { Product } from '@shared/models/product.model';
+import {
+  Product,
+  Process,
+  Feature,
+  Partner,
+} from '@shared/models/product.model';
 import { DataService } from '@app/core/services/data.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { TabView } from 'primeng';
+import { ProcessService } from '@app/core/http/process/process.service';
+import { FeatureService } from '@app/core/http/feature/feature.service';
+import { PartnerService } from '@app/core/http/partner/partner.service';
 
 @Component({
   selector: 'ag-product-modify',
@@ -27,20 +35,18 @@ export class ProductModifyPage implements OnInit, AfterViewInit {
     private productService: ProductService,
     private dataService: DataService,
     private router: Router,
-    private vcRef: ViewContainerRef
+    private vcRef: ViewContainerRef,
+    private processService: ProcessService,
+    private partnerService: PartnerService,
+    private featureService: FeatureService
   ) {}
   @ViewChild('tabView', { static: true }) tabview: TabView;
-  /*
-  title: string;
-  image: string;
-  description: string;
-  website: string;
-  feature_description: string;
-  time_estimate: Date;
-  features: Feature[];
-  processes: Process[];
-*/
-  product: Product = new Product();
+
+  features$: Observable<Feature[]>;
+  partners$: Observable<Partner[]>;
+  target: Process[];
+  source$: Observable<Process[]>;
+  product$: Observable<Product>;
   pageTitle = 'افزودن محصول';
   tabViewIndex = 0;
   disableTabs = [];
@@ -51,24 +57,21 @@ export class ProductModifyPage implements OnInit, AfterViewInit {
     description: new FormControl(null, [Validators.required]),
     website: new FormControl(null, [Validators.required]),
     time_estimate: new FormControl(null, [Validators.required]),
+    features: new FormControl(null, [Validators.required]),
+    partners: new FormControl(null, [Validators.required]),
   });
 
   ngOnInit() {
+    this.features$ = this.featureService.get();
+    this.partners$ = this.partnerService.get();
     this.route.params.subscribe((params) => {
       if (params['id']) {
         this.editMode = true;
-        this.productService
-          .getProductById(params['id'])
-          .pipe(
-            catchError((err) => {
-              return throwError(err);
-            })
-          )
-          .subscribe((product) => {
-            this.product = product;
-          });
+        this.product$ = this.productService.getProductById(params['id']);
       } else {
         this.editMode = false;
+        this.source$ = this.processService.get();
+        this.target = [];
       }
     });
   }
@@ -89,7 +92,7 @@ export class ProductModifyPage implements OnInit, AfterViewInit {
 
   onCancelClick() {
     this.dataService.cancellationConfirm(this.vcRef).then((accept) => {
-      this.router.navigate(['/dashborad/product/list']);
+      this.router.navigate(['/dashboard/product/list']);
     });
   }
 
@@ -101,18 +104,27 @@ export class ProductModifyPage implements OnInit, AfterViewInit {
 
   goNextTab() {
     this.tabViewIndex++;
-    this.checkDisable();
+    this.checkDisableForm();
   }
 
   goPrevTab() {
     this.tabViewIndex--;
-    this.checkDisable();
+    this.checkDisableForm();
   }
 
-  checkDisable() {
+  checkDisableForm() {
     for (let i = 0; i < this.disableTabs.length; i++) {
       this.disableTabs[i] = true;
       this.disableTabs[this.tabViewIndex] = false;
     }
   }
+
+  onMoveToTarget() {
+    console.log(this.target);
+  }
+  onMoveToSource() {}
+  onMoveAllToTarget() {}
+  onMoveAllToSource() {}
+  onSourceReorder() {}
+  onTargetReorder() {}
 }

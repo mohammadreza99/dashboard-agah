@@ -33,12 +33,12 @@ export class PrimeConfirmService {
         blockScroll: options.blockScroll,
         defaultFocus: options.defaultFocus,
         accept: () => {
-          accept();
           viewContainerRef.clear();
+          accept('accept');
         },
         reject: () => {
-          reject();
           viewContainerRef.clear();
+          reject('reject');
         },
       });
     });

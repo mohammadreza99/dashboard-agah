@@ -39,9 +39,9 @@ export class PrimeTableComponent implements OnInit {
   }
   @Input() columns: PrimeTableColumn[];
   @Input() hasSearchInput = true;
-  @Input() paginator = true;
-  @Input() paginatorRows: number = 10;
-  @Input() rowsPerPageOptions: any[] = [10, 20, 30];
+  @Input() paginator = false;
+  @Input() paginatorRows: number = 4;
+  @Input() rowsPerPageOptions: any[];
   @Input() showRowIndex = false;
   @Input() sortable = true;
   @Input() selectionMode: PrimeTreeSelectionMode = null;
