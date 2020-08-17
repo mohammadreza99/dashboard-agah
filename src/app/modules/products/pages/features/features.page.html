@@ -31,16 +31,21 @@
       labelWidth="90"
       label="عنوان"
     ></prm-input-text>
-    <prm-input-file
-      [disabled]="disabled"
-      [files]="imageToShow"
-      formControlName="logo"
-      [errors]="[{type:'required',message:'این فیلد الزامیست.'}]"
-      class="col-8 mb-4"
-      labelWidth="90"
-      label="تصویر"
-      (onSelect)="onSelectImage($event)"
-    ></prm-input-file>
+    <div class="col-8 mb-4 d-flex flex-column align-items-end image-preview">
+      <img
+        class="mb-3"
+        [src]="imageToShow || 'assets/images/imgplaceholder.png'"
+      />
+      <prm-input-file
+        #upload
+        [disabled]="disabled"
+        formControlName="logo"
+        [errors]="[{type:'required',message:'این فیلد الزامیست.'}]"
+        labelWidth="90"
+        label="تصویر"
+        (onSelect)="onSelectImage($event)"
+      ></prm-input-file>
+    </div>
     <div class="col-8">
       <div class="d-flex">
         <prm-button
@@ -58,7 +63,6 @@
       </div>
     </div>
   </form>
-
   <div class="row">
     <div class="col-12">
       <prm-table

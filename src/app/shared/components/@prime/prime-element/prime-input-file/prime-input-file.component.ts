@@ -7,12 +7,14 @@ import {
   EventEmitter,
   forwardRef,
   AfterViewInit,
+  ViewChild,
 } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { PrimeInputBaseComponent } from '../prime-input-base/prime-input-base.component';
 import { PrimeInputFileMode } from '../../prime-type/prime-input-file-mode';
+import { FileUpload } from 'primeng';
 
 @Component({
   selector: 'prm-input-file',
@@ -31,7 +33,7 @@ export class PrimeInputFileComponent extends PrimeInputBaseComponent
   // constructor(private cd: ChangeDetectorRef) {
   //   super();
   // }
-
+  @ViewChild('upload') upload: FileUpload;
   @Input() url: string;
   @Input() multiple: boolean = false;
   @Input() auto: boolean = false;
@@ -41,7 +43,7 @@ export class PrimeInputFileComponent extends PrimeInputBaseComponent
   @Input() maxFileSize: number = null;
   @Input() previewWidth: number = 50;
   @Input() fileLimit: number = null;
-  @Input() mode: PrimeInputFileMode = 'advanced';
+  @Input() mode: PrimeInputFileMode = 'basic';
   @Input() chooseLabel: string = 'انتخاب';
   @Input() uploadLabel: string = 'آپلود';
   @Input() cancelLabel: string = 'انصراف';
@@ -117,6 +119,10 @@ export class PrimeInputFileComponent extends PrimeInputBaseComponent
 
   _onError(event) {
     this.onError.emit(event);
+  }
+
+  clear() {
+    this.upload.clear();
   }
 
   /////////////////////////////////// DRAG DROP EXAMPLE //////////////////////////////////

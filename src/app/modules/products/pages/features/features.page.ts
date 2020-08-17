@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, ViewContainerRef, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Feature } from '@app/shared/models/product.model';
 import { Observable } from 'rxjs';
@@ -7,6 +7,7 @@ import { PrimeTableAction } from '@app/shared/components/@prime/prime-model/prim
 import { FeatureService } from '@app/core/http/feature/feature.service';
 import { DataService } from '@app/core/services/data.service';
 import { map } from 'rxjs/operators';
+import { PrimeInputFileComponent } from '@app/shared/components/@prime/prime-element/prime-input-file/prime-input-file.component';
 
 @Component({
   selector: 'ag-features',
@@ -19,6 +20,7 @@ export class FeaturesPage implements OnInit {
     private dataService: DataService,
     private vcRef: ViewContainerRef
   ) {}
+  @ViewChild('file') fileUpload: PrimeInputFileComponent;
 
   form = new FormGroup({
     id: new FormControl(null),
@@ -52,7 +54,7 @@ export class FeaturesPage implements OnInit {
   actions: PrimeTableAction[] = [
     { tooltip: 'ویرایش', icon: 'fas fa-pencil', color: 'info' },
   ];
-  imageToShow: any[];
+  imageToShow: any;
 
   ngOnInit(): void {
     this.features$ = this.featureService.get();
@@ -69,6 +71,8 @@ export class FeaturesPage implements OnInit {
     if (event.action === 'ویرایش') {
       this.disabled = false;
       this.editMode = true;
+      this.form.reset();
+      // this.fileUpload?.clear();
       this.form.setValue({
         id: feature.id,
         title: feature.title,
@@ -88,6 +92,11 @@ export class FeaturesPage implements OnInit {
 
   onSelectImage(imageInput: any) {
     const file: File = imageInput.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      this.imageToShow = event.target.result;
+    };
     this.featureFormData.append('logo', file);
   }
 

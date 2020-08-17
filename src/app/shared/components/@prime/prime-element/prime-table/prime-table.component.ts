@@ -91,6 +91,7 @@ export class PrimeTableComponent implements OnInit {
         }
         Object.assign(this.data[i], { index: i + 1 });
       }
+    this.cd.detectChanges();
   }
 
   createColumnsValue() {
