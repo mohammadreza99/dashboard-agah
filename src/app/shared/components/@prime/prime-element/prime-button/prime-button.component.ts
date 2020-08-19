@@ -6,7 +6,7 @@ import { PrimePosition } from '../../prime-type/prime-position';
 @Component({
   selector: 'prm-button',
   templateUrl: './prime-button.component.html',
-  styleUrls: ['./prime-button.component.scss']
+  styleUrls: ['./prime-button.component.scss'],
 })
 export class PrimeButtonComponent implements OnInit {
   constructor() {}
@@ -14,6 +14,7 @@ export class PrimeButtonComponent implements OnInit {
   @Input() iconPos: PrimePosition = 'right';
   @Input() label: string;
   @Input() type: string;
+  @Input() form: string;
   @Input() style: object;
   @Input() rounded: boolean;
   @Input() disabled: boolean;

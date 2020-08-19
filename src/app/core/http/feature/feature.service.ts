@@ -19,25 +19,24 @@ export class FeatureService {
       .pipe(map((res: any) => res.data));
   }
 
-  getById(featureId: number): Observable<Feature> {
+  getById(featureId: string | number): Observable<Feature> {
     return this.apiService.get<Feature>(`${this.endPoint}/${featureId}`);
   }
 
-  post(feature: FormData): Observable<Feature> {
-    return this.apiService.post<Feature>(`${this.endPoint}`, feature);
+  post(feature: Feature): Observable<Feature> {
+    const formData = this.apiService.getFormData(feature);
+    return this.apiService.post<Feature>(`${this.endPoint}`, formData);
   }
 
-  put(feature: FormData): Observable<Feature> {
-    return this.apiService.post<Feature>(
-      `${this.endPoint}/${feature.get('id')}`,
-      {
-        ...feature,
-        _method: 'PATCH',
-      }
+  patch(feature: Feature): Observable<Feature> {
+    const formData = this.apiService.getFormData(feature);
+    return this.apiService.patch<Feature>(
+      `${this.endPoint}/${feature.id}`,
+      formData
     );
   }
 
-  delete(featureId: number) {
+  delete(featureId: string | number) {
     return this.apiService.delete<Feature>(`${this.endPoint}/${featureId}`);
   }
 }

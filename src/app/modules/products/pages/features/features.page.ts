@@ -8,6 +8,7 @@ import { FeatureService } from '@app/core/http/feature/feature.service';
 import { DataService } from '@app/core/services/data.service';
 import { map } from 'rxjs/operators';
 import { PrimeInputFileComponent } from '@app/shared/components/@prime/prime-element/prime-input-file/prime-input-file.component';
+import { SingleImagePickerComponent } from '@app/shared/components/single-image-picker/single-image-picker.component';
 
 @Component({
   selector: 'ag-features',
@@ -15,12 +16,14 @@ import { PrimeInputFileComponent } from '@app/shared/components/@prime/prime-ele
   styleUrls: ['./features.page.scss'],
 })
 export class FeaturesPage implements OnInit {
+  @ViewChild(SingleImagePickerComponent, { static: true })
+  upload: SingleImagePickerComponent;
+
   constructor(
     private featureService: FeatureService,
     private dataService: DataService,
     private vcRef: ViewContainerRef
   ) {}
-  @ViewChild('file') fileUpload: PrimeInputFileComponent;
 
   form = new FormGroup({
     id: new FormControl(null),
@@ -30,7 +33,6 @@ export class FeaturesPage implements OnInit {
   disabled = true;
   editMode = false;
   features$: Observable<Feature[]>;
-  featureFormData = new FormData();
   columns: PrimeTableColumn[] = [
     {
       field: 'id',
@@ -54,7 +56,7 @@ export class FeaturesPage implements OnInit {
   actions: PrimeTableAction[] = [
     { tooltip: 'ویرایش', icon: 'fas fa-pencil', color: 'info' },
   ];
-  imageToShow: any;
+  urlToShow: string;
 
   ngOnInit(): void {
     this.features$ = this.featureService.get();
@@ -63,7 +65,7 @@ export class FeaturesPage implements OnInit {
   addFeature() {
     this.disabled = false;
     this.editMode = false;
-    this.form.reset();
+    this.resetForm();
   }
 
   onActionClick(event) {
@@ -71,68 +73,38 @@ export class FeaturesPage implements OnInit {
     if (event.action === 'ویرایش') {
       this.disabled = false;
       this.editMode = true;
-      this.form.reset();
-      // this.fileUpload?.clear();
-      this.form.setValue({
+      this.resetForm();
+      this.form.patchValue({
         id: feature.id,
         title: feature.title,
-        logo: feature.logo,
       });
-      this.getImage('http://via.placeholder.com/150x150').subscribe(
-        (data: any) => {
-          this.createImageFromBlob(data);
-        }
-      );
+      this.urlToShow = feature.logo;
     } else if (event.action === 'حذف') {
       this.featureService
-        .delete(+feature.id)
+        .delete(feature.id)
         .subscribe((res) => this.dataService.successfullMessage(this.vcRef));
     }
-  }
-
-  onSelectImage(imageInput: any) {
-    const file: File = imageInput.files[0];
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = (event) => {
-      this.imageToShow = event.target.result;
-    };
-    this.featureFormData.append('logo', file);
   }
 
   onSubmit() {
-    this.featureFormData.append('title', this.form.get('title').value);
     if (this.editMode) {
       this.featureService
-        .put(this.featureFormData)
+        .patch(this.dataService.getDirtyControls(this.form) as Feature)
         .subscribe((res) => this.dataService.successfullMessage(this.vcRef));
     } else {
       this.featureService
-        .post(this.featureFormData)
+        .post(this.form.value as Feature)
         .subscribe((res) => this.dataService.successfullMessage(this.vcRef));
     }
   }
 
-  onCancelClick() {
+  onCancel() {
     this.disabled = true;
+    this.resetForm();
+  }
+
+  resetForm() {
     this.form.reset();
-  }
-
-  getImage(imageUrl: string) {
-    return this.dataService.getImage(imageUrl, { responseType: 'blob' });
-  }
-
-  createImageFromBlob(image: Blob) {
-    const reader = new FileReader();
-    reader.addEventListener(
-      'load',
-      () => {
-        this.imageToShow = [reader.result];
-      },
-      false
-    );
-    if (image) {
-      reader.readAsDataURL(image);
-    }
+    this.upload.clear();
   }
 }

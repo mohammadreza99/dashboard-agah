@@ -16,7 +16,7 @@ export class EmployeeService {
     return this.apiService.get<Employee[]>(this.endPoint);
   }
 
-  getById(employeeId: number): Observable<Employee> {
+  getById(employeeId: string | number): Observable<Employee> {
     return this.apiService.get<Employee>(`${this.endPoint}/${employeeId}`);
   }
 }

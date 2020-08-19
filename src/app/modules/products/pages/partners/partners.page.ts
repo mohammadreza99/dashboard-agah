@@ -25,6 +25,7 @@ export class PartnersPage implements OnInit {
     logo: new FormControl(null, Validators.required),
   });
   disabled = true;
+  urlToShow: string;
   editMode = false;
   partners$: Observable<Partner[]>;
   columns: PrimeTableColumn[] = [
@@ -66,40 +67,26 @@ export class PartnersPage implements OnInit {
     if (event.action === 'ویرایش') {
       this.disabled = false;
       this.editMode = true;
-      this.form.setValue({
+      this.form.patchValue({
         id: partner.id,
         name: partner.name,
-        logo: partner.logo,
       });
+      this.urlToShow = partner.logo;
     } else if (event.action === 'حذف') {
       this.partnerService
-        .delete(+partner.id)
+        .delete(partner.id)
         .subscribe((res) => this.dataService.successfullMessage(this.vcRef));
     }
   }
 
-  onSelectImage(imageInput: any) {
-    const file: File = imageInput.files[0];
-    // const reader = new FileReader();
-    // let selectedFile: ImageSnippet;
-    // reader.addEventListener('load', (event: any) => {
-    //   selectedFile = new ImageSnippet(event.target.result, file);
-    // });
-    // reader.readAsDataURL(file);
-    const formData = new FormData();
-    formData.append('file', file);
-    this.form.get('logo').setValue(formData);
-  }
-
   onSubmit() {
-    console.log(this.form.value);
     if (this.editMode) {
       this.partnerService
-        .put(this.form.value)
+        .patch(this.form.value as Partner)
         .subscribe((res) => this.dataService.successfullMessage(this.vcRef));
     } else {
       this.partnerService
-        .post(this.form.value)
+        .post(this.form.value as Partner)
         .subscribe((res) => this.dataService.successfullMessage(this.vcRef));
     }
   }

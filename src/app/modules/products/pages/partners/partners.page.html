@@ -31,15 +31,16 @@
       labelWidth="90"
       label="عنوان"
     ></prm-input-text>
-    <prm-input-file
+    <ag-single-image-picker
+      label="تصویر"
+      labelWidth="90"
+      class="col-8 mb-4"
       [disabled]="disabled"
       formControlName="logo"
-      [errors]="[{type:'required',message:'این فیلد الزامیست.'}]"
       class="col-8 mb-4"
-      labelWidth="90"
-      label="تصویر"
-      (onSelect)="onSelectImage($event)"
-    ></prm-input-file>
+      [errors]="[{type:'required',message:'این فیلد الزامیست.'}]"
+      [urlToShow]="urlToShow"
+    ></ag-single-image-picker>
     <div class="col-8">
       <div class="d-flex">
         <prm-button

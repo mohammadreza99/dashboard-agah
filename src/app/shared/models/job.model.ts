@@ -1,7 +1,7 @@
 import { BaseEntity } from './base';
 
 export class JobItemDetails extends BaseEntity {
-  job_id: number;
+  job_id: string | number;
   title: string;
   logo: string;
   details: string[];
@@ -16,7 +16,7 @@ export class JobItem extends BaseEntity {
 }
 
 export class JobRequest extends BaseEntity {
-  job_id: number;
+  job_id: string | number;
   first_name: string;
   last_name: string;
   birthday: Date;

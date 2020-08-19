@@ -19,7 +19,7 @@ export class CompanyPositionService {
       .pipe(map((res: any) => res.data));
   }
 
-  getById(positionId: number): Observable<CompanyPosition> {
+  getById(positionId: string | number): Observable<CompanyPosition> {
     return this.apiService.get<CompanyPosition>(
       `${this.endPoint}/${positionId}`
     );

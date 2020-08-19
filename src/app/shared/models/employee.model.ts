@@ -6,7 +6,7 @@ export class Employee extends BaseEntity {
   first_name: string;
   last_name: string;
   image: string;
-  position_id: number;
+  position_id: string | number;
   position: CompanyPosition;
   social_accounts: { linkedin: string };
 }

@@ -16,7 +16,7 @@ export class SocialNetworkService {
     return this.apiService.get<SocialNetwork[]>(this.endPoint);
   }
 
-  getById(socialNetworkId: number): Observable<SocialNetwork> {
+  getById(socialNetworkId: string | number): Observable<SocialNetwork> {
     return this.apiService.get<SocialNetwork>(
       `${this.endPoint}/${socialNetworkId}`
     );

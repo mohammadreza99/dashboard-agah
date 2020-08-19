@@ -10,6 +10,7 @@ import { PrimeConfirmService } from '@prime/prime-service/prime-confirm.service'
 import { PrimeToastService } from '@prime/prime-service/prime-toast.service';
 import { PrimeTableAction } from '@prime/prime-model/prime-table-action.model';
 import { ItemValidationCheck } from '@shared/models/item-validation-check.model';
+import { FormGroup } from '@angular/forms';
 
 @Injectable({ providedIn: 'root' })
 export class DataService {
@@ -57,18 +58,18 @@ export class DataService {
       label: 'فرصت های شغلی',
       icon: 'pi pi-pw pi-file',
       items: [
-        { label: 'لیست فرصت های شغلی', routerLink: ['/customer/group/list'] },
+        { label: 'لیست فرصت های شغلی', routerLink: ['/dashboard/product/'] },
       ],
     },
     {
       label: 'مقالات',
       icon: 'pi pi-pw pi-file',
-      items: [{ label: 'لیست مقالات', routerLink: ['/customer/group/list'] }],
+      items: [{ label: 'لیست مقالات', routerLink: ['/dashboard/post/list'] }],
     },
     {
       label: 'اخبار',
       icon: 'pi pi-pw pi-file',
-      items: [{ label: 'لیست اخبار', routerLink: ['/customer/group/list'] }],
+      items: [{ label: 'لیست اخبار', routerLink: ['/dashboard/news/list'] }],
     },
   ];
 
@@ -150,7 +151,8 @@ export class DataService {
     return this.toaster.show(
       {
         severity: 'success',
-        summary: 'عملیات با موفقیت انجام شد.',
+        detail: 'عملیات با موفقیت انجام شد',
+        summary: 'انجام شد',
       },
       vcRef
     );
@@ -174,8 +176,27 @@ export class DataService {
       })
     );
   }
+
   getImage(imageUrl: string, options: any) {
     return this.http.get(imageUrl, options);
   }
+
+  getDirtyControls(
+    form: FormGroup,
+    type: 'object' | 'array' | 'names' = 'object'
+  ): {} {
+    const kv = Object.entries(form.controls).filter((val) => val[1].dirty);
+    const result = {
+      object: () =>
+        kv.reduce(
+          (accum, val) => Object.assign(accum, { [val[0]]: val[1].value }),
+          {}
+        ),
+      array: () => kv.map((val) => val[1]),
+      names: () => kv.map((val) => val[0]),
+    }[type]();
+    return Object.assign(result, { id: form.get('id').value });
+  }
+
   //#endregion GENERAL
 }

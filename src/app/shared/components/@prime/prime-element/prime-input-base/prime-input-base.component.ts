@@ -86,7 +86,7 @@ export class PrimeInputBaseComponent
         this.cdr.detectChanges();
       }
       this.controlContainer.ngSubmit.subscribe(() => {
-        if (this.value == false) {
+        if (this.value === false) {
           this.formControl.setValue(null);
           this.value = null;
         }
@@ -108,17 +108,14 @@ export class PrimeInputBaseComponent
       formControl: this.formControl,
       layout: this.layout,
     };
-
   }
 
   controlIsRequired(control: FormControl): boolean {
     let isRequired = false;
     let formControl = new FormControl();
-    for (const key in control)
-      formControl[key] = control[key];
+    for (const key in control) formControl[key] = control[key];
     formControl.setValue(null);
-    if (formControl.errors && formControl.errors.required)
-      isRequired = true;
+    if (formControl.errors && formControl.errors.required) isRequired = true;
     formControl.setValue(control.value);
     return isRequired;
   }

@@ -28,6 +28,7 @@ export class ProcessPage implements OnInit {
   });
   disabled = true;
   editMode = false;
+  urlToShow: string;
   processes$: Observable<Process[]>;
   columns: PrimeTableColumn[] = [
     {
@@ -74,40 +75,27 @@ export class ProcessPage implements OnInit {
     if (event.action === 'ویرایش') {
       this.disabled = false;
       this.editMode = true;
-      this.form.setValue({
+      this.form.patchValue({
         id: process.id,
         title: process.title,
         description: process.description,
-        image: process.image,
       });
+      this.urlToShow = process.image;
     } else if (event.action === 'حذف') {
       this.processService
-        .delete(+process.id)
+        .delete(process.id)
         .subscribe((res) => this.dataService.successfullMessage(this.vcRef));
     }
-  }
-
-  onSelectImage(imageInput: any) {
-    const file: File = imageInput.files[0];
-    // const reader = new FileReader();
-    // let selectedFile: ImageSnippet;
-    // reader.addEventListener('load', (event: any) => {
-    //   selectedFile = new ImageSnippet(event.target.result, file);
-    // });
-    // reader.readAsDataURL(file);
-    const formData = new FormData();
-    formData.append('file', file);
-    this.form.get('logo').setValue(formData);
   }
 
   onSubmit() {
     if (this.editMode) {
       this.processService
-        .put(this.form.value)
+        .patch(this.form.value as Process)
         .subscribe((res) => this.dataService.successfullMessage(this.vcRef));
     } else {
       this.processService
-        .post(this.form.value)
+        .post(this.form.value as Process)
         .subscribe((res) => this.dataService.successfullMessage(this.vcRef));
     }
   }

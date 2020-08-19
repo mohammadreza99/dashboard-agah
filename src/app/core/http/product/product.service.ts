@@ -25,7 +25,7 @@ export class ProductService {
       .pipe(map((res: any) => res.data));
   }
 
-  getProductById(productId: number): Observable<Product> {
+  getProductById(productId: string | number): Observable<Product> {
     return this.apiService.get<Product>(`${this.endPoint}/${productId}`);
   }
 }

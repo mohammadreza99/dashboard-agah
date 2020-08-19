@@ -9,6 +9,7 @@ import { RouterModule } from '@angular/router';
 import { COMPONENTS } from '.';
 import { PrimeModule } from '@prime/prime.module';
 
+
 @NgModule({
   declarations: [...COMPONENTS],
   imports: [

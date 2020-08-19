@@ -2,7 +2,7 @@ import { BaseEntity } from './base';
 import { Author } from './author.model';
 
 export class Post extends BaseEntity {
-  user_id: number;
+  user_id: string | number;
   title: string;
   content: string;
   image: string;

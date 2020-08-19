@@ -119,9 +119,8 @@ export class ProductModifyPage implements OnInit, AfterViewInit {
     }
   }
 
-  onMoveToTarget() {
-    console.log(this.target);
-  }
+  onMoveToTarget() {}
+
   onMoveToSource() {}
   onMoveAllToTarget() {}
   onMoveAllToSource() {}

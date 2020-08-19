@@ -9,7 +9,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { ProductsModule } from './modules/products/products.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { HomeModule } from './modules/home/home.module';
-import { ContentModule } from './modules/content/content.module';
+import { NewsModule } from './modules/news/news.module';
+import { PostsModule } from './modules/posts/posts.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -22,7 +23,8 @@ import { ContentModule } from './modules/content/content.module';
     AuthModule,
     SharedModule,
     ProductsModule,
-    ContentModule,
+    NewsModule,
+    PostsModule,
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

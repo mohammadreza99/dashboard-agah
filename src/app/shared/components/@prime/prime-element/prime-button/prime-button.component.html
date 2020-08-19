@@ -1,4 +1,5 @@
 <p-button
+  *ngIf="type != 'submit'"
   [icon]="icon"
   [iconPos]="iconPos"
   [label]="label"
@@ -10,3 +11,16 @@
   (onFocus)="_onFocus()"
   (onClick)="_onClick()"
 ></p-button>
+
+<button
+  pButton
+  type="submit"
+  [icon]="icon"
+  [iconPos]="iconPos"
+  [label]="label"
+  [disabled]="disabled"
+  [ngClass]="styleClass"
+  [style]="style"
+  [attr.form]="form"
+  *ngIf="type == 'submit'"
+></button>

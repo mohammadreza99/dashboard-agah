@@ -16,7 +16,7 @@ export class StockholderService {
     return this.apiService.get<Stockholder[]>(this.endPoint);
   }
 
-  getById(stockholderId: number): Observable<Stockholder> {
+  getById(stockholderId: string | number): Observable<Stockholder> {
     return this.apiService.get<Stockholder>(
       `${this.endPoint}/${stockholderId}`
     );

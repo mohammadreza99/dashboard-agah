@@ -7,6 +7,10 @@ import { LoginPage } from './modules/auth/pages/login/login.page';
 import { PartnersPage } from './modules/products/pages/partners/partners.page';
 import { ProcessPage } from './modules/products/pages/process/process.page';
 import { FeaturesPage } from './modules/products/pages/features/features.page';
+import { NewsListPage } from './modules/news/news-list/news-list.page';
+import { NewsModifyPage } from './modules/news/news-modify/news-modify.page';
+import { PostsListPage } from './modules/posts/pages/posts-list/posts-list.page';
+import { PostModifyPage } from './modules/posts/pages/post-modify/post-modify.page';
 
 const routes: Routes = [
   {
@@ -39,7 +43,7 @@ const routes: Routes = [
             data: { breadcrumb: 'add product' },
           },
           {
-            path: 'edit',
+            path: 'edit/:id',
             component: ProductModifyPage,
             data: { breadcrumb: 'edit product' },
           },
@@ -57,6 +61,46 @@ const routes: Routes = [
             path: 'partners',
             component: PartnersPage,
             data: { breadcrumb: 'partners' },
+          },
+        ],
+      },
+      {
+        path: 'news',
+        children: [
+          {
+            path: 'list',
+            component: NewsListPage,
+            data: { breadcrumb: 'products list' },
+          },
+          {
+            path: 'add',
+            component: NewsModifyPage,
+            data: { breadcrumb: 'add product' },
+          },
+          {
+            path: 'edit/:id',
+            component: NewsModifyPage,
+            data: { breadcrumb: 'products list' },
+          },
+        ],
+      },
+      {
+        path: 'post',
+        children: [
+          {
+            path: 'list',
+            component: PostsListPage,
+            data: { breadcrumb: 'products list' },
+          },
+          {
+            path: 'add',
+            component: PostModifyPage,
+            data: { breadcrumb: 'add product' },
+          },
+          {
+            path: 'edit/:id',
+            component: PostModifyPage,
+            data: { breadcrumb: 'products list' },
           },
         ],
       },

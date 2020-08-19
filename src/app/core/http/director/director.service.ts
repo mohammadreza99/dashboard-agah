@@ -16,7 +16,7 @@ export class DirectorService {
     return this.apiService.get<Director[]>(this.endPoint);
   }
 
-  getById(directorId: number): Observable<Director> {
+  getById(directorId: string | number): Observable<Director> {
     return this.apiService.get<Director>(`${this.endPoint}/${directorId}`);
   }
 }

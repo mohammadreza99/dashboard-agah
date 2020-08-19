@@ -19,7 +19,7 @@ export class NewsLetterService {
       .pipe(map((res: any) => res.data));
   }
 
-  getById(newsLetterId: number): Observable<NewsLetter> {
+  getById(newsLetterId: string | number): Observable<NewsLetter> {
     return this.apiService.get<NewsLetter>(`${this.endPoint}/${newsLetterId}`);
   }
 }

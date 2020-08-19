@@ -133,7 +133,7 @@
           {{ getDate(rowData[col.field]) }}
         </span>
         <span class="w-100" *ngSwitchCase="'image'">
-          <img class="w-100" [src]="rowData[col.field]" />
+          <img [src]="rowData[col.field]" />
         </span>
         <span *ngSwitchCase="'boolean'">
           <i

@@ -19,7 +19,7 @@ export class HistoryService {
       .pipe(map((res: any) => res.data));
   }
 
-  getById(historyId: number): Observable<History> {
+  getById(historyId: string | number): Observable<History> {
     return this.apiService.get<History>(`${this.endPoint}/${historyId}`);
   }
 }

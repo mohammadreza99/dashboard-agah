@@ -1,7 +1,6 @@
 import {
   Component,
   OnInit,
-  ChangeDetectorRef,
   Input,
   Output,
   EventEmitter,
@@ -33,7 +32,9 @@ export class PrimeInputFileComponent extends PrimeInputBaseComponent
   // constructor(private cd: ChangeDetectorRef) {
   //   super();
   // }
-  @ViewChild('upload') upload: FileUpload;
+
+  @ViewChild('upload', { static: true }) upload: FileUpload;
+
   @Input() url: string;
   @Input() multiple: boolean = false;
   @Input() auto: boolean = false;
@@ -124,7 +125,6 @@ export class PrimeInputFileComponent extends PrimeInputBaseComponent
   clear() {
     this.upload.clear();
   }
-
   /////////////////////////////////// DRAG DROP EXAMPLE //////////////////////////////////
   // timePeriods = [
   //   "Bronze age",

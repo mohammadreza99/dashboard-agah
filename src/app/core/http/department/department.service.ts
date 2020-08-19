@@ -16,7 +16,7 @@ export class DepartmentService {
     return this.apiService.get<Department[]>(this.endPoint);
   }
 
-  getById(departmentId: number): Observable<Department> {
+  getById(departmentId: string | number): Observable<Department> {
     return this.apiService.get<Department>(`${this.endPoint}/${departmentId}`);
   }
 }

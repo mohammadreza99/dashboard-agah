@@ -80,7 +80,9 @@ td[ng-reflect-ng-switch="boolean"] {
     font-size: 2em !important;
   }
 }
-
+img {
+  width: 110px;
+}
 .array-item {
   &:hover {
     cursor: pointer;

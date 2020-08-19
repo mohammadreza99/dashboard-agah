@@ -34,7 +34,7 @@ export class PostService {
     });
   }
 
-  delete(partnerId: number) {
+  delete(partnerId: string | number) {
     return this.apiService.delete<Post>(`${this.endPoint}/${partnerId}`);
   }
 }

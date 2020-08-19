@@ -72,13 +72,15 @@
               labelWidth="80"
               label="همراهان"
             ></prm-input-multi-select>
-            <prm-input-file
+
+            <ag-single-image-picker
+              label="تصویر"
+              labelWidth="80"
               class="col-8 mb-4"
               formControlName="image"
               [errors]="[{type:'required',message:'این فیلد الزامیست.'}]"
-              labelWidth="80"
-              label="تصویر"
-            ></prm-input-file>
+            ></ag-single-image-picker>
+
             <prm-input-textarea
               class="col-8 mb-4"
               formControlName="description"

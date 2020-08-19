@@ -31,21 +31,15 @@
       labelWidth="90"
       label="عنوان"
     ></prm-input-text>
-    <div class="col-8 mb-4 d-flex flex-column align-items-end image-preview">
-      <img
-        class="mb-3"
-        [src]="imageToShow || 'assets/images/imgplaceholder.png'"
-      />
-      <prm-input-file
-        #upload
-        [disabled]="disabled"
-        formControlName="logo"
-        [errors]="[{type:'required',message:'این فیلد الزامیست.'}]"
-        labelWidth="90"
-        label="تصویر"
-        (onSelect)="onSelectImage($event)"
-      ></prm-input-file>
-    </div>
+    <ag-single-image-picker
+      label="تصویر"
+      labelWidth="90"
+      class="col-8 mb-4"
+      [disabled]="disabled"
+      [urlToShow]="urlToShow"
+      formControlName="logo"
+      class="col-8 mb-4"
+    ></ag-single-image-picker>
     <div class="col-8">
       <div class="d-flex">
         <prm-button
@@ -54,7 +48,7 @@
           label="ثبت"
         ></prm-button>
         <prm-button
-          (click)="onCancelClick()"
+          (click)="onCancel()"
           color="danger"
           class="mx-4"
           [disabled]="disabled"

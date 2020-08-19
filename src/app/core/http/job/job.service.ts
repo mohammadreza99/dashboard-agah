@@ -20,8 +20,8 @@ export class JobService {
       .pipe(map((res: any) => res.data));
   }
 
-  getById(id: number) {
-    return this.apiService.get<JobItem>(`${this.jobsEndPoint}/${id}`);
+  getById(jobId: string | number) {
+    return this.apiService.get<JobItem>(`${this.jobsEndPoint}/${jobId}`);
   }
 
   request(form: JobRequest): Observable<JobRequest> {

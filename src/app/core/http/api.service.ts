@@ -28,20 +28,52 @@ export class ApiService {
   }
 
   post<T>(endpoint: string, data: any, options?: any) {
+    if (!options) {
+      options = {};
+    }
+    options.headers = this.headers;
     return this.http
       .post<T>(this.baseUrl + endpoint, data, options)
       .pipe(map((res: any) => res.data as T));
   }
 
   put<T>(endpoint: string, data: any, options?: any) {
+    if (!options) {
+      options = {};
+    }
+    options.headers = this.headers;
     return this.http
       .put(this.baseUrl + endpoint, data, options)
       .pipe(map((res: any) => res.data as T));
   }
 
+  patch<T>(endpoint: string, data: any, options?: any) {
+    if (!options) {
+      options = {};
+    }
+    options.headers = this.headers;
+    return this.http
+      .patch(this.baseUrl + endpoint, data, options)
+      .pipe(map((res: any) => res.data as T));
+  }
+
   delete<T>(endpoint: string, options?: any) {
+    if (!options) {
+      options = {};
+    }
+    options.headers = this.headers;
     return this.http
       .delete<T>(this.baseUrl + endpoint, options)
       .pipe(map((res: any) => res.data as T));
+  }
+
+  getFormData(obj: any): FormData {
+    const formData = new FormData();
+    for (const key in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        formData.append(key, obj[key]);
+      }
+    }
+    return formData;
   }
 }

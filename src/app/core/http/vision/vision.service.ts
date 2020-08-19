@@ -16,7 +16,7 @@ export class VisionService {
     return this.apiService.get<Vision>(this.endPoint);
   }
 
-  getById(visionId: number): Observable<Vision> {
+  getById(visionId: string | number): Observable<Vision> {
     return this.apiService.get<Vision>(`${this.endPoint}/${visionId}`);
   }
 }

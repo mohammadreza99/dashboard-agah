@@ -19,22 +19,24 @@ export class PartnerService {
       .pipe(map((res: any) => res.data));
   }
 
-  getById(partnerId: number): Observable<Partner> {
+  getById(partnerId: string | number): Observable<Partner> {
     return this.apiService.get<Partner>(`${this.endPoint}/${partnerId}`);
   }
 
   post(partner: Partner): Observable<Partner> {
-    return this.apiService.post<Partner>(`${this.endPoint}`, partner);
+    const formData = this.apiService.getFormData(partner);
+    return this.apiService.post<Partner>(`${this.endPoint}`, formData);
   }
 
-  put(partner: Partner): Observable<Partner> {
-    return this.apiService.post<Partner>(`${this.endPoint}/${partner.id}`, {
-      ...partner,
-      _method: 'PATCH',
-    });
+  patch(partner: Partner): Observable<Partner> {
+    const formData = this.apiService.getFormData(partner);
+    return this.apiService.patch<Partner>(
+      `${this.endPoint}/${partner.id}`,
+      formData
+    );
   }
 
-  delete(partnerId: number) {
+  delete(partnerId: string | number) {
     return this.apiService.delete<Partner>(`${this.endPoint}/${partnerId}`);
   }
 }

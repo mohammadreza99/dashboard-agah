@@ -27,7 +27,7 @@ export class ProductCategoryModifyPage implements OnInit {
   selectedExtraFields: PrimeTree[] = [];
   disabled: boolean = false;
   editMode: boolean = false;
-  paramId: number;
+  paramId: string | number;
 
   ngOnInit() {
     this.paramId = +this.route.snapshot.params['id'];
