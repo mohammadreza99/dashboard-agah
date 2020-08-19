@@ -57,7 +57,7 @@ export class FeaturesPage implements OnInit {
     { tooltip: 'ویرایش', icon: 'fas fa-pencil', color: 'info' },
   ];
   urlToShow: string;
-
+  filesToShow;
   ngOnInit(): void {
     this.features$ = this.featureService.get();
   }

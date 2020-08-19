@@ -7,6 +7,7 @@ import {
   forwardRef,
   AfterViewInit,
   ViewChild,
+  OnChanges,
 } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -29,9 +30,6 @@ import { FileUpload } from 'primeng';
 })
 export class PrimeInputFileComponent extends PrimeInputBaseComponent
   implements OnInit, AfterViewInit {
-  // constructor(private cd: ChangeDetectorRef) {
-  //   super();
-  // }
 
   @ViewChild('upload', { static: true }) upload: FileUpload;
 

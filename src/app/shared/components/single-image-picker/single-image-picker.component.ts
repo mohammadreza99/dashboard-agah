@@ -34,9 +34,11 @@ export class SingleImagePickerComponent extends PrimeInputBaseComponent
   @ViewChild(PrimeInputFileComponent, { static: true })
   upload: PrimeInputFileComponent;
   @Input('urlToShow') set showImage(url: string) {
-    this.getImage(url).subscribe((data: any) => {
-      this.createImageFromBlob(data);
-    });
+    if (url) {
+      this.getImage(url).subscribe((data: any) => {
+        this.createImageFromBlob(data);
+      });
+    }
   }
   @Output() onSelect = new EventEmitter();
 

@@ -11,9 +11,10 @@ import { AuthModule } from './modules/auth/auth.module';
 import { HomeModule } from './modules/home/home.module';
 import { NewsModule } from './modules/news/news.module';
 import { PostsModule } from './modules/posts/posts.module';
+import { LoadingComponent } from './shared/components/loading/loading.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, LoadingComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

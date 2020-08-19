@@ -7,21 +7,24 @@ import {
   HostListener,
 } from '@angular/core';
 import { MenuItem } from 'primeng';
+import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'ag-home-page',
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
-export class HomePage {
-  constructor(private cd: ChangeDetectorRef) {}
+export class HomePage implements OnInit {
+  constructor(
+    private cd: ChangeDetectorRef,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   showSidebar = true;
   isModalSidebar = false;
-  breadcrumbItems: MenuItem[] = [
-    { label: 'افزودن محصول', routerLink: '/product/add' },
-    { label: 'خانه', routerLink: 'home' },
-  ];
+  breadcrumbItems: MenuItem[] = [];
 
   @ViewChild('mainContent', { static: true }) mainContent: ElementRef;
   @ViewChild('sidebar', { static: true, read: ElementRef }) sidebar: ElementRef;
@@ -41,6 +44,42 @@ export class HomePage {
       }
     }
     this.cd.detectChanges();
+  }
+
+  ngOnInit() {
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(
+        () =>
+          (this.breadcrumbItems = [
+            ...this.createBreadcrumbs(this.route.root),
+            { label: 'خانه', routerLink: '/' },
+          ])
+      );
+  }
+
+  createBreadcrumbs(
+    route: ActivatedRoute,
+    url: string = '',
+    breadcrumbs: MenuItem[] = []
+  ): MenuItem[] {
+    const children: ActivatedRoute[] = route.children;
+    if (children.length === 0) {
+      return breadcrumbs;
+    }
+    for (const child of children) {
+      const routeURL: string = child.snapshot.url
+        .map((segment) => segment.path)
+        .join('/');
+      if (routeURL !== '') {
+        url += `/${routeURL}`;
+      }
+      const label = child.snapshot.data['breadcrumb'];
+      if (label) {
+        breadcrumbs.push({ label, url });
+      }
+      return this.createBreadcrumbs(child, url, breadcrumbs);
+    }
   }
 
   onHambergurClick() {
