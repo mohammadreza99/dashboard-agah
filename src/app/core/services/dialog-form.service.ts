@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DialogService, DynamicDialogRef } from 'primeng';
 
-import { DialogFormConfig } from '@app/type/dialog-form-config';
+import { DialogFormConfig } from '@app/shared/models/dialog-form-config';
 import { DialogFormComponent } from '@shared/components/dialog-form/dialog-form.component';
 
 @Injectable({
@@ -9,11 +9,15 @@ import { DialogFormComponent } from '@shared/components/dialog-form/dialog-form.
 })
 export class DialogFormService {
   constructor(private dialogService: DialogService) {}
-  show(header: string, config: DialogFormConfig[]): DynamicDialogRef {
+  show(
+    header: string,
+    config: DialogFormConfig[],
+    width: string = '600px'
+  ): DynamicDialogRef {
     return this.dialogService.open(DialogFormComponent, {
       header: header,
       data: config,
-      width: '400px',
+      width: width,
     });
   }
 }

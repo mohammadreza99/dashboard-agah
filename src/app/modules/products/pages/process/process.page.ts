@@ -1,12 +1,13 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, ViewContainerRef, ViewChild } from '@angular/core';
 import { Process } from '@app/shared/models/product.model';
 
 import { DataService } from '@app/core/services/data.service';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { PrimeTableColumn } from '@app/shared/components/@prime/prime-model/prime-table-column.model';
-import { PrimeTableAction } from '@app/shared/components/@prime/prime-model/prime-table-action.model';
 import { ProcessService } from '@app/core/http/process/process.service';
+import { TableComponent } from '@app/shared/components/table/table.component';
+import { DialogFormService } from '@app/core/services/dialog-form.service';
+import { DialogFormConfig } from '@app/shared/models/dialog-form-config';
+import { ColDef } from 'ag-grid-community';
 
 @Component({
   selector: 'ag-process',
@@ -14,94 +15,111 @@ import { ProcessService } from '@app/core/http/process/process.service';
   styleUrls: ['./process.page.scss'],
 })
 export class ProcessPage implements OnInit {
-  constructor(
-    private processService: ProcessService,
-    private dataService: DataService,
-    private vcRef: ViewContainerRef
-  ) {}
+  @ViewChild(TableComponent, { static: false }) table: TableComponent;
 
-  form = new FormGroup({
-    id: new FormControl(null),
-    title: new FormControl(null, Validators.required),
-    description: new FormControl(null, Validators.required),
-    image: new FormControl(null, Validators.required),
-  });
-  disabled = true;
-  editMode = false;
-  urlToShow: string;
-  processes$: Observable<Process[]>;
-  columns: PrimeTableColumn[] = [
+  rowData$: Observable<Process[]>;
+  columnDefs: ColDef[] = [
     {
       field: 'id',
-      header: 'کد',
-      filterType: 'input',
-      type: 'string',
+      headerName: 'شناسه',
+      editable: false,
     },
     {
       field: 'title',
-      header: 'عنوان',
-      filterType: 'input',
-      type: 'string',
+      headerName: 'عنوان',
     },
     {
       field: 'description',
-      header: 'توضیحات',
-      filterType: 'input',
-      type: 'string',
+      headerName: 'عنوان',
+      cellEditor: 'agLargeTextCellEditor',
     },
-    {
-      field: 'image',
-      header: 'تصویر',
-      filterType: 'input',
-      type: 'image',
-    },
-  ];
-  actions: PrimeTableAction[] = [
-    { tooltip: 'ویرایش', icon: 'fas fa-pencil', color: 'info' },
   ];
 
+  constructor(
+    private processService: ProcessService,
+    private dataService: DataService,
+    private dialogFormService: DialogFormService,
+    private vcRef: ViewContainerRef
+  ) {}
+
   ngOnInit(): void {
-    this.processes$ = this.processService.get();
+    this.rowData$ = this.processService.get();
   }
 
   addProcess() {
-    this.disabled = false;
-    this.editMode = false;
-    this.form.reset();
+    this.dialogFormService
+      .show('افزودن', this.formConfig())
+      .onClose.subscribe((process: Process) => {
+        if (process) {
+          this.processService.post(process).subscribe((res) => {
+            this.table.addTransaction(process);
+            this.dataService.successfullMessage(this.vcRef);
+          });
+        }
+      });
+  }
+
+  formConfig(): DialogFormConfig[] {
+    return [
+      {
+        type: 'text',
+        label: 'عنوان',
+        labelWidth: 110,
+        formControlName: 'title',
+        errors: [{ type: 'required', message: 'این فیلد الزامیست' }],
+      },
+      {
+        type: 'textarea',
+        label: 'توضیحات',
+        labelWidth: 110,
+        formControlName: 'description',
+        errors: [{ type: 'required', message: 'این فیلد الزامیست' }],
+      },
+      {
+        type: 'image-picker',
+        label: 'عکس',
+        labelWidth: 110,
+        formControlName: 'image',
+        errors: [{ type: 'required', message: 'این فیلد الزامیست' }],
+      },
+    ];
+  }
+
+  onCellValueChanged(event) {
+    const process = new Process();
+    process.id = event.data.id;
+    if (event.colDef.field !== 'image') {
+      const field = event.colDef.field;
+      const value = event.value;
+      process[field] = value;
+    }
+    this.processService.patch(process).subscribe(() => {
+      this.table.updateTransaction(process);
+      this.dataService.successfullMessage(this.vcRef);
+    });
+  }
+
+  onImageSelect(e) {
+    const process = new Process();
+    process.id = e.rowData.id;
+    process[e.field] = e.file;
+    this.processService.patch(process).subscribe(() => {
+      this.table.updateTransaction(process);
+      this.dataService.successfullMessage(this.vcRef);
+    });
   }
 
   onActionClick(event) {
-    const process = event.row as Process;
-    if (event.action === 'ویرایش') {
-      this.disabled = false;
-      this.editMode = true;
-      this.form.patchValue({
-        id: process.id,
-        title: process.title,
-        description: process.description,
-      });
-      this.urlToShow = process.image;
-    } else if (event.action === 'حذف') {
-      this.processService
-        .delete(process.id)
-        .subscribe((res) => this.dataService.successfullMessage(this.vcRef));
+    const rowData = event.rowData as Process;
+    switch (event.action) {
+      case 'delete':
+        this.dataService.deletionConfirm(this.vcRef).then(() => {
+          this.processService.delete(rowData.id).subscribe(() => {
+            this.table.deleteTransaction(rowData);
+            this.dataService.successfullMessage(this.vcRef);
+          });
+        });
+        break;
     }
-  }
-
-  onSubmit() {
-    if (this.editMode) {
-      this.processService
-        .patch(this.form.value as Process)
-        .subscribe((res) => this.dataService.successfullMessage(this.vcRef));
-    } else {
-      this.processService
-        .post(this.form.value as Process)
-        .subscribe((res) => this.dataService.successfullMessage(this.vcRef));
-    }
-  }
-
-  onCancelClick() {
-    this.disabled = true;
-    this.form.reset();
   }
 }

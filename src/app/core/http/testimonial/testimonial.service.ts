@@ -16,8 +16,27 @@ export class TestimonialService {
     return this.apiService.get<Testimonial[]>(this.endPoint);
   }
 
-  getById(testimonialId: string | number): Observable<Testimonial> {
+  getById(testimonialId: object): Observable<Testimonial> {
     return this.apiService.get<Testimonial>(
+      `${this.endPoint}/${testimonialId}`
+    );
+  }
+
+  post(testimonial: Testimonial): Observable<Testimonial> {
+    const formData = this.apiService.getFormData(testimonial);
+    return this.apiService.post<Testimonial>(`${this.endPoint}`, formData);
+  }
+
+  patch(testimonial: Testimonial): Observable<Testimonial> {
+    const formData = this.apiService.getFormData(testimonial, true);
+    return this.apiService.post<Testimonial>(
+      `${this.endPoint}/${testimonial.id}`,
+      formData
+    );
+  }
+
+  delete(testimonialId: object) {
+    return this.apiService.delete<Testimonial>(
       `${this.endPoint}/${testimonialId}`
     );
   }

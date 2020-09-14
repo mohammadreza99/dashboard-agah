@@ -35,9 +35,29 @@
   [ngClass]="{ disabled: disabled }"
   class="fal fa-1x fa-times position-absolute border rounded-circle d-flex justify-content-center align-items-center bg-light text-muted"
 ></i>
-<dp-day-time-calendar
-  *ngIf="inline"
-  [(ngModel)]="_date"
-  dir="rtl"
-  theme="dp-material"
-></dp-day-time-calendar>
+<ng-container *ngIf="inline">
+  <dp-day-time-calendar
+    *ngIf="datePickerMode == 'daytime'"
+    [(ngModel)]="_date"
+    [config]="config"
+    dir="rtl"
+    theme="dp-material"
+    (onChange)="_onInlineChange($event)"
+  ></dp-day-time-calendar>
+
+  <dp-day-calendar
+    *ngIf="datePickerMode == 'day'"
+    [(ngModel)]="_date"
+    dir="rtl"
+    theme="dp-material"
+    (onSelect)="_onInlineChange($event)"
+  ></dp-day-calendar>
+
+  <dp-time-select
+    *ngIf="datePickerMode == 'time'"
+    [(ngModel)]="_date"
+    dir="rtl"
+    theme="dp-material"
+    (onChange)="_onInlineChange($event)"
+  ></dp-time-select>
+</ng-container>

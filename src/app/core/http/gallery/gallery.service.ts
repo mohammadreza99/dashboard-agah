@@ -16,7 +16,7 @@ export class GalleryService {
     return this.apiService.get<any[]>(this.endPoint);
   }
 
-  getById(galleryId: string | number): Observable<GalleryItem> {
+  getById(galleryId: object): Observable<GalleryItem> {
     return this.apiService.get<any>(`${this.endPoint}/${galleryId}`);
   }
 }

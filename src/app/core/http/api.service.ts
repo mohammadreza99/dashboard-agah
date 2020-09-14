@@ -2,26 +2,17 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
-import { Constants } from '@core/config/constants';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  constructor(private http: HttpClient, private constants: Constants) {}
+  constructor(private http: HttpClient) {}
 
-  private baseUrl = this.constants.API_URL;
-  private headers = new HttpHeaders({
-    // TODO
-    'Accept-Language': 'en',
-  });
+  private baseUrl = environment.apiUrl;
 
   get<T>(endpoint: string, options?: any) {
-    if (!options) {
-      options = {};
-    }
-    options.headers = this.headers;
-
     return this.http
       .get<T>(this.baseUrl + endpoint, options)
       .pipe(map((res: any) => res.data as T));
@@ -31,7 +22,6 @@ export class ApiService {
     if (!options) {
       options = {};
     }
-    options.headers = this.headers;
     return this.http
       .post<T>(this.baseUrl + endpoint, data, options)
       .pipe(map((res: any) => res.data as T));
@@ -41,7 +31,6 @@ export class ApiService {
     if (!options) {
       options = {};
     }
-    options.headers = this.headers;
     return this.http
       .put(this.baseUrl + endpoint, data, options)
       .pipe(map((res: any) => res.data as T));
@@ -51,7 +40,6 @@ export class ApiService {
     if (!options) {
       options = {};
     }
-    options.headers = this.headers;
     return this.http
       .patch(this.baseUrl + endpoint, data, options)
       .pipe(map((res: any) => res.data as T));
@@ -61,18 +49,40 @@ export class ApiService {
     if (!options) {
       options = {};
     }
-    options.headers = this.headers;
     return this.http
       .delete<T>(this.baseUrl + endpoint, options)
       .pipe(map((res: any) => res.data as T));
   }
 
-  getFormData(obj: any): FormData {
+  getFormData(obj: any, editMode: boolean = false): FormData {
     const formData = new FormData();
     for (const key in obj) {
       if (Object.prototype.hasOwnProperty.call(obj, key)) {
-        formData.append(key, obj[key]);
+        if (Array.isArray(obj[key])) {
+          for (let i = 0; i < obj[key].length; i++) {
+            formData.append(key + '[' + i + ']', obj[key][i]);
+          }
+        } else if (
+          typeof obj[key] === 'object' &&
+          key !== 'image' &&
+          key !== 'logo' &&
+          key !== 'time_estimates' &&
+          key !== 'time' &&
+          key !== 'video' &&
+          key !== 'birthday'
+        ) {
+          for (const subkey in obj[key]) {
+            if (Object.prototype.hasOwnProperty.call(obj, key)) {
+              formData.append(`${key}[${subkey}]`, obj[key][subkey]);
+            }
+          }
+        } else {
+          formData.append(key, obj[key]);
+        }
       }
+    }
+    if (editMode) {
+      formData.append('_method', 'PATCH');
     }
     return formData;
   }

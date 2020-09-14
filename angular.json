@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ng9-en-primeng-fullcomponment": {
+    "agah-portal-admin": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/ng9-en-primeng-fullcomponment",
+            "outputPath": "dist/agah-portal-admin/browser",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -32,7 +32,10 @@
               "node_modules/quill/dist/quill.snow.css",
               "src/styles.scss"
             ],
-            "scripts": ["node_modules/quill/dist/quill.js"],
+            "scripts": [
+              "node_modules/quill/dist/quill.js",
+              "node_modules/particles.js/particles.js"
+            ],
             "stylePreprocessorOptions": {
               "includePaths": ["src/assets/styles", "src/assets"]
             }
@@ -71,18 +74,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ng9-en-primeng-fullcomponment:build"
+            "browserTarget": "agah-portal-admin:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "ng9-en-primeng-fullcomponment:build:production"
+              "browserTarget": "agah-portal-admin:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ng9-en-primeng-fullcomponment:build"
+            "browserTarget": "agah-portal-admin:build"
           }
         },
         "test": {
@@ -117,16 +120,63 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "ng9-en-primeng-fullcomponment:serve"
+            "devServerTarget": "agah-portal-admin:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "ng9-en-primeng-fullcomponment:serve:production"
+              "devServerTarget": "agah-portal-admin:serve:production"
             }
+          }
+        },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/agah-portal-admin/server",
+            "main": "server.ts",
+            "tsConfig": "tsconfig.server.json"
+          },
+          "configurations": {
+            "production": {
+              "outputHashing": "media",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
+              "sourceMap": false,
+              "optimization": true
+            }
+          }
+        },
+        "serve-ssr": {
+          "builder": "@nguniversal/builders:ssr-dev-server",
+          "options": {
+            "browserTarget": "agah-portal-admin:build",
+            "serverTarget": "agah-portal-admin:server"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "agah-portal-admin:build:production",
+              "serverTarget": "agah-portal-admin:server:production"
+            }
+          }
+        },
+        "prerender": {
+          "builder": "@nguniversal/builders:prerender",
+          "options": {
+            "browserTarget": "agah-portal-admin:build:production",
+            "serverTarget": "agah-portal-admin:server:production",
+            "routes": [
+              "/"
+            ]
+          },
+          "configurations": {
+            "production": {}
           }
         }
       }
     }
   },
-  "defaultProject": "ng9-en-primeng-fullcomponment"
+  "defaultProject": "agah-portal-admin"
 }

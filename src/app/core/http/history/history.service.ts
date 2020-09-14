@@ -19,7 +19,24 @@ export class HistoryService {
       .pipe(map((res: any) => res.data));
   }
 
-  getById(historyId: string | number): Observable<History> {
+  getById(historyId: object): Observable<History> {
     return this.apiService.get<History>(`${this.endPoint}/${historyId}`);
+  }
+
+  post(history: History): Observable<History> {
+    const formData = this.apiService.getFormData(history);
+    return this.apiService.post<History>(`${this.endPoint}`, formData);
+  }
+
+  patch(history: History): Observable<History> {
+    const formData = this.apiService.getFormData(history, true);
+    return this.apiService.post<History>(
+      `${this.endPoint}/${history.id}`,
+      formData
+    );
+  }
+
+  delete(historyId: object) {
+    return this.apiService.delete<History>(`${this.endPoint}/${historyId}`);
   }
 }

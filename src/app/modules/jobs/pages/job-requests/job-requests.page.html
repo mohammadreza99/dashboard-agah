@@ -1,0 +1,9 @@
+<ag-page-container title="رزومه های ارسال شده">
+  <ag-table
+    [columnDefs]="columnDefs"
+    [rowData]="rowData$ | async"
+    [actionsConfig]="[{action:'confirm',icon:'fa fa-check',headerName:'تایید رزومه',color:'primary'},{action:'delete',icon:'fa fa-times',headerName:'حذف',color:'danger'}]"
+    (actionClick)="onActionClick($event)"
+  >
+  </ag-table>
+</ag-page-container>

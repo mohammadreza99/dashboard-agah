@@ -1,14 +1,14 @@
 import { Component, OnInit, ViewContainerRef, ViewChild } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Feature } from '@app/shared/models/product.model';
 import { Observable } from 'rxjs';
-import { PrimeTableColumn } from '@app/shared/components/@prime/prime-model/prime-table-column.model';
-import { PrimeTableAction } from '@app/shared/components/@prime/prime-model/prime-table-action.model';
 import { FeatureService } from '@app/core/http/feature/feature.service';
 import { DataService } from '@app/core/services/data.service';
-import { map } from 'rxjs/operators';
-import { PrimeInputFileComponent } from '@app/shared/components/@prime/prime-element/prime-input-file/prime-input-file.component';
-import { SingleImagePickerComponent } from '@app/shared/components/single-image-picker/single-image-picker.component';
+import { TableComponent } from '@app/shared/components/table/table.component';
+import { CompanyPositionService } from '@app/core/http/company-position/company-position.service';
+import { DialogFormService } from '@app/core/services/dialog-form.service';
+import { DialogFormConfig } from '@app/shared/models/dialog-form-config';
+import { ColDef } from 'ag-grid-community';
+import { features } from 'process';
 
 @Component({
   selector: 'ag-features',
@@ -16,95 +16,99 @@ import { SingleImagePickerComponent } from '@app/shared/components/single-image-
   styleUrls: ['./features.page.scss'],
 })
 export class FeaturesPage implements OnInit {
-  @ViewChild(SingleImagePickerComponent, { static: true })
-  upload: SingleImagePickerComponent;
+  @ViewChild(TableComponent, { static: false }) table: TableComponent;
+
+  rowData$: Observable<Feature[]>;
+  columnDefs: ColDef[] = [
+    {
+      field: 'id',
+      headerName: 'شناسه',
+      editable: false,
+    },
+    {
+      field: 'title',
+      headerName: 'عنوان',
+    },
+  ];
 
   constructor(
     private featureService: FeatureService,
     private dataService: DataService,
+    private dialogFormService: DialogFormService,
     private vcRef: ViewContainerRef
   ) {}
 
-  form = new FormGroup({
-    id: new FormControl(null),
-    title: new FormControl(null, Validators.required),
-    logo: new FormControl(null, Validators.required),
-  });
-  disabled = true;
-  editMode = false;
-  features$: Observable<Feature[]>;
-  columns: PrimeTableColumn[] = [
-    {
-      field: 'id',
-      header: 'کد',
-      filterType: 'input',
-      type: 'string',
-    },
-    {
-      field: 'title',
-      header: 'عنوان',
-      filterType: 'input',
-      type: 'string',
-    },
-    {
-      field: 'logo',
-      header: 'تصویر',
-      filterType: 'input',
-      type: 'image',
-    },
-  ];
-  actions: PrimeTableAction[] = [
-    { tooltip: 'ویرایش', icon: 'fas fa-pencil', color: 'info' },
-  ];
-  urlToShow: string;
-  filesToShow;
   ngOnInit(): void {
-    this.features$ = this.featureService.get();
+    this.rowData$ = this.featureService.get();
   }
 
   addFeature() {
-    this.disabled = false;
-    this.editMode = false;
-    this.resetForm();
+    this.dialogFormService
+      .show('افزودن', this.formConfig())
+      .onClose.subscribe((feature: Feature) => {
+        if (feature) {
+          this.featureService.post(feature).subscribe((res) => {
+            this.table.addTransaction(feature);
+            this.dataService.successfullMessage(this.vcRef);
+          });
+        }
+      });
+  }
+
+  formConfig(): DialogFormConfig[] {
+    return [
+      {
+        type: 'text',
+        label: 'عنوان',
+        labelWidth: 110,
+        formControlName: 'title',
+        errors: [{ type: 'required', message: 'این فیلد الزامیست' }],
+      },
+      {
+        type: 'image-picker',
+        label: 'لوگو',
+        labelWidth: 110,
+        formControlName: 'logo',
+        errors: [{ type: 'required', message: 'این فیلد الزامیست' }],
+      },
+    ];
+  }
+
+  onCellValueChanged(event) {
+    const feature = new Feature();
+    feature.id = event.data.id;
+    if (event.colDef.field !== 'logo') {
+      const field = event.colDef.field;
+      const value = event.value;
+      feature[field] = value;
+    }
+    this.featureService.patch(feature).subscribe(() => {
+      this.table.updateTransaction(feature);
+      this.dataService.successfullMessage(this.vcRef);
+    });
+  }
+
+  onImageSelect(e) {
+    const feature = new Feature();
+    feature.id = e.rowData.id;
+    feature[e.field] = e.file;
+    this.featureService.patch(feature).subscribe(() => {
+      this.table.updateTransaction(feature);
+      this.dataService.successfullMessage(this.vcRef);
+    });
   }
 
   onActionClick(event) {
-    const feature = event.row as Feature;
-    if (event.action === 'ویرایش') {
-      this.disabled = false;
-      this.editMode = true;
-      this.resetForm();
-      this.form.patchValue({
-        id: feature.id,
-        title: feature.title,
-      });
-      this.urlToShow = feature.logo;
-    } else if (event.action === 'حذف') {
-      this.featureService
-        .delete(feature.id)
-        .subscribe((res) => this.dataService.successfullMessage(this.vcRef));
+    const rowData = event.rowData as Feature;
+    switch (event.action) {
+      case 'delete':
+        this.dataService.deletionConfirm(this.vcRef).then(() => {
+          this.featureService.delete(rowData.id).subscribe(() => {
+            this.table.deleteTransaction(rowData);
+            this.dataService.successfullMessage(this.vcRef);
+          });
+        });
+        break;
     }
-  }
-
-  onSubmit() {
-    if (this.editMode) {
-      this.featureService
-        .patch(this.dataService.getDirtyControls(this.form) as Feature)
-        .subscribe((res) => this.dataService.successfullMessage(this.vcRef));
-    } else {
-      this.featureService
-        .post(this.form.value as Feature)
-        .subscribe((res) => this.dataService.successfullMessage(this.vcRef));
-    }
-  }
-
-  onCancel() {
-    this.disabled = true;
-    this.resetForm();
-  }
-
-  resetForm() {
-    this.form.reset();
-    this.upload.clear();
   }
 }

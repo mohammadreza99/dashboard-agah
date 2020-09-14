@@ -1,0 +1,18 @@
+<form
+  class="form-wrapper"
+  (ngSubmit)="onSubmit()"
+  [formGroup]="form"
+  [class.show]="show"
+>
+  <p-editor formControlName="content"></p-editor>
+  <p-message
+    class="d-inline-block mt-1"
+    *ngIf="form.get('content').invalid"
+    severity="error"
+    text="این فیلد الزامیست"
+  ></p-message>
+  <div class="d-flex mt-4">
+    <prm-button type="submit" class="mr-4" label="ویرایش"></prm-button>
+    <prm-button color="danger" label="انصراف" (click)="onCancel()"></prm-button>
+  </div>
+</form>

@@ -13,7 +13,7 @@ export class PrimeButtonComponent implements OnInit {
   @Input() icon: string;
   @Input() iconPos: PrimePosition = 'right';
   @Input() label: string;
-  @Input() type: string;
+  @Input() type = 'button';
   @Input() form: string;
   @Input() style: object;
   @Input() rounded: boolean;

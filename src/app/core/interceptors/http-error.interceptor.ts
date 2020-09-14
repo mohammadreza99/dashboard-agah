@@ -4,7 +4,7 @@ import {
   HttpHandler,
   HttpEvent,
   HttpInterceptor,
-  HttpErrorResponse,
+  HttpHeaders,
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -18,9 +18,25 @@ export class HttpErrorInterceptor implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    return next.handle(request).pipe(
-      catchError((error: HttpErrorResponse) => {
+    const clonedReq = request.clone({
+      headers: new HttpHeaders({
+        'Accept-Language': localStorage.getItem('lang'),
+      }),
+    });
+    return next.handle(clonedReq).pipe(
+      catchError((error: any) => {
         if (error) {
+          for (const key in error.error?.errors) {
+            if (
+              Object.prototype.hasOwnProperty.call(error.error?.errors, key)
+            ) {
+              const element = error.error?.errors[key];
+              this.errorService.storeError({
+                title: key,
+                message: element,
+              });
+            }
+          }
           const errorMessage = `Code: ${error.status}\nERROR Message: ${error.message}`;
           this.errorService.storeError(this.getErrorMessage(error.status));
           return throwError(errorMessage);
@@ -28,31 +44,55 @@ export class HttpErrorInterceptor implements HttpInterceptor {
       })
     );
   }
-  getErrorMessage(code: number): string {
+  getErrorMessage(code: number) {
     switch (code) {
       case 400: {
-        return 'درخواست صحیح نمی باشد و قابل پردازش نیست';
+        return {
+          title: `خطای ${code}`,
+          message: 'درخواست صحیح نمی باشد و قابل پردازش نیست',
+        };
       }
       case 401: {
-        return 'دوباره وارد سیستم شوید';
+        return {
+          title: `خطای ${code}`,
+          message: 'دوباره وارد سیستم شوید',
+        };
       }
       case 403: {
-        return 'اجرای درخواست مورد نظر برای شما امکان ندارد';
+        return {
+          title: `خطای ${code}`,
+          message: 'اجرای درخواست مورد نظر برای شما امکان ندارد',
+        };
       }
       case 404: {
-        return 'درخواست مورد نظر وجود ندارد';
+        return {
+          title: `خطای ${code}`,
+          message: 'درخواست مورد نظر وجود ندارد',
+        };
       }
       case 405: {
-        return 'متد استفاده شده برای درخواست مجاز نیست';
+        return {
+          title: `خطای ${code}`,
+          message: 'متد استفاده شده برای درخواست مجاز نیست',
+        };
       }
       case 422: {
-        return 'لطفا تمام فیلدها را پر کنید';
+        return {
+          title: `خطای ${code}`,
+          message: 'خطا در پردازش فیلدها',
+        };
       }
       case 500: {
-        return 'خطا سمت سرور رخ داده است';
+        return {
+          title: `خطای ${code}`,
+          message: 'خطا سمت سرور رخ داده است',
+        };
       }
       default: {
-        return 'خطای ناشناس، امکان ارتباط با سرور وجود ندارد';
+        return {
+          title: `خطا`,
+          message: 'خطای ناشناس، امکان ارتباط با سرور وجود ندارد',
+        };
       }
     }
   }

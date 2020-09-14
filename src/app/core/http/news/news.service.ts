@@ -19,7 +19,7 @@ export class NewsService {
       .pipe(map((res: any) => res.data));
   }
 
-  getById(newsId: string | number): Observable<News> {
+  getById(newsId: object): Observable<News> {
     return this.apiService.get<News>(`${this.endPoint}/${newsId}`);
   }
 
@@ -29,11 +29,11 @@ export class NewsService {
   }
 
   patch(news: News): Observable<News> {
-    const formData = this.apiService.getFormData(news);
-    return this.apiService.patch<News>(`${this.endPoint}/${news.id}`, formData);
+    const formData = this.apiService.getFormData(news, true);
+    return this.apiService.post<News>(`${this.endPoint}/${news.id}`, formData);
   }
 
-  delete(newsId: string | number) {
+  delete(newsId: object) {
     return this.apiService.delete<News>(`${this.endPoint}/${newsId}`);
   }
 }

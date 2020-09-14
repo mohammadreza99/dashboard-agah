@@ -9,25 +9,37 @@ import { AppRoutingModule } from './app-routing.module';
 import { ProductsModule } from './modules/products/products.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { HomeModule } from './modules/home/home.module';
-import { NewsModule } from './modules/news/news.module';
-import { PostsModule } from './modules/posts/posts.module';
 import { LoadingComponent } from './shared/components/loading/loading.component';
+import { ContactModule } from './modules/contact/contact.module';
+import { AgahModule } from './modules/agah/agah.module';
+import { EducationModule } from './modules/education/education.module';
+import { GalleryModule } from './modules/gallery/gallery.module';
+import { JobsModule } from './modules/jobs/jobs.module';
+import { MultimediaModule } from './modules/multimedia/multimedia.module';
+import { UsersModule } from './modules/users/users.module';
+import { AuthGuard } from './core/guards/auth.guard';
 
 @NgModule({
   declarations: [AppComponent, LoadingComponent],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     BrowserAnimationsModule,
     AppRoutingModule,
     CoreModule,
-    HomeModule,
-    AuthModule,
     SharedModule,
+    AgahModule,
+    AuthModule,
+    ContactModule,
+    EducationModule,
+    GalleryModule,
+    HomeModule,
+    JobsModule,
+    MultimediaModule,
     ProductsModule,
-    NewsModule,
-    PostsModule,
+    UsersModule,
   ],
   bootstrap: [AppComponent],
+  providers: [AuthGuard],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule {}

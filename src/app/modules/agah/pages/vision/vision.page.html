@@ -1,0 +1,16 @@
+<ag-page-container title="چشم انداز آگاه">
+  <prm-button
+    color="success"
+    label="افزودن"
+    icon="fa fa-plus"
+    (click)="addVision()"
+  ></prm-button>
+  <ag-table
+    [columnDefs]="columnDefs"
+    [rowData]="rowData$ | async"
+    [actionsConfig]="[{action:'edit-content',icon:'fa fa-pen',headerName:'ویرایش محتوا',color:'primary'}]"
+    (cellValueChanged)="onCellValueChanged($event)"
+    (actionClick)="onActionClick($event)"
+  >
+  </ag-table>
+</ag-page-container>

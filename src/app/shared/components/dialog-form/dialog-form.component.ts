@@ -1,11 +1,11 @@
-import { Component, OnInit, Optional } from "@angular/core";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { DynamicDialogRef, DynamicDialogConfig } from "primeng";
+import { Component, OnInit, Optional } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { DynamicDialogRef, DynamicDialogConfig } from 'primeng';
 
 @Component({
   selector: 'dialog-form',
   templateUrl: './dialog-form.component.html',
-  styleUrls: ['./dialog-form.component.scss']
+  styleUrls: ['./dialog-form.component.scss'],
 })
 export class DialogFormComponent implements OnInit {
   constructor(
@@ -18,13 +18,22 @@ export class DialogFormComponent implements OnInit {
   ngOnInit() {
     for (const item of this.dialogConfig.data) {
       this.form.addControl(item.formControlName, new FormControl(undefined));
-      if (item.errors)
+      if (item.errors) {
         for (const error of item.errors) {
           this.form.controls[item.formControlName].setValidators([
-            Validators[error.type]
+            Validators[error.type],
           ]);
         }
-      if (item.value) this.form.get(item.formControlName).setValue(item.value);
+      }
+      if (item.type === 'dropdown') {
+        (item.dropdownItems as Array<any>).unshift({
+          label: 'انتخاب کنید',
+          value: null,
+        });
+      }
+      if (item.value) {
+        this.form.get(item.formControlName).setValue(item.value);
+      }
     }
   }
 
@@ -37,5 +46,4 @@ export class DialogFormComponent implements OnInit {
   onCancel() {
     this.dialogRef.close(null);
   }
-
 }

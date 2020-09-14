@@ -19,22 +19,21 @@ export class PostService {
       .pipe(map((res: any) => res.data));
   }
 
-  getById(postId: SVGAnimatedString): Observable<Post> {
+  getById(postId: object): Observable<Post> {
     return this.apiService.get<Post>(`${this.endPoint}/${postId}`);
   }
 
   post(post: Post): Observable<Post> {
+    const formData = this.apiService.getFormData(post);
     return this.apiService.post<Post>(`${this.endPoint}`, post);
   }
 
-  put(post: Post): Observable<Post> {
-    return this.apiService.post<Post>(`${this.endPoint}/${post.id}`, {
-      ...post,
-      _method: 'PATCH',
-    });
+  patch(post: Post): Observable<Post> {
+    const formData = this.apiService.getFormData(post, true);
+    return this.apiService.post<Post>(`${this.endPoint}/${post.id}`, formData);
   }
 
-  delete(partnerId: string | number) {
-    return this.apiService.delete<Post>(`${this.endPoint}/${partnerId}`);
+  delete(postId: object) {
+    return this.apiService.delete<Post>(`${this.endPoint}/${postId}`);
   }
 }

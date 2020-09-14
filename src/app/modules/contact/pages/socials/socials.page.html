@@ -1,0 +1,14 @@
+<ag-page-container title="شبکه های اجتماعی">
+  <prm-button
+    color="success"
+    label="افزودن"
+    icon="fa fa-plus"
+    (click)="addSocialNetwork()"
+  ></prm-button>
+  <ag-table
+    [columnDefs]="columnDefs"
+    [rowData]="rowData$ | async"
+    (cellValueChanged)="onCellValueChanged($event)"
+  >
+  </ag-table>
+</ag-page-container>

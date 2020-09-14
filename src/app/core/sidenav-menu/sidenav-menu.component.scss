@@ -53,5 +53,10 @@ p-panelMenu {
     &-content {
       border: 0;
     }
+
+    .ui-menuitem-icon {
+      margin-right: 0;
+      margin-left: 0.5em;
+    }
   }
 }

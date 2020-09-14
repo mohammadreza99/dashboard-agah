@@ -16,8 +16,27 @@ export class StockholderService {
     return this.apiService.get<Stockholder[]>(this.endPoint);
   }
 
-  getById(stockholderId: string | number): Observable<Stockholder> {
+  getById(stockholderId: object): Observable<Stockholder> {
     return this.apiService.get<Stockholder>(
+      `${this.endPoint}/${stockholderId}`
+    );
+  }
+
+  post(stockholder: Stockholder): Observable<Stockholder> {
+    const formData = this.apiService.getFormData(stockholder);
+    return this.apiService.post<Stockholder>(`${this.endPoint}`, formData);
+  }
+
+  patch(stockholder: Stockholder): Observable<Stockholder> {
+    const formData = this.apiService.getFormData(stockholder, true);
+    return this.apiService.post<Stockholder>(
+      `${this.endPoint}/${stockholder.id}`,
+      formData
+    );
+  }
+
+  delete(stockholderId: object) {
+    return this.apiService.delete<Stockholder>(
       `${this.endPoint}/${stockholderId}`
     );
   }

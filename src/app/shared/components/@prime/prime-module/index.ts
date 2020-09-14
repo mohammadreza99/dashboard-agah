@@ -40,9 +40,11 @@ import { PasswordModule } from 'primeng/password';
 import { TreeModule } from 'primeng/tree';
 import { EditorModule } from 'primeng/editor';
 import { PickListModule } from 'primeng';
+import { SelectButtonModule } from 'primeng/selectbutton';
 
 export const MODULES = [
   ButtonModule,
+  SelectButtonModule,
   SidebarModule,
   PanelMenuModule,
   MenuModule,

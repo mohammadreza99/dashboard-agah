@@ -1,0 +1,9 @@
+<ag-page-container title="کاربران">
+  <prm-button
+    color="success"
+    label="افزودن"
+    icon="fa fa-plus"
+    (click)="addUser()"
+  ></prm-button>
+  <ag-table [columnDefs]="columnDefs" [rowData]="rowData$ | async"> </ag-table>
+</ag-page-container>

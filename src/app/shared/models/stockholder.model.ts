@@ -1,9 +1,6 @@
 import { BaseEntity } from './base';
-import { CompanyPosition } from './company-position.model';
 
 export class Stockholder extends BaseEntity {
-  firstName: string;
-  lastName: string;
+  name: string;
   image: string;
-  company_position: CompanyPosition;
 }

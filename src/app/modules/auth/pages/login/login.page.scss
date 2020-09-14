@@ -3,11 +3,6 @@ form > div > * {
   margin-bottom: 25px;
 }
 
-prm-button {
-  ::ng-deep p-button {
-    width: 100%;
-    .ui-button {
-      width: 100%;
-    }
-  }
+prm-button ::ng-deep *{
+  width: 100%;
 }

@@ -4,19 +4,19 @@ $menu-types: "menu", menubar, tieredmenu, contextmenu, megamenu, slidemenu;
 $themes: (
   light: (
     //   activation-priamry-100: $color1,
-      //   activation-priamry-200: $color2,
-      //   activation-priamry-300: $color3,
-      //   activation-danger: $color4,
-      //   activation-success: $color5,
-      //   activation-light: $color6,
-      //   bg-100: $color7,
-      //   bg-200: $color8,
-      //   bg-300: $color9,
-      //   bg-400: $color10,
-      //   bg-500: $color11,
-      //   text-color: $color12,
-      //   icon-color: $color13,
-      //   input-placeholder: $color14
+    //   activation-priamry-200: $color2,
+    //   activation-priamry-300: $color3,
+    //   activation-danger: $color4,
+    //   activation-success: $color5,
+    //   activation-light: $color6,
+    //   bg-100: $color7,
+    //   bg-200: $color8,
+    //   bg-300: $color9,
+    //   bg-400: $color10,
+    //   bg-500: $color11,
+    //   text-color: $color12,
+    //   icon-color: $color13,
+    //   input-placeholder: $color14,,,,,,,
   ),
   dark: (
     activation-primary-100: $primary-100,
@@ -33,8 +33,8 @@ $themes: (
     text-color: $dark-200,
     icon-color: $dark-400,
     input-placeholder: $dark-300,
-    sidemenu-active-color: $dark-600
-  )
+    sidemenu-active-color: $dark-600,
+  ),
 );
 
 @mixin theme($theme, $color) {
@@ -58,7 +58,7 @@ $themes: (
   ::placeholder {
     color: $input-placeholder !important;
   }
-  
+
   body.#{$theme} {
     color: $text-color;
     background: $bg-200;
@@ -90,8 +90,8 @@ $themes: (
       sidenav-menu {
         background-color: $bg-500 !important;
         color: map-get($theme-name, text-color);
-
         .ui-panelmenu {
+
           &-header {
             &.ui-state-active > a {
               background-color: map-get(
@@ -128,6 +128,9 @@ $themes: (
                   .ui-menuitem-text {
                     color: $text-color;
                   }
+                }
+                .ui-menuitem-text {
+                  color: $text-color;
                 }
               }
             }

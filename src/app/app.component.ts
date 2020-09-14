@@ -4,6 +4,7 @@ import { PrimeToastService } from './shared/components/@prime/prime-service/prim
 import { filter, map, mergeMap, switchMap } from 'rxjs/operators';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Title } from '@angular/platform-browser';
+import { LangService } from './core/http/lang/lang.service';
 
 @Component({
   selector: 'app-root',
@@ -17,8 +18,10 @@ export class AppComponent implements OnInit {
     private vcRef: ViewContainerRef,
     private router: Router,
     private title: Title,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private langService: LangService
   ) {
+    this.getLang();
     router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),
@@ -34,7 +37,7 @@ export class AppComponent implements OnInit {
         filter((r) => r.outlet === 'primary'),
         mergeMap((r) => r.data),
         map((event) => {
-          return event['breadcrumb'];
+          return event['title'];
         })
       )
       .subscribe((titleString) => {
@@ -46,10 +49,23 @@ export class AppComponent implements OnInit {
     this.errorService.getError().subscribe((error) => {
       if (error) {
         this.toastService.show(
-          { summary: 'خطا', detail: error, severity: 'error' },
+          {
+            summary: error.title,
+            detail: error.message,
+            severity: 'error',
+            life: 10000,
+          },
           this.vcRef
         );
       }
     });
+  }
+
+  async getLang() {
+    const loaclStorageLang = localStorage.getItem('lang');
+    if (!loaclStorageLang) {
+      const lang = await this.langService.getLang().toPromise();
+      localStorage.setItem('lang', lang['lang']);
+    }
   }
 }

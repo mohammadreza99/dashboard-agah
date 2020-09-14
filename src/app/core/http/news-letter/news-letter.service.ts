@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-
-import { NewsLetter } from '@shared/models/news-letter.model';
 import { ApiService } from '@core/http/api.service';
+import { NewsLetter } from '@app/shared/models/news-letter.model';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +10,7 @@ import { ApiService } from '@core/http/api.service';
 export class NewsLetterService {
   constructor(private apiService: ApiService) {}
 
-  private readonly endPoint = 'news-letter';
+  private readonly endPoint = 'news-letters';
 
   get(): Observable<NewsLetter[]> {
     return this.apiService
@@ -19,7 +18,26 @@ export class NewsLetterService {
       .pipe(map((res: any) => res.data));
   }
 
-  getById(newsLetterId: string | number): Observable<NewsLetter> {
+  getById(newsLetterId: object): Observable<NewsLetter> {
     return this.apiService.get<NewsLetter>(`${this.endPoint}/${newsLetterId}`);
+  }
+
+  post(newsLetter: NewsLetter): Observable<NewsLetter> {
+    const formData = this.apiService.getFormData(newsLetter);
+    return this.apiService.post<NewsLetter>(`${this.endPoint}`, formData);
+  }
+
+  patch(newsLetter: NewsLetter): Observable<NewsLetter> {
+    const formData = this.apiService.getFormData(newsLetter, true);
+    return this.apiService.post<NewsLetter>(
+      `${this.endPoint}/${newsLetter.id}`,
+      formData
+    );
+  }
+
+  delete(newsLetterId: object) {
+    return this.apiService.delete<NewsLetter>(
+      `${this.endPoint}/${newsLetterId}`
+    );
   }
 }

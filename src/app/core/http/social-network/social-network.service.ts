@@ -16,9 +16,23 @@ export class SocialNetworkService {
     return this.apiService.get<SocialNetwork[]>(this.endPoint);
   }
 
-  getById(socialNetworkId: string | number): Observable<SocialNetwork> {
+  getById(socialNetworkId: object): Observable<SocialNetwork> {
     return this.apiService.get<SocialNetwork>(
       `${this.endPoint}/${socialNetworkId}`
     );
+  }
+
+  post(socialNetwork: SocialNetwork): Observable<SocialNetwork> {
+    const formData = this.apiService.getFormData(socialNetwork);
+    return this.apiService.post<SocialNetwork>(`${this.endPoint}`, formData);
+  }
+
+  patch(socialNetwork: SocialNetwork): Observable<SocialNetwork> {
+    const formData = this.apiService.getFormData(socialNetwork, true);
+    return this.apiService.post<SocialNetwork>(`${this.endPoint}/${socialNetwork.id}`, formData);
+  }
+
+  delete(socialNetworkId: object) {
+    return this.apiService.delete<SocialNetwork>(`${this.endPoint}/${socialNetworkId}`);
   }
 }

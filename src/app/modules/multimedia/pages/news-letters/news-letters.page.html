@@ -1,0 +1,17 @@
+<ag-page-container title="خبرنامه">
+  <prm-button
+    color="success"
+    label="افزودن"
+    icon="fa fa-plus"
+    (click)="addNewsLetter()"
+  ></prm-button>
+  <ag-table
+    [columnDefs]="columnDefs"
+    [rowData]="rowData$ | async"
+    [actionsConfig]="[{action:'edit-template',icon:'fa fa-pen',headerName:'ویرایش محتوا',color:'primary'},
+    {action:'delete',icon:'fa fa-times',headerName:'حذف',color:'danger'}]"
+    (cellValueChanged)="onCellValueChanged($event)"
+    (actionClick)="onActionClick($event)"
+  >
+  </ag-table>
+</ag-page-container>

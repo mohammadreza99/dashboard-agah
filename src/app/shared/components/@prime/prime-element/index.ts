@@ -32,6 +32,8 @@ import { PrimeInputSwitchComponent } from './prime-input-switch/prime-input-swit
 import { PrimeInputTagsComponent } from './prime-input-tags/prime-input-tags.component';
 import { PrimeInputTextComponent } from './prime-input-text/prime-input-text.component';
 import { PrimeInputTextareaComponent } from './prime-input-textarea/prime-input-textarea.component';
+import { SingleImagePickerComponent } from './single-image-picker/single-image-picker.component';
+import { PrimeInputEditorComponent } from './prime-input-editor/prime-input-editor.component';
 
 export const ELEMENTS = [
   PrimeButtonComponent,
@@ -68,5 +70,7 @@ export const ELEMENTS = [
   PrimeInputTagsComponent,
   PrimeInputTextComponent,
   PrimeInputTextareaComponent,
+  SingleImagePickerComponent,
+  PrimeInputEditorComponent,
 ];
 export const ENTRY_COMPONENTS = [];

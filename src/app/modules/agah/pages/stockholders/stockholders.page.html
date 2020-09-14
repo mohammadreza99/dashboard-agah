@@ -1,0 +1,18 @@
+<ag-page-container title="سهامداران">
+  <prm-button
+    color="success"
+    label="افزودن"
+    icon="fa fa-plus"
+    (click)="addStockholder()"
+  ></prm-button>
+  <ag-table
+    [columnDefs]="columnDefs"
+    [rowData]="rowData$ | async"
+    [imagesConfig]="[{field:'image',headerName:'عکس',editable:true}]"
+    [actionsConfig]="[{action:'delete',icon:'fa fa-times',headerName:'حذف',color:'danger'}]"
+    (cellValueChanged)="onCellValueChanged($event)"
+    (imageSelect)="onImageSelect($event)"
+    (actionClick)="onActionClick($event)"
+  >
+  </ag-table>
+</ag-page-container>

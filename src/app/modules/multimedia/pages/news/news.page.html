@@ -1,0 +1,19 @@
+<ag-page-container title="اخبار">
+  <prm-button
+    color="success"
+    label="افزودن"
+    icon="fa fa-plus"
+    (click)="addNews()"
+  ></prm-button>
+  <ag-table
+    [columnDefs]="columnDefs"
+    [rowData]="rowData$ | async"
+    [imagesConfig]="[{field:'image',headerName:'عکس',editable:true}]"
+    [actionsConfig]="[{action:'edit-content',icon:'fa fa-pen',headerName:'ویرایش محتوا',color:'primary'},
+    {action:'delete',icon:'fa fa-times',headerName:'حذف',color:'danger'}]"
+    (cellValueChanged)="onCellValueChanged($event)"
+    (imageSelect)="onImageSelect($event)"
+    (actionClick)="onActionClick($event)"
+  >
+  </ag-table>
+</ag-page-container>

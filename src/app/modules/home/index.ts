@@ -1,4 +1,4 @@
 import { HomePage } from '@modules/home/pages/home/home.page';
-export const COMPONENTS = [
-  HomePage,
-];
+import { DashboardPage } from './pages/dashboard/dashboard.page';
+
+export const COMPONENTS = [HomePage, DashboardPage];

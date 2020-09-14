@@ -1,4 +1,4 @@
-@import "mixins.scss";
+@import "src/assets/styles/mixins.scss";
 
 .main-wrapper {
   overflow-x: hidden;
@@ -8,6 +8,7 @@
   transition: margin-right 0.3s;
   &.mr-278 {
     margin-right: $sidenav-width;
+  overflow-y: auto;
   }
   @media (min-width: 768px) {
     margin-top: $navbar-height;

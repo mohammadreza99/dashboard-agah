@@ -1,0 +1,8 @@
+<ag-page-container title="تماس با ما">
+  <ag-table
+    [columnDefs]="columnDefs"
+    [rowData]="rowData$ | async"
+    (cellValueChanged)="onCellValueChanged($event)"
+  >
+  </ag-table>
+</ag-page-container>

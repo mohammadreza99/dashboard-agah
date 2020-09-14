@@ -1,22 +1,29 @@
 <div class="container-fluid h-100">
   <div class="row align-content-center justify-content-center h-100">
     <div class="col-12">
-      <form class="form-row justify-content-center" [formGroup]="form">
-        <div class="col-4 text-center">
+      <form
+        class="form-row justify-content-center"
+        [formGroup]="form"
+        (ngSubmit)="onSubmit()"
+      >
+        <div class="col-3 text-center p-4 bg-light border rounded-lg shadow">
           <h2>ورود</h2>
           <prm-input-text
             formControlName="email"
             placeholder="نام کاربری"
+            [errors]="[{type:'required',message:'این فیلد الزامیست.'},{type:'email',message:'ایمیل نامعتبر است.'}]"
           ></prm-input-text>
           <prm-input-text
+            type="password"
             formControlName="password"
             placeholder="رمز عبور"
+            [errors]="[{type:'required',message:'این فیلد الزامیست.'}]"
           ></prm-input-text>
-          <prm-input-checkbox-single
-            [formControl]="form.get('remember')"
-            label="مرا بخاطر بسپار"
-          ></prm-input-checkbox-single>
-          <prm-button class="w-100" type="submit" label="ورود"></prm-button>
+          <prm-button
+            class="d-block w-100"
+            type="submit"
+            label="ورود"
+          ></prm-button>
         </div>
       </form>
     </div>

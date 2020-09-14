@@ -25,7 +25,24 @@ export class ProductService {
       .pipe(map((res: any) => res.data));
   }
 
-  getProductById(productId: string | number): Observable<Product> {
+  getById(productId: string): Observable<Product> {
     return this.apiService.get<Product>(`${this.endPoint}/${productId}`);
+  }
+
+  post(product: Product): Observable<Product> {
+    const formData = this.apiService.getFormData(product);
+    return this.apiService.post<Product>(`${this.endPoint}`, formData);
+  }
+
+  patch(product: Product): Observable<Product> {
+    const formData = this.apiService.getFormData(product, true);
+    return this.apiService.post<Product>(
+      `${this.endPoint}/${product.id}`,
+      formData
+    );
+  }
+
+  delete(productId: object) {
+    return this.apiService.delete<Product>(`${this.endPoint}/${productId}`);
   }
 }

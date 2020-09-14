@@ -19,7 +19,7 @@ export class ProcessService {
       .pipe(map((res: any) => res.data));
   }
 
-  getById(processId: string | number): Observable<Process> {
+  getById(processId: object): Observable<Process> {
     return this.apiService.get<Process>(`${this.endPoint}/${processId}`);
   }
 
@@ -29,14 +29,14 @@ export class ProcessService {
   }
 
   patch(process: Process): Observable<Process> {
-    const formData = this.apiService.getFormData(process);
-    return this.apiService.patch<Process>(
+    const formData = this.apiService.getFormData(process, true);
+    return this.apiService.post<Process>(
       `${this.endPoint}/${process.id}`,
       formData
     );
   }
 
-  delete(processId: string | number) {
+  delete(processId: object) {
     return this.apiService.delete<Process>(`${this.endPoint}/${processId}`);
   }
 }

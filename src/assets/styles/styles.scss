@@ -12,6 +12,22 @@ body {
     }
   }
 
+  .form-wrapper {
+    max-height: 0;
+    transition: all 0.4s;
+    opacity: 0;
+    visibility: hidden;
+    background-color: #f8f9fa !important;
+    &.show {
+      opacity: 1;
+      visibility: visible;
+      max-height: fit-content;
+      padding: 3rem;
+      margin-bottom: 3rem;
+      border: 1px solid #dee2e6 !important;
+    }
+  }
+  
   *:focus {
     outline: none;
   }

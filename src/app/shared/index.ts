@@ -3,12 +3,26 @@ import { DialogFormComponent } from './components/dialog-form/dialog-form.compon
 import { ImagePickerComponent } from './components/image-picker/image-picker.component';
 import { TagComponent } from './components/tag/tag.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
-import { SingleImagePickerComponent } from './components/single-image-picker/single-image-picker.component';
+import { PageContainerComponent } from './components/page-container/page-container.component';
+import { ContentFormComponent } from './components/content-form/content-form.component';
+import { TableComponent } from './components/table/table.component';
+import { CellButtonComponent } from './components/table/cell-button/cell-button.component';
+import { CellImageComponent } from './components/table/cell-image/cell-image.component';
+import { CellDatepickerComponent } from './components/table/cell-datepicker/cell-datepicker.component';
+import { CellFileComponent } from './components/table/cell-file/cell-file.component';
+import { ParticlesDirective } from './particles.directive';
 
 export const COMPONENTS: Type<any>[] = [
   DialogFormComponent,
   ImagePickerComponent,
   TagComponent,
   ToolbarComponent,
-  SingleImagePickerComponent,
+  TableComponent,
+  CellButtonComponent,
+  CellImageComponent,
+  CellDatepickerComponent,
+  CellFileComponent,
+  PageContainerComponent,
+  ContentFormComponent,
+  ParticlesDirective,
 ];

@@ -1,0 +1,15 @@
+<ag-page-container title="کاربران خبرنامه">
+  <prm-button
+    color="success"
+    label="افزودن"
+    icon="fa fa-plus"
+    (click)="addNewsLetterUser()"
+  ></prm-button>
+  <ag-table
+    [columnDefs]="columnDefs"
+    [rowData]="rowData$ | async"
+    [actionsConfig]="[{action:'delete',icon:'fa fa-times',headerName:'حذف',color:'danger'}]"
+    (actionClick)="onActionClick($event)"
+  >
+  </ag-table>
+</ag-page-container>

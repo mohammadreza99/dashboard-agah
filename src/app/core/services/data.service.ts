@@ -1,5 +1,4 @@
 import { Injectable, ViewContainerRef } from '@angular/core';
-import * as moment from 'jalali-moment';
 import { MenuItem } from 'primeng/api';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Observer, fromEvent, merge } from 'rxjs';
@@ -8,8 +7,6 @@ import { map, filter } from 'rxjs/operators';
 import { PrimeMessageService } from '@prime/prime-service/prime-message.service';
 import { PrimeConfirmService } from '@prime/prime-service/prime-confirm.service';
 import { PrimeToastService } from '@prime/prime-service/prime-toast.service';
-import { PrimeTableAction } from '@prime/prime-model/prime-table-action.model';
-import { ItemValidationCheck } from '@shared/models/item-validation-check.model';
 import { FormGroup } from '@angular/forms';
 
 @Injectable({ providedIn: 'root' })
@@ -27,49 +24,188 @@ export class DataService {
   //#region GENERAL
   private SIDE_MENU_ITEMS: MenuItem[] = [
     {
-      label: 'داشبورد',
-      icon: 'pi pi-pw pi-file',
+      label: 'خانه',
       routerLink: ['/dashboard'],
-      routerLinkActiveOptions: { exact: true },
+    },
+    {
+      label: 'آگاه',
+      items: [
+        {
+          label: 'چشم انداز آگاه',
+          routerLink: ['/dashboard/agah/vision'],
+          icon: 'pi pi-minus',
+        },
+        {
+          label: 'تاریخچه',
+          routerLink: ['/dashboard/agah/history'],
+          icon: 'pi pi-minus',
+        },
+        {
+          label: 'بخش های آگاه',
+          routerLink: ['/dashboard/agah/departments'],
+          icon: 'pi pi-minus',
+        },
+        {
+          label: 'کارمندان',
+          routerLink: ['/dashboard/agah/employers'],
+          icon: 'pi pi-minus',
+        },
+        {
+          label: 'هیئت مدیره',
+          routerLink: ['/dashboard/agah/directors'],
+          icon: 'pi pi-minus',
+        },
+        {
+          label: 'سهامداران',
+          routerLink: ['/dashboard/agah/stockholders'],
+          icon: 'pi pi-minus',
+        },
+        {
+          label: 'مشاوران',
+          routerLink: ['/dashboard/agah/counselors'],
+          icon: 'pi pi-minus',
+        },
+        {
+          label: 'سمت ها',
+          routerLink: ['/dashboard/agah/positions'],
+          icon: 'pi pi-minus',
+        },
+      ],
     },
     {
       label: 'محصولات',
-      icon: 'pi pi-pw pi-file',
       items: [
         {
           label: 'لیست محصولات',
           routerLink: ['/dashboard/product/list'],
+          icon: 'pi pi-minus',
         },
         {
           label: 'ویژگی ها',
           routerLink: ['/dashboard/product/features'],
+          icon: 'pi pi-minus',
         },
         {
           label: 'مسیر پروژه',
           routerLink: ['/dashboard/product/process'],
+          icon: 'pi pi-minus',
         },
         {
           label: 'همراهان',
           routerLink: ['/dashboard/product/partners'],
+          icon: 'pi pi-minus',
         },
       ],
     },
     {
-      label: 'فرصت های شغلی',
-      icon: 'pi pi-pw pi-file',
+      label: 'چندرسانه ای',
       items: [
-        { label: 'لیست فرصت های شغلی', routerLink: ['/dashboard/product/'] },
+        {
+          label: 'اخبار',
+          routerLink: ['/dashboard/multimedia/news'],
+          icon: 'pi pi-minus',
+        },
+        {
+          label: 'مقالات',
+          routerLink: ['/dashboard/multimedia/posts'],
+          icon: 'pi pi-minus',
+        },
+        {
+          label: 'خبرنامه',
+          routerLink: ['/dashboard/multimedia/news-letters'],
+          icon: 'pi pi-minus',
+        },
       ],
     },
     {
-      label: 'مقالات',
-      icon: 'pi pi-pw pi-file',
-      items: [{ label: 'لیست مقالات', routerLink: ['/dashboard/post/list'] }],
+      label: 'آموزش',
+      items: [
+        {
+          label: 'اساتید',
+          routerLink: ['/dashboard/education/teachers'],
+          icon: 'pi pi-minus',
+        },
+        {
+          label: 'دروس آنلاین',
+          routerLink: ['/dashboard/education/courses'],
+          icon: 'pi pi-minus',
+        },
+        {
+          label: 'ورکشاپ',
+          routerLink: ['/dashboard/education/workshop'],
+          icon: 'pi pi-minus',
+        },
+      ],
     },
     {
-      label: 'اخبار',
-      icon: 'pi pi-pw pi-file',
-      items: [{ label: 'لیست اخبار', routerLink: ['/dashboard/news/list'] }],
+      label: 'شغل ها',
+      items: [
+        {
+          label: 'لیست شغل ها',
+          routerLink: ['/dashboard/jobs/list'],
+          icon: 'pi pi-minus',
+        },
+        {
+          label: 'لیست درخواست ها',
+          routerLink: ['/dashboard/jobs/requests'],
+          icon: 'pi pi-minus',
+        },
+      ],
+    },
+    {
+      label: 'تماس با ما',
+      items: [
+        {
+          label: 'شبکه های اجتماعی',
+          routerLink: ['/dashboard/contact/socials'],
+          icon: 'pi pi-minus',
+        },
+        {
+          label: 'اطلاعات تماس',
+          routerLink: ['/dashboard/contact/contact-info'],
+          icon: 'pi pi-minus',
+        },
+        {
+          label: 'فرم تماس با ما',
+          routerLink: ['/dashboard/contact/contact-comment'],
+          icon: 'pi pi-minus',
+        },
+      ],
+    },
+    {
+      label: 'کاربران',
+      items: [
+        {
+          label: 'کاربران',
+          routerLink: ['/dashboard/users/list'],
+          icon: 'pi pi-minus',
+        },
+        {
+          label: 'نظرات مشتریان',
+          routerLink: ['/dashboard/users/testimonials'],
+          icon: 'pi pi-minus',
+        },
+        {
+          label: 'نظرات کاربران',
+          routerLink: ['/dashboard/users/comments'],
+          icon: 'pi pi-minus',
+        },
+        {
+          label: 'کاربران خبرنامه',
+          routerLink: ['/dashboard/users/news-letter-users'],
+          icon: 'pi pi-minus',
+        },
+      ],
+    },
+    {
+      label: 'گالری',
+      items: [
+        {
+          label: 'تصاویر',
+          routerLink: ['/dashboard/gallery/images'],
+          icon: 'pi pi-minus',
+        },
+      ],
     },
   ];
 
@@ -92,37 +228,6 @@ export class DataService {
       item.parameter === '' ||
       item.parameter.length === 0
     );
-  }
-
-  checkValidate(
-    parameters: ItemValidationCheck[],
-    viewContainerRef: ViewContainerRef
-  ) {
-    if (parameters.length === 1) {
-      const item = parameters[0];
-      if (this.itemIsEmpty(item)) {
-        this.messager.show(
-          {
-            severity: 'error',
-            detail: item.errorDetail,
-            summary: item.errorSummary || 'خطا',
-          },
-          viewContainerRef
-        );
-      }
-    } else {
-      const messages = [];
-      for (const item of parameters) {
-        if (this.itemIsEmpty(item)) {
-          messages.push({
-            detail: item.errorDetail,
-            summary: item.errorSummary || 'خطا',
-            severity: 'error',
-          });
-        }
-      }
-      this.messager.show(messages, viewContainerRef);
-    }
   }
 
   cancellationConfirm(vcRef: ViewContainerRef): Promise<any> {

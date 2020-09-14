@@ -49,3 +49,8 @@ nav {
 p-menu ::ng-deep .ui-menu {
   z-index: 5001 !important;
 }
+
+p-selectButton ::ng-deep .ui-selectbutton {
+  display: flex;
+  align-items: center;
+}

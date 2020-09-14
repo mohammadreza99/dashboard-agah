@@ -16,7 +16,24 @@ export class EmployeeService {
     return this.apiService.get<Employee[]>(this.endPoint);
   }
 
-  getById(employeeId: string | number): Observable<Employee> {
+  getById(employeeId: object): Observable<Employee> {
     return this.apiService.get<Employee>(`${this.endPoint}/${employeeId}`);
+  }
+
+  post(employee: Employee): Observable<Employee> {
+    const formData = this.apiService.getFormData(employee);
+    return this.apiService.post<Employee>(`${this.endPoint}`, formData);
+  }
+
+  patch(employee: Employee): Observable<Employee> {
+    const formData = this.apiService.getFormData(employee, true);
+    return this.apiService.post<Employee>(
+      `${this.endPoint}/${employee.id}`,
+      formData
+    );
+  }
+
+  delete(employeeId: object) {
+    return this.apiService.delete<Employee>(`${this.endPoint}/${employeeId}`);
   }
 }

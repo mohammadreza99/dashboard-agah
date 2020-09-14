@@ -1,7 +1,15 @@
-import { Component, OnInit, forwardRef, AfterViewInit, Input } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  forwardRef,
+  AfterViewInit,
+  Input,
+  OnChanges,
+} from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { IDatePickerConfig } from 'ng2-jalali-date-picker';
-import { Moment } from "jalali-moment";
+import { Moment } from 'jalali-moment';
+import * as moment from 'jalali-moment';
 
 import { PrimeInputBaseComponent } from '../prime-input-base/prime-input-base.component';
 import { PrimeDatePickerMode } from '../../prime-type/prime-date-picker';
@@ -14,16 +22,14 @@ import { PrimeDatePickerMode } from '../../prime-type/prime-date-picker';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => PrimeInputDateTimePickerComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
-export class PrimeInputDateTimePickerComponent extends PrimeInputBaseComponent
+export class PrimeInputDateTimePickerComponent
+  extends PrimeInputBaseComponent
   implements OnInit, AfterViewInit {
-
-  // constructor() { super() }
-
-  @Input() datePickerMode: PrimeDatePickerMode = "day";
+  @Input() datePickerMode: PrimeDatePickerMode = 'day';
   @Input() minDate: Moment | string;
   @Input() maxDate: Moment | string;
   @Input() minTime: Moment | string;
@@ -47,8 +53,11 @@ export class PrimeInputDateTimePickerComponent extends PrimeInputBaseComponent
 
   _onChange(args) {
     this.value = args;
-    if (this.hasValueAccessor) this.controlOnChange(this.value);
+    const result = this.value._d as Date;
+    result.setDate(result.getDate() + 1);
+    if (this.hasValueAccessor) {
+      this.controlOnChange(result.toISOString());
+    }
     this.onChange.emit(this.value);
   }
-
 }

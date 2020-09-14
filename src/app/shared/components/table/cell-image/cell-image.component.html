@@ -1,0 +1,23 @@
+<span class="wrapper">
+  <img [src]="imageToShow || 'assets/images/file.jpg'" style="height: 34px" />
+  <label
+    *ngIf="editable"
+    style="cursor: pointer"
+    class="p-1 mr-2 border bg-light"
+    [for]="'input' + id"
+    >تغییر</label
+  >
+  <span
+    (click)="viewFile()"
+    style="cursor: pointer"
+    class="p-1 mr-2 border bg-light"
+    >مشاهده</span
+  >
+  <input
+    [attr.accept]="accept"
+    (change)="onSelectImage($event)"
+    [id]="'input' + id"
+    type="file"
+    style="position: fixed; top: -100em"
+  />
+</span>

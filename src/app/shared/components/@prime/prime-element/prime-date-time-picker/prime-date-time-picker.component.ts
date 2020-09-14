@@ -1,6 +1,15 @@
-import { Component, OnInit, ElementRef, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ElementRef,
+  Input,
+  Output,
+  EventEmitter,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { IDatePickerConfig } from 'ng2-jalali-date-picker';
-import * as moment from "jalali-moment";
+import * as moment from 'jalali-moment';
 
 import { PrimeDatePickerMode } from '../../prime-type/prime-date-picker';
 import { PrimeDirection } from '../../prime-type/prime-direction';
@@ -8,25 +17,23 @@ import { PrimeDirection } from '../../prime-type/prime-direction';
 @Component({
   selector: 'prm-date-time-picker',
   templateUrl: './prime-date-time-picker.component.html',
-  styleUrls: ['./prime-date-time-picker.component.scss']
+  styleUrls: ['./prime-date-time-picker.component.scss'],
 })
-export class PrimeDateTimePickerComponent implements OnInit {
-
-  constructor(public el: ElementRef) { }
-
-  @Input() datePickerMode: PrimeDatePickerMode = "day";
+export class PrimeDateTimePickerComponent implements OnInit, OnChanges {
+  constructor(public el: ElementRef) {}
+  @Input() datePickerMode: PrimeDatePickerMode = 'day';
   @Input() inline: boolean = false;
   @Input() disabled: boolean = false;
   @Input() clearable: boolean = true;
   @Input() placeholder: string;
   @Input() readonly: boolean = false;
-  @Input() layout: PrimeDirection = "rtl";
+  @Input() layout: PrimeDirection = 'rtl';
   @Input() style: object = null;
   @Input() minDate: moment.Moment | string = undefined;
   @Input() maxDate: moment.Moment | string = undefined;
   @Input() minTime: moment.Moment | string = undefined;
   @Input() maxTime: moment.Moment | string = undefined;
-  @Input() date: moment.Moment;
+  @Input() date: moment.Moment = moment();
   @Output() dateChange = new EventEmitter();
   @Output() onChange = new EventEmitter();
   @Output() onOpen = new EventEmitter();
@@ -47,46 +54,47 @@ export class PrimeDateTimePickerComponent implements OnInit {
     showTwentyFourHours: true,
     showGoToCurrent: true,
     hideOnOutsideClick: true,
-    locale: moment.locale("fa"),
+    locale: moment.locale('fa'),
   };
 
   _miladiMonths = [
-    "ژانویه ",
-    "فوریه ",
-    "مارس",
-    "آوریل",
-    "می",
-    "ژوئن",
-    "جولای",
-    "آگوست",
-    "سپتامبر",
-    "اکتبر",
-    "نوامبر",
-    "دسامبر",
+    'ژانویه ',
+    'فوریه ',
+    'مارس',
+    'آوریل',
+    'می',
+    'ژوئن',
+    'جولای',
+    'آگوست',
+    'سپتامبر',
+    'اکتبر',
+    'نوامبر',
+    'دسامبر',
   ];
   _months = [
-    "فروردین",
-    "اردیبهشت",
-    "خرداد",
-    "تیر",
-    "مرداد",
-    "شهریور",
-    "مهر",
-    "آبان",
-    "آذر",
-    "دی",
-    "بهمن",
-    "اسفند",
+    'فروردین',
+    'اردیبهشت',
+    'خرداد',
+    'تیر',
+    'مرداد',
+    'شهریور',
+    'مهر',
+    'آبان',
+    'آذر',
+    'دی',
+    'بهمن',
+    'اسفند',
   ];
   _weeks: string[] = [
-    "شنبه",
-    "یکشنبه",
-    "دوشنبه",
-    "سه شنبه",
-    "چهارشنبه",
-    "پنج شنبه",
-    "جمعه",
+    'شنبه',
+    'یکشنبه',
+    'دوشنبه',
+    'سه شنبه',
+    'چهارشنبه',
+    'پنج شنبه',
+    'جمعه',
   ];
+  flag = true;
 
   ngOnInit(): void {
     if (this.readonly) {
@@ -96,6 +104,10 @@ export class PrimeDateTimePickerComponent implements OnInit {
     setTimeout(() => {
       if (this.date) this._date = this.date;
     }, 0);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.date) this._date = changes.date.currentValue;
   }
 
   getStrWeekDay(momentObj: moment.Moment): string {
@@ -115,7 +127,7 @@ export class PrimeDateTimePickerComponent implements OnInit {
       let result;
       let dateObj = date._d;
       switch (this.datePickerMode) {
-        case "day": {
+        case 'day': {
           result = {
             day: date.date(),
             month: date.month() + 1,
@@ -131,7 +143,7 @@ export class PrimeDateTimePickerComponent implements OnInit {
           };
           break;
         }
-        case "month": {
+        case 'month': {
           result = {
             month: date.month() + 1,
             year: date.year(),
@@ -139,7 +151,7 @@ export class PrimeDateTimePickerComponent implements OnInit {
           };
           break;
         }
-        case "daytime": {
+        case 'daytime': {
           result = {
             hour: date.hours(),
             minute: date.minutes(),
@@ -157,7 +169,7 @@ export class PrimeDateTimePickerComponent implements OnInit {
           };
           break;
         }
-        case "time": {
+        case 'time': {
           result = {
             hour: date.hours(),
             minute: date.minutes(),
@@ -166,9 +178,16 @@ export class PrimeDateTimePickerComponent implements OnInit {
           break;
         }
       }
-      this.dateChange.emit(result);
-      this.onChange.emit(result);
+      if (this.flag) {
+        this.dateChange.emit(date);
+        this.flag = false;
+      }
+      // this.onChange.emit(date);
     }
+  }
+
+  _onInlineChange(event) {
+    this.onChange.emit(event);
   }
 
   _onOpen() {

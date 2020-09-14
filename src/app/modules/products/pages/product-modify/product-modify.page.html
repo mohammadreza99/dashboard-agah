@@ -21,6 +21,7 @@
           <h1>{{ pageTitle }}</h1>
         </right>
       </toolbar>
+
       <p-tabView orientation="right" #tabView [activeIndex]="tabViewIndex">
         <p-tabPanel [disabled]="disableTabs[0]" header="اطلاعات پایه">
           <form
@@ -28,6 +29,7 @@
             [formGroup]="basicInfoForm"
             (ngSubmit)="onSubmitBasicInfo()"
           >
+            <input formControlName="id" type="hidden" />
             <prm-input-text
               class="col-8 mb-4"
               formControlName="title"
@@ -36,7 +38,6 @@
               label="عنوان"
             >
             </prm-input-text>
-
             <prm-input-text
               class="col-8 mb-4"
               formControlName="website"
@@ -54,17 +55,28 @@
               label="تاریخ ارائه"
             >
             </prm-input-date-time-picker>
+
             <prm-input-multi-select
-              [items]="features$ | async"
+              [items]="availableFeatures"
+              formControlName="features"
+              [dataKey]="'id'"
               optionLabel="title"
               class="col-8 mb-4"
               [errors]="[{type:'required',message:'این فیلد الزامیست.'}]"
-              formControlName="features"
               labelWidth="80"
               label="ویژگی ها"
             ></prm-input-multi-select>
+
+            <prm-input-textarea
+              class="col-8 mb-4"
+              formControlName="feature_description"
+              [errors]="[{type:'required',message:'این فیلد الزامیست.'}]"
+              labelWidth="80"
+              label="توضیحات ویژگی ها"
+            ></prm-input-textarea>
+
             <prm-input-multi-select
-              [items]="partners$ | async"
+              [items]="availablePartners"
               optionLabel="name"
               class="col-8 mb-4"
               [errors]="[{type:'required',message:'این فیلد الزامیست.'}]"
@@ -76,8 +88,10 @@
             <ag-single-image-picker
               label="تصویر"
               labelWidth="80"
+              [urlToShow]="urlToShow"
               class="col-8 mb-4"
               formControlName="image"
+              (onSelect)="onSelectImage($event)"
               [errors]="[{type:'required',message:'این فیلد الزامیست.'}]"
             ></ag-single-image-picker>
 
@@ -88,45 +102,40 @@
               labelWidth="80"
               label="توضیحات"
             ></prm-input-textarea>
+
             <prm-button
               class="col-8 mb-4"
               type="submit"
-              label="ثبت"
+              label="ادامه"
             ></prm-button>
           </form>
         </p-tabPanel>
 
         <p-tabPanel [disabled]="disableTabs[1]" header="مسیر پروژه">
           <p-pickList
-            [source]="source$ | async"
-            [target]="target"
+            [source]="availableProcesses"
+            [target]="selectedProcesses"
             sourceHeader="مسیر پروژه"
             targetHeader="انتخاب شده"
-            [dragdrop]="true"
             [responsive]="true"
             [sourceStyle]="{'height':'400px'}"
             [targetStyle]="{'height':'400px'}"
             filterBy="title"
             sourceFilterPlaceholder="جستجو"
             targetFilterPlaceholder="جستجو"
-            (onMoveToTarget)="onMoveToTarget()"
-            (onMoveToSource)="onMoveToSource()"
-            (onMoveAllToTarget)="onMoveAllToTarget()"
-            (onMoveAllToSource)="onMoveAllToSource()"
-            (onSourceReorder)="onSourceReorder()"
-            (onTargetReorder)="onTargetReorder()"
           >
             <ng-template let-process pTemplate="item">
-              <div class="py-4 d-flex align-content-center justify-content-end">
-                <div class="mx-3">
-                  {{process.title}}
-                </div>
-                <img [src]="process.image" />
+              <div class="py-4 d-flex align-items-center justify-content-end">
+                {{process.title}}
+                <img
+                  style="width: 80px; margin-left: 20px"
+                  [src]="process.image"
+                />
               </div>
             </ng-template>
           </p-pickList>
           <div class="d-flex justify-content-between mt-5">
-            <prm-button (click)="onSubmitBasicInfo()" label="ثبت"></prm-button>
+            <prm-button (click)="onSaveClick()" label="ثبت"></prm-button>
             <prm-button
               color="danger"
               (click)="goPrevTab()"

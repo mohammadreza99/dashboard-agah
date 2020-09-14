@@ -1,13 +1,13 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { DialogFormService } from '@core/services/dialog-form.service';
-import { PrimeTableComponent } from '@shared/components/@prime/prime-element/prime-table/prime-table.component';
-import { PrimeTableColumn } from '@shared/components/@prime/prime-model/prime-table-column.model';
-import { PrimeTableAction } from '@shared/components/@prime/prime-model/prime-table-action.model';
-import { Product } from '@shared/models/product.model';
+import { Product, Partner } from '@shared/models/product.model';
 import { ProductService } from '@core/http/product/product.service';
+import { DataService } from '@app/core/services/data.service';
+import { PartnerService } from '@app/core/http/partner/partner.service';
+import { Router } from '@angular/router';
+import { ColDef } from 'ag-grid-community';
+import { TableComponent } from '@app/shared/components/table/table.component';
 
 @Component({
   selector: 'ag-products-list',
@@ -15,47 +15,83 @@ import { ProductService } from '@core/http/product/product.service';
   styleUrls: ['./products-list.page.scss'],
 })
 export class ProductsListPage implements OnInit {
-  constructor(private productService: ProductService, private router: Router) {}
+  @ViewChild(TableComponent, { static: true }) table: TableComponent;
 
-  products$: Observable<Product[]>;
-  columns: PrimeTableColumn[] = [
+  constructor(
+    private productService: ProductService,
+    private partnerService: PartnerService,
+    private dataService: DataService,
+    private router: Router,
+    private vcRef: ViewContainerRef
+  ) {}
+  columnDefs: ColDef[] = [
     {
       field: 'id',
-      header: 'کد',
-      filterType: 'input',
-      type: 'string',
+      headerName: 'شناسه',
+      editable: false,
     },
     {
       field: 'title',
-      header: 'عنوان',
-      filterType: 'input',
-      type: 'string',
+      headerName: 'عنوان',
+      editable: false,
     },
     {
-      field: 'website',
-      header: 'وبسایت',
-      filterType: 'input',
-      type: 'string',
-    },
-    {
-      field: 'time_estimate',
-      header: 'زمان ارائه',
-      filterType: 'input',
-      type: 'string',
+      field: 'description',
+      headerName: 'توضیحات',
+      editable: false,
     },
   ];
-  actions: PrimeTableAction[] = [
-    { tooltip: 'ویرایش', icon: 'fas fa-pencil', color: 'info' },
-  ];
+  rowData$: Observable<Product[]>;
+  availablePartners$: Observable<Partner[]>;
 
   ngOnInit(): void {
-    this.products$ = this.productService.get();
+    this.rowData$ = this.productService.get();
+    this.availablePartners$ = this.partnerService.get();
+  }
+
+  onSubmit(product: Product) {
+    this.productService.post(product).subscribe(() => {
+      this.table.addTransaction(product);
+      this.dataService.successfullMessage(this.vcRef);
+    });
+  }
+
+  onImageSelect(e) {
+    const product = new Product();
+    product.id = e.rowData.id;
+    product[e.field] = e.file;
+    this.productService.patch(product).subscribe(() => {
+      this.table.updateTransaction(product);
+      this.dataService.successfullMessage(this.vcRef);
+    });
+  }
+
+  cellValueChanged(event) {
+    const product = new Product();
+    const field = event.colDef.field;
+    const value = event.value;
+    product.id = event.data.id;
+    product[field] = value;
+    this.productService.patch(product).subscribe(() => {
+      this.table.updateTransaction(product);
+      this.dataService.successfullMessage(this.vcRef);
+    });
   }
 
   onActionClick(event) {
-    if (event.action === 'ویرایش') {
-      this.router.navigate(['/dashboard/product/edit', event.row.id]);
-    } else if (event.action === 'حذف') {
+    const product = event.rowData as Product;
+    switch (event.action) {
+      case 'delete':
+        this.dataService.deletionConfirm(this.vcRef).then(() => {
+          this.productService.delete(product.id).subscribe(() => {
+            this.table.deleteTransaction(product);
+            this.dataService.successfullMessage(this.vcRef);
+          });
+        });
+        break;
+      case 'edit':
+        this.router.navigate(['/dashboard/product/edit', product.id]);
+        break;
     }
   }
 }

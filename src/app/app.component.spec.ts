@@ -14,7 +14,7 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'ng9-en-primeng-fullcomponment'`, () => {
+  it(`should have as title 'agah-portal-admin'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
   });
@@ -24,7 +24,7 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     const compiled = fixture.nativeElement;
     expect(compiled.querySelector('.content span').textContent).toContain(
-      'ng9-en-primeng-fullcomponment app is running!'
+      'agah-portal-admin app is running!'
     );
   });
 });

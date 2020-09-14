@@ -1,29 +1,20 @@
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-12">
-      <toolbar class="page-header">
-        <left>
-          <prm-button
-            label="افزودن"
-            icon="fa fa-plus"
-            color="success"
-            routerLink="/dashboard/product/add"
-          >
-          </prm-button>
-        </left>
-        <right>
-          <h1>محصولات</h1>
-        </right>
-      </toolbar>
-
-      <prm-table
-        [items]="products$ | async"
-        [columns]="columns"
-        [actions]="actions"
-        [showDeleteAction]="true"
-        (actionClick)="onActionClick($event)"
-      >
-      </prm-table>
-    </div>
-  </div>
-</div>
+<ag-page-container
+  title="محصولات"
+  *ngIf="availablePartners$ | async as partners"
+>
+  <prm-button
+    color="success"
+    label="افزودن"
+    icon="fa fa-plus"
+    routerLink="/dashboard/product/add"
+  ></prm-button>
+  <ag-table
+    [columnDefs]="columnDefs"
+    [rowData]="rowData$ | async"
+    [imagesConfig]="[{field:'image',headerName:'تصویر',editable:false}]"
+    [actionsConfig]="[{action:'edit',icon:'fa fa-pen',headerName:'ویرایش',color:'primary'},
+    {action:'delete',icon:'fa fa-times',headerName:'حذف',color:'danger'}]"
+    (actionClick)="onActionClick($event)"
+  >
+  </ag-table>
+</ag-page-container>

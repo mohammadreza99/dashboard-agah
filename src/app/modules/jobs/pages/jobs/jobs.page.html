@@ -1,0 +1,18 @@
+<ag-page-container title="شغل ها">
+  <prm-button
+    color="success"
+    label="افزودن"
+    icon="fa fa-plus"
+    (click)="addJobItem()"
+  ></prm-button>
+  <ag-table
+    [columnDefs]="columnDefs"
+    [rowData]="rowData$ | async"
+    [imagesConfig]="[{field:'logo',headerName:'عکس',editable:true}]"
+    [actionsConfig]="[{action:'add-details',icon:'fa fa-pen',headerName:'جزییات',color:'primary'},{action:'delete',icon:'fa fa-times',headerName:'حذف',color:'danger'}]"
+    (cellValueChanged)="onCellValueChanged($event)"
+    (imageSelect)="onImageSelect($event)"
+    (actionClick)="onActionClick($event)"
+  >
+  </ag-table>
+</ag-page-container>

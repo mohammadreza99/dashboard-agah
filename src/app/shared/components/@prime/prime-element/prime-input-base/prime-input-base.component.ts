@@ -71,6 +71,7 @@ export class PrimeInputBaseComponent
   hasValueAccessor: boolean = false;
   containerConfig = {};
   isRequired: boolean;
+
   ngOnInit() {
     this.id = this.getId();
   }

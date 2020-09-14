@@ -1,8 +1,8 @@
 import { BaseEntity } from './base';
 
 export class Testimonial extends BaseEntity {
-  firstName: string;
-  lastName: string;
+  first_name: string;
+  last_name: string;
   position: string;
   opinion: string;
   image: string;

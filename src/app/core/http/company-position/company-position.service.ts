@@ -14,14 +14,31 @@ export class CompanyPositionService {
   private readonly endPoint = 'company-positions';
 
   get(): Observable<CompanyPosition[]> {
-    return this.apiService
-      .get<CompanyPosition[]>(this.endPoint)
-      .pipe(map((res: any) => res.data));
+    return this.apiService.get<CompanyPosition[]>(this.endPoint);
   }
 
-  getById(positionId: string | number): Observable<CompanyPosition> {
+  getById(positionId: object): Observable<CompanyPosition> {
     return this.apiService.get<CompanyPosition>(
       `${this.endPoint}/${positionId}`
+    );
+  }
+
+  post(companyPosition: CompanyPosition): Observable<CompanyPosition> {
+    const formData = this.apiService.getFormData(companyPosition);
+    return this.apiService.post<CompanyPosition>(`${this.endPoint}`, formData);
+  }
+
+  patch(companyPosition: CompanyPosition): Observable<CompanyPosition> {
+    const formData = this.apiService.getFormData(companyPosition, true);
+    return this.apiService.post<CompanyPosition>(
+      `${this.endPoint}/${companyPosition.id}`,
+      formData
+    );
+  }
+
+  delete(companyPositionId: object) {
+    return this.apiService.delete<CompanyPosition>(
+      `${this.endPoint}/${companyPositionId}`
     );
   }
 }

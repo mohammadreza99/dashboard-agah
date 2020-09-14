@@ -10,7 +10,7 @@ import { COMPONENTS } from '.';
 import { CommonModule } from '@angular/common';
 
 @NgModule({
-  declarations: [...COMPONENTS, ],
+  declarations: [...COMPONENTS],
   exports: [...COMPONENTS],
   imports: [SharedModule, ProductsRoutingModule, CommonModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
