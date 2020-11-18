@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '../api.service';
 import { Observable } from 'rxjs';
-import { Workshop } from '@app/shared/models/education';
+import { Workshop } from '@shared/models';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -18,7 +18,7 @@ export class WorkshopService {
       .pipe(map((res: any) => res.data));
   }
 
-  getById(workshopId: string) {
+  getById(workshopId: string | number) {
     return this.apiService.get<Workshop>(`${this.endPoint}/${workshopId}`);
   }
 
@@ -35,7 +35,7 @@ export class WorkshopService {
     );
   }
 
-  delete(workshopId: object) {
+  delete(workshopId: number | string) {
     return this.apiService.delete<Workshop>(`${this.endPoint}/${workshopId}`);
   }
 }

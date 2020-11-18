@@ -1,5 +1,11 @@
-ag-grid-angular  ::ng-deep{
-    .ag-root-wrapper-body {
-        height: 100%;
-    }
+ag-grid-angular ::ng-deep {
+  .ag-root-wrapper-body {
+    height: 100%;
+  }
+
+  .ag-cell,
+  .ag-row {
+    display: flex;
+    align-items: center;
+  }
 }

@@ -34,6 +34,9 @@ import { UsersPage } from './modules/users/pages/users/users.page';
 import { NewsLetterUsersPage } from './modules/users/pages/news-letter-users/news-letter-users.page';
 import { NewsLettersPage } from './modules/multimedia/pages/news-letters/news-letters.page';
 import { DashboardPage } from './modules/home/pages/dashboard/dashboard.page';
+import { TagsPage } from './modules/multimedia/pages/tags/tags.page';
+import { GalleryPage } from './modules/gallery/pages/gallery/gallery.page';
+import { CategoriesPage } from './modules/education/pages/categories/categories.page';
 const routes: Routes = [
   {
     path: '',
@@ -154,11 +157,21 @@ const routes: Routes = [
             component: NewsLettersPage,
             data: { title: 'خبرنامه' },
           },
+          {
+            path: 'tags',
+            component: TagsPage,
+            data: { title: 'تگ ها' },
+          },
         ],
       },
       {
         path: 'education',
         children: [
+          {
+            path: 'categories',
+            component: CategoriesPage,
+            data: { title: 'دسته بندی' },
+          },
           {
             path: 'teachers',
             component: TeachersPage,
@@ -248,7 +261,13 @@ const routes: Routes = [
       },
       {
         path: 'gallery',
-        children: [],
+        children: [
+          {
+            path: 'images',
+            component: GalleryPage,
+            data: { title: 'گالری' },
+          },
+        ],
       },
     ],
   },
@@ -257,9 +276,9 @@ const routes: Routes = [
 @NgModule({
   imports: [
     RouterModule.forRoot(routes, {
-    initialNavigation: 'enabled',
-    scrollPositionRestoration: 'top',
-}),
+      initialNavigation: 'enabled',
+      scrollPositionRestoration: 'top',
+    }),
   ],
   exports: [RouterModule],
 })

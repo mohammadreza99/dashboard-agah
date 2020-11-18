@@ -167,9 +167,7 @@
           "options": {
             "browserTarget": "agah-portal-admin:build:production",
             "serverTarget": "agah-portal-admin:server:production",
-            "routes": [
-              "/"
-            ]
+            "routes": ["/"]
           },
           "configurations": {
             "production": {}

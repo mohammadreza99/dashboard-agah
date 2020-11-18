@@ -34,6 +34,7 @@ import { PrimeInputTextComponent } from './prime-input-text/prime-input-text.com
 import { PrimeInputTextareaComponent } from './prime-input-textarea/prime-input-textarea.component';
 import { SingleImagePickerComponent } from './single-image-picker/single-image-picker.component';
 import { PrimeInputEditorComponent } from './prime-input-editor/prime-input-editor.component';
+import { MultiImagePickerComponent } from './multi-image-picker/multi-image-picker.component';
 
 export const ELEMENTS = [
   PrimeButtonComponent,
@@ -71,6 +72,7 @@ export const ELEMENTS = [
   PrimeInputTextComponent,
   PrimeInputTextareaComponent,
   SingleImagePickerComponent,
+  MultiImagePickerComponent,
   PrimeInputEditorComponent,
 ];
 export const ENTRY_COMPONENTS = [];

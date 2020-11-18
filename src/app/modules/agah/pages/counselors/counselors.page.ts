@@ -1,12 +1,11 @@
 import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { CounselorService } from '@app/core/http/counselor/counselor.service';
-import { DataService } from '@app/core/services/data.service';
+import { CounselorService } from '@core/http/counselor/counselor.service';
+import { DataService } from '@core/services/data.service';
 import { Observable } from 'rxjs';
-import { TableComponent } from '@app/shared/components/table/table.component';
-import { Counselor } from '@app/shared/models/counselor.model';
+import { TableComponent } from '@shared/components/table/table.component';
 import { ColDef } from 'ag-grid-community';
-import { DialogFormService } from '@app/core/services/dialog-form.service';
-import { DialogFormConfig } from '@app/shared/models/dialog-form-config';
+import { DialogFormService } from '@core/services/dialog-form.service';
+import { Counselor, DialogFormConfig } from '@shared/models';
 
 @Component({
   selector: 'ag-counselors',
@@ -21,6 +20,7 @@ export class CounselorsPage implements OnInit {
     {
       field: 'id',
       headerName: 'شناسه',
+      maxWidth: 90,
       editable: false,
     },
     {

@@ -4,7 +4,6 @@ import { PrimeToastService } from './shared/components/@prime/prime-service/prim
 import { filter, map, mergeMap, switchMap } from 'rxjs/operators';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Title } from '@angular/platform-browser';
-import { LangService } from './core/http/lang/lang.service';
 
 @Component({
   selector: 'app-root',
@@ -18,10 +17,12 @@ export class AppComponent implements OnInit {
     private vcRef: ViewContainerRef,
     private router: Router,
     private title: Title,
-    private route: ActivatedRoute,
-    private langService: LangService
+    private route: ActivatedRoute
   ) {
-    this.getLang();
+    const loaclStorageLang = localStorage.getItem('lang');
+    if (!loaclStorageLang) {
+      localStorage.setItem('lang', 'en');
+    }
     router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),
@@ -59,13 +60,5 @@ export class AppComponent implements OnInit {
         );
       }
     });
-  }
-
-  async getLang() {
-    const loaclStorageLang = localStorage.getItem('lang');
-    if (!loaclStorageLang) {
-      const lang = await this.langService.getLang().toPromise();
-      localStorage.setItem('lang', lang['lang']);
-    }
   }
 }

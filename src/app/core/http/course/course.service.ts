@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '../api.service';
 import { Observable } from 'rxjs';
-import { Course, CourseContent } from '@app/shared/models/education';
+import { Course, CourseContent } from '@shared/models';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -18,7 +18,7 @@ export class CourseService {
       .pipe(map((res: any) => res.data));
   }
 
-  getById(courseId: string) {
+  getById(courseId: string | number) {
     return this.apiService.get<Course>(`${this.endPoint}/${courseId}`);
   }
 
@@ -35,17 +35,17 @@ export class CourseService {
     );
   }
 
-  delete(courseId: object) {
+  delete(courseId: number | string) {
     return this.apiService.delete<Course>(`${this.endPoint}/${courseId}`);
   }
 
-  getContent(courseId: string) {
+  getContent(courseId: string | number) {
     return this.apiService
       .get<CourseContent[]>(`${this.endPoint}/${courseId}/contents`)
       .pipe(map((res: any) => res.data));
   }
 
-  postContent(courseId: object, courseContent: CourseContent) {
+  postContent(courseId: number | string, courseContent: CourseContent) {
     const formData = this.apiService.getFormData(courseContent);
     return this.apiService.post<CourseContent>(
       `${this.endPoint}/${courseId}/contents`,
@@ -53,7 +53,7 @@ export class CourseService {
     );
   }
 
-  patchContent(courseId: object, courseContent: CourseContent) {
+  patchContent(courseId: number | string, courseContent: CourseContent) {
     const formData = this.apiService.getFormData(courseContent, true);
     return this.apiService.post<CourseContent>(
       `${this.endPoint}/${courseId}/contents/${courseContent.id}`,
@@ -61,7 +61,7 @@ export class CourseService {
     );
   }
 
-  deleteContent(courseId: object, courseContentId: object) {
+  deleteContent(courseId: number | string, courseContentId: number | string) {
     return this.apiService.delete<Course>(
       `${this.endPoint}/${courseId}/contents/${courseContentId}`
     );

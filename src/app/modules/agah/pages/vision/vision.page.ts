@@ -1,12 +1,11 @@
 import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { TableComponent } from '@app/shared/components/table/table.component';
+import { TableComponent } from '@shared/components/table/table.component';
 import { Observable } from 'rxjs';
-import { Vision } from '@app/shared/models/vision.model';
 import { ColDef } from 'ag-grid-community';
-import { VisionService } from '@app/core/http/vision/vision.service';
-import { DataService } from '@app/core/services/data.service';
-import { DialogFormService } from '@app/core/services/dialog-form.service';
-import { DialogFormConfig } from '@app/shared/models/dialog-form-config';
+import { VisionService } from '@core/http/vision/vision.service';
+import { DataService } from '@core/services/data.service';
+import { DialogFormService } from '@core/services/dialog-form.service';
+import { Vision, DialogFormConfig } from '@shared/models';
 
 @Component({
   selector: 'ag-vision',
@@ -21,12 +20,13 @@ export class VisionPage implements OnInit {
     {
       field: 'id',
       headerName: 'شناسه',
+      maxWidth: 90,
       editable: false,
     },
     {
       field: 'text',
       headerName: 'متن',
-      cellEditor: 'agLargeTextCellEditor',
+      editable: false,
     },
   ];
 

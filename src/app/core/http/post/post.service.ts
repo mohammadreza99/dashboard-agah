@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { Post } from '@shared/models/post.model';
+import { Post } from '@shared/models';
 import { ApiService } from '@core/http/api.service';
 import { map } from 'rxjs/operators';
 
@@ -19,13 +19,13 @@ export class PostService {
       .pipe(map((res: any) => res.data));
   }
 
-  getById(postId: object): Observable<Post> {
+  getById(postId: number | string): Observable<Post> {
     return this.apiService.get<Post>(`${this.endPoint}/${postId}`);
   }
 
   post(post: Post): Observable<Post> {
     const formData = this.apiService.getFormData(post);
-    return this.apiService.post<Post>(`${this.endPoint}`, post);
+    return this.apiService.post<Post>(`${this.endPoint}`, formData);
   }
 
   patch(post: Post): Observable<Post> {
@@ -33,7 +33,7 @@ export class PostService {
     return this.apiService.post<Post>(`${this.endPoint}/${post.id}`, formData);
   }
 
-  delete(postId: object) {
+  delete(postId: number | string) {
     return this.apiService.delete<Post>(`${this.endPoint}/${postId}`);
   }
 }

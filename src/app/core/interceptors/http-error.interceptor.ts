@@ -19,9 +19,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     const clonedReq = request.clone({
-      headers: new HttpHeaders({
-        'Accept-Language': localStorage.getItem('lang'),
-      }),
+      setHeaders: { 'Accept-Language': localStorage.getItem('lang') || 'en' }
     });
     return next.handle(clonedReq).pipe(
       catchError((error: any) => {

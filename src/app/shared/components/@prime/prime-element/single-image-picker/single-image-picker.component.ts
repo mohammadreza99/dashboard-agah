@@ -9,7 +9,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { PrimeInputBaseComponent } from '@prime/prime-element/prime-input-base/prime-input-base.component';
-import { DataService } from '@app/core/services/data.service';
+import { DataService } from '@core/services/data.service';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { PrimeInputFileComponent } from '../prime-input-file/prime-input-file.component';
 
@@ -25,7 +25,8 @@ import { PrimeInputFileComponent } from '../prime-input-file/prime-input-file.co
     },
   ],
 })
-export class SingleImagePickerComponent extends PrimeInputBaseComponent
+export class SingleImagePickerComponent
+  extends PrimeInputBaseComponent
   implements OnInit, AfterViewInit {
   constructor(private dataService: DataService) {
     super();
@@ -42,7 +43,7 @@ export class SingleImagePickerComponent extends PrimeInputBaseComponent
     }
   }
   @Output() onSelect = new EventEmitter();
-
+  @Input() accept: string = 'image/*';
   imageToShow: any;
 
   ngOnInit() {

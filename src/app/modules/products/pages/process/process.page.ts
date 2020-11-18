@@ -1,13 +1,12 @@
 import { Component, OnInit, ViewContainerRef, ViewChild } from '@angular/core';
-import { Process } from '@app/shared/models/product.model';
 
-import { DataService } from '@app/core/services/data.service';
+import { DataService } from '@core/services/data.service';
 import { Observable } from 'rxjs';
-import { ProcessService } from '@app/core/http/process/process.service';
-import { TableComponent } from '@app/shared/components/table/table.component';
-import { DialogFormService } from '@app/core/services/dialog-form.service';
-import { DialogFormConfig } from '@app/shared/models/dialog-form-config';
+import { ProcessService } from '@core/http/process/process.service';
+import { TableComponent } from '@shared/components/table/table.component';
+import { DialogFormService } from '@core/services/dialog-form.service';
 import { ColDef } from 'ag-grid-community';
+import { Process, DialogFormConfig } from '@shared/models';
 
 @Component({
   selector: 'ag-process',
@@ -22,6 +21,7 @@ export class ProcessPage implements OnInit {
     {
       field: 'id',
       headerName: 'شناسه',
+      maxWidth: 90,
       editable: false,
     },
     {
@@ -43,6 +43,10 @@ export class ProcessPage implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.getRowData();
+  }
+
+  getRowData() {
     this.rowData$ = this.processService.get();
   }
 
@@ -54,6 +58,7 @@ export class ProcessPage implements OnInit {
           this.processService.post(process).subscribe((res) => {
             this.table.addTransaction(process);
             this.dataService.successfullMessage(this.vcRef);
+            this.getRowData();
           });
         }
       });

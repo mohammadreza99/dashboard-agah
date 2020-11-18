@@ -1,14 +1,11 @@
 import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { TableComponent } from '@app/shared/components/table/table.component';
-import { EmployeeService } from '@app/core/http/employee/employee.service';
-import { DataService } from '@app/core/services/data.service';
-import { Observable } from 'rxjs';
-import { Employee } from '@app/shared/models/employee.model';
-import { DialogFormService } from '@app/core/services/dialog-form.service';
-import { DialogFormConfig } from '@app/shared/models/dialog-form-config';
-import { CompanyPosition } from '@app/shared/models/company-position.model';
-import { CompanyPositionService } from '@app/core/http/company-position/company-position.service';
+import { TableComponent } from '@shared/components/table/table.component';
+import { EmployeeService } from '@core/http/employee/employee.service';
+import { DataService } from '@core/services/data.service';
+import { DialogFormService } from '@core/services/dialog-form.service';
+import { CompanyPositionService } from '@core/http/company-position/company-position.service';
 import { ColDef } from 'ag-grid-community';
+import { CompanyPosition, Employee, DialogFormConfig } from '@shared/models';
 
 @Component({
   selector: 'ag-employees',
@@ -18,7 +15,7 @@ import { ColDef } from 'ag-grid-community';
 export class EmployeesPage implements OnInit {
   @ViewChild(TableComponent, { static: false }) table: TableComponent;
 
-  rowData$: Observable<Employee[]>;
+  rowData;
   columnDefs: ColDef[];
   availablePositions: CompanyPosition[];
 
@@ -34,8 +31,13 @@ export class EmployeesPage implements OnInit {
     this.generateColumns();
   }
 
+  getRowData() {
+    this.employeeService.get().subscribe((res) => {
+      this.rowData = res;
+    });
+  }
+
   async generateColumns() {
-    this.rowData$ = this.employeeService.get();
     this.availablePositions = await this.companyPositionService
       .get()
       .toPromise();
@@ -47,6 +49,10 @@ export class EmployeesPage implements OnInit {
       {
         field: 'last_name',
         headerName: 'نام خانوادگی',
+      },
+      {
+        field: 'social_accounts.linkedin',
+        headerName: 'لینکدین',
       },
       {
         field: 'company_position_id',
@@ -66,6 +72,7 @@ export class EmployeesPage implements OnInit {
         },
       },
     ];
+    this.getRowData();
   }
 
   addEmployee() {
@@ -112,11 +119,14 @@ export class EmployeesPage implements OnInit {
         errors: [{ type: 'required', message: 'این فیلد الزامیست' }],
       },
       {
-        type: 'text',
+        type: 'link',
         label: 'لینکدین',
         labelWidth: 110,
         formControlName: 'linkedin',
-        errors: [{ type: 'required', message: 'این فیلد الزامیست' }],
+        errors: [
+          { type: 'required', message: 'این فیلد الزامیست' },
+          { type: 'pattern', message: 'لینک وارد شده صحیح نیست' },
+        ],
       },
       {
         type: 'dropdown',
@@ -139,13 +149,20 @@ export class EmployeesPage implements OnInit {
   }
 
   onCellValueChanged(event) {
+    // debugger;
     const employee = new Employee();
     employee.id = event.data.id;
     if (event.colDef.field !== 'image') {
-      const field = event.colDef.field;
-      const value = event.data[field];
-      employee[field] = value;
+      if (event.colDef.field == 'social_accounts.linkedin') {
+        employee['social_accounts']['linkedin'] =
+          event.data['social_accounts']['linkedin'];
+      } else {
+        const field = event.colDef.field;
+        const value = event.data[field];
+        employee[field] = value;
+      }
     }
+
     this.employeeService.patch(employee).subscribe(() => {
       this.table.updateTransaction(employee);
       this.dataService.successfullMessage(this.vcRef);

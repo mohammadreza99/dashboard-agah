@@ -1,14 +1,11 @@
 import { Component, OnInit, ViewContainerRef, ViewChild } from '@angular/core';
-import { Feature } from '@app/shared/models/product.model';
 import { Observable } from 'rxjs';
-import { FeatureService } from '@app/core/http/feature/feature.service';
-import { DataService } from '@app/core/services/data.service';
-import { TableComponent } from '@app/shared/components/table/table.component';
-import { CompanyPositionService } from '@app/core/http/company-position/company-position.service';
-import { DialogFormService } from '@app/core/services/dialog-form.service';
-import { DialogFormConfig } from '@app/shared/models/dialog-form-config';
+import { FeatureService } from '@core/http/feature/feature.service';
+import { DataService } from '@core/services/data.service';
+import { TableComponent } from '@shared/components/table/table.component';
+import { DialogFormService } from '@core/services/dialog-form.service';
 import { ColDef } from 'ag-grid-community';
-import { features } from 'process';
+import { Feature, DialogFormConfig } from '@shared/models';
 
 @Component({
   selector: 'ag-features',
@@ -23,6 +20,7 @@ export class FeaturesPage implements OnInit {
     {
       field: 'id',
       headerName: 'شناسه',
+      maxWidth: 90,
       editable: false,
     },
     {
@@ -39,6 +37,10 @@ export class FeaturesPage implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.getRowData();
+  }
+
+  getRowData() {
     this.rowData$ = this.featureService.get();
   }
 
@@ -50,6 +52,7 @@ export class FeaturesPage implements OnInit {
           this.featureService.post(feature).subscribe((res) => {
             this.table.addTransaction(feature);
             this.dataService.successfullMessage(this.vcRef);
+            this.getRowData();
           });
         }
       });

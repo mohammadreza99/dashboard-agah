@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { ApiService } from '@core/http/api.service';
-import { History } from '@shared/models/history.model';
+import { HistoryItem } from '@shared/models';
 
 @Injectable({
   providedIn: 'root',
@@ -13,30 +13,30 @@ export class HistoryService {
 
   private readonly endPoint = 'histories';
 
-  get(): Observable<History[]> {
+  get(): Observable<HistoryItem[]> {
     return this.apiService
-      .get<History[]>(this.endPoint)
+      .get<HistoryItem[]>(this.endPoint)
       .pipe(map((res: any) => res.data));
   }
 
-  getById(historyId: object): Observable<History> {
-    return this.apiService.get<History>(`${this.endPoint}/${historyId}`);
+  getById(historyId: number | string): Observable<HistoryItem> {
+    return this.apiService.get<HistoryItem>(`${this.endPoint}/${historyId}`);
   }
 
-  post(history: History): Observable<History> {
+  post(history: HistoryItem): Observable<HistoryItem> {
     const formData = this.apiService.getFormData(history);
-    return this.apiService.post<History>(`${this.endPoint}`, formData);
+    return this.apiService.post<HistoryItem>(`${this.endPoint}`, formData);
   }
 
-  patch(history: History): Observable<History> {
+  patch(history: HistoryItem): Observable<HistoryItem> {
     const formData = this.apiService.getFormData(history, true);
-    return this.apiService.post<History>(
+    return this.apiService.post<HistoryItem>(
       `${this.endPoint}/${history.id}`,
       formData
     );
   }
 
-  delete(historyId: object) {
-    return this.apiService.delete<History>(`${this.endPoint}/${historyId}`);
+  delete(historyId: number | string) {
+    return this.apiService.delete<HistoryItem>(`${this.endPoint}/${historyId}`);
   }
 }

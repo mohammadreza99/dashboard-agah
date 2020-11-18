@@ -9,10 +9,10 @@
     [columnDefs]="columnDefs"
     [rowData]="rowData$ | async"
     [imagesConfig]="[{field:'image',headerName:'عکس',editable:true}]"
-    [actionsConfig]="[{action:'add-content',icon:'fa fa-pen',headerName:'جزییات',color:'primary'},{action:'delete',icon:'fa fa-times',headerName:'حذف',color:'danger'}]"
-    (cellValueChanged)="onCellValueChanged($event)"
+    [actionsConfig]="[{action:'add-content',icon:'fa fa-plus',headerName:'جزییات',color:'primary'},{action:'edit',icon:'fa fa-pen',headerName:'ویرایش',color:'primary'},{action:'delete',icon:'fa fa-times',headerName:'حذف',color:'danger'}]"
     (imageSelect)="onImageSelect($event)"
     (actionClick)="onActionClick($event)"
   >
   </ag-table>
 </ag-page-container>
+<!-- (cellValueChanged)="onCellValueChanged($event)" -->

@@ -1,12 +1,11 @@
 import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { TableComponent } from '@app/shared/components/table/table.component';
+import { TableComponent } from '@shared/components/table/table.component';
 import { Observable } from 'rxjs';
-import { Teacher } from '@app/shared/models/education';
 import { ColDef } from 'ag-grid-community';
-import { TeacherService } from '@app/core/http/tracher/teacher.service';
-import { DataService } from '@app/core/services/data.service';
-import { DialogFormService } from '@app/core/services/dialog-form.service';
-import { DialogFormConfig } from '@app/shared/models/dialog-form-config';
+import { TeacherService } from '@core/http/tracher/teacher.service';
+import { DataService } from '@core/services/data.service';
+import { DialogFormService } from '@core/services/dialog-form.service';
+import { Teacher, DialogFormConfig } from '@shared/models';
 
 @Component({
   selector: 'ag-teachers',
@@ -21,6 +20,7 @@ export class TeachersPage implements OnInit {
     {
       field: 'id',
       headerName: 'شناسه',
+      maxWidth: 90,
       editable: false,
     },
     {
@@ -54,6 +54,10 @@ export class TeachersPage implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.getRowData();
+  }
+
+  getRowData() {
     this.rowData$ = this.teacherService.get();
   }
 
@@ -65,6 +69,7 @@ export class TeachersPage implements OnInit {
           this.teacherService.post(teacher).subscribe((res) => {
             this.table.addTransaction(teacher);
             this.dataService.successfullMessage(this.vcRef);
+            this.getRowData();
           });
         }
       });
@@ -101,11 +106,14 @@ export class TeachersPage implements OnInit {
         errors: [{ type: 'required', message: 'این فیلد الزامیست' }],
       },
       {
-        type: 'text',
+        type: 'link',
         label: 'لینکدین',
         labelWidth: 110,
         formControlName: 'linkedin',
-        errors: [{ type: 'required', message: 'این فیلد الزامیست' }],
+        errors: [
+          { type: 'required', message: 'این فیلد الزامیست' },
+          { type: 'pattern', message: 'لینک وارد شده صحیح نیست' },
+        ],
       },
       {
         type: 'image-picker',

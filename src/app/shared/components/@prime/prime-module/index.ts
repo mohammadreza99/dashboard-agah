@@ -41,6 +41,8 @@ import { TreeModule } from 'primeng/tree';
 import { EditorModule } from 'primeng/editor';
 import { PickListModule } from 'primeng';
 import { SelectButtonModule } from 'primeng/selectbutton';
+import { InplaceModule } from 'primeng/inplace';
+import { EditorModule as TinyModule } from '@tinymce/tinymce-angular';
 
 export const MODULES = [
   ButtonModule,
@@ -86,4 +88,6 @@ export const MODULES = [
   PasswordModule,
   EditorModule,
   PickListModule,
+  InplaceModule,
+  TinyModule,
 ];

@@ -3,7 +3,9 @@
   [enableSorting]="enableSorting"
   [enableFilter]="enableFilter"
   [pagination]="pagination"
+  [paginationPageSize]="paginationPageSize"
   [rowData]="rowData"
+  [rowDragManaged]="draggable"
   [columnDefs]="columnDefs"
   [defaultColDef]="defaultColDef"
   [enableRtl]="true"
@@ -12,4 +14,7 @@
   (gridReady)="onGridReady($event)"
   (columnResized)="onColumnResized($event)"
   (cellValueChanged)="onCellValueChanged($event)"
+  (rowDragEnter)="rowDragEnter.emit($event)"
+  (rowDragMove)="rowDragMove.emit($event)"
+  (rowDragEnd)="rowDragEnd.emit($event)"
 ></ag-grid-angular>

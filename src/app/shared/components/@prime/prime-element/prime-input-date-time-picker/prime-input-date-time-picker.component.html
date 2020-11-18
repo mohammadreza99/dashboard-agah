@@ -1,5 +1,6 @@
 <prm-input-container [config]="containerConfig">
   <prm-date-time-picker
+    *ngIf="value != null"
     [disabled]="disabled"
     [readonly]="readonly"
     [clearable]="clearable"
@@ -10,7 +11,7 @@
     [datePickerMode]="datePickerMode"
     [beforeAfter]="beforeAfterConfig"
     [layout]="layout"
-    (dateChange)="_onChange($event)"
+    (onChange)="_onChange($event)"
     (onBlur)="__onBlur()"
     (onFocus)="_onFocus()"
   >

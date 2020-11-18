@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { ApiService } from '@core/http/api.service';
-import { SocialNetwork } from '@shared/models/social-network.model';
+import { SocialNetwork } from '@shared/models';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +16,7 @@ export class SocialNetworkService {
     return this.apiService.get<SocialNetwork[]>(this.endPoint);
   }
 
-  getById(socialNetworkId: object): Observable<SocialNetwork> {
+  getById(socialNetworkId: number | string): Observable<SocialNetwork> {
     return this.apiService.get<SocialNetwork>(
       `${this.endPoint}/${socialNetworkId}`
     );
@@ -29,10 +29,15 @@ export class SocialNetworkService {
 
   patch(socialNetwork: SocialNetwork): Observable<SocialNetwork> {
     const formData = this.apiService.getFormData(socialNetwork, true);
-    return this.apiService.post<SocialNetwork>(`${this.endPoint}/${socialNetwork.id}`, formData);
+    return this.apiService.post<SocialNetwork>(
+      `${this.endPoint}/${socialNetwork.id}`,
+      formData
+    );
   }
 
-  delete(socialNetworkId: object) {
-    return this.apiService.delete<SocialNetwork>(`${this.endPoint}/${socialNetworkId}`);
+  delete(socialNetworkId: number | string) {
+    return this.apiService.delete<SocialNetwork>(
+      `${this.endPoint}/${socialNetworkId}`
+    );
   }
 }

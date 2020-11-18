@@ -65,8 +65,9 @@ export class ApiService {
         } else if (
           typeof obj[key] === 'object' &&
           key !== 'image' &&
+          key !== 'images' &&
           key !== 'logo' &&
-          key !== 'time_estimates' &&
+          key !== 'time_estimate' &&
           key !== 'time' &&
           key !== 'video' &&
           key !== 'birthday'

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiService } from '../api.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Comment } from '@app/shared/models/comment';
+import { CommentItem } from '@shared/models';
 
 @Injectable({
   providedIn: 'root',
@@ -12,31 +12,31 @@ export class CommentService {
 
   private readonly endPoint = 'comments';
 
-  get(): Observable<Comment[]> {
+  get(): Observable<CommentItem[]> {
     return this.apiService
-      .get<Comment[]>(this.endPoint)
+      .get<CommentItem[]>(this.endPoint)
       .pipe(map((res: any) => res.data));
   }
 
-  getById(commentId: string) {
-    return this.apiService.get<Comment>(`${this.endPoint}/${commentId}`);
+  getById(commentId: string | number) {
+    return this.apiService.get<CommentItem>(`${this.endPoint}/${commentId}`);
   }
 
-  publish(commentId: object) {
-    return this.apiService.patch<Comment>(
+  publish(commentId: number | string) {
+    return this.apiService.patch<CommentItem>(
       `${this.endPoint}/${commentId}/publish`,
       null
     );
   }
 
-  unpublish(commentId: object) {
-    return this.apiService.patch<Comment>(
+  unpublish(commentId: number | string) {
+    return this.apiService.patch<CommentItem>(
       `${this.endPoint}/${commentId}/unpublish`,
       null
     );
   }
 
-  delete(commentId: object) {
-    return this.apiService.delete<Comment>(`${this.endPoint}/${commentId}`);
+  delete(commentId: number | string) {
+    return this.apiService.delete<CommentItem>(`${this.endPoint}/${commentId}`);
   }
 }

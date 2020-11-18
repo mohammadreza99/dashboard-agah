@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiService } from '../api.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Counselor } from '@app/shared/models/counselor.model';
+import { Counselor } from '@shared/models';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +18,7 @@ export class CounselorService {
       .pipe(map((res: any) => res.data));
   }
 
-  getById(counselorId: object): Observable<Counselor> {
+  getById(counselorId: number | string): Observable<Counselor> {
     return this.apiService.get<Counselor>(`${this.endPoint}/${counselorId}`);
   }
 
@@ -35,7 +35,7 @@ export class CounselorService {
     );
   }
 
-  delete(counselorId: object) {
+  delete(counselorId: number | string) {
     return this.apiService.delete<Counselor>(`${this.endPoint}/${counselorId}`);
   }
 }

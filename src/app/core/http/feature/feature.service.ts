@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { ApiService } from '../api.service';
-import { Feature } from '@app/shared/models/product.model';
+import { Feature } from '@shared/models';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -19,7 +19,7 @@ export class FeatureService {
       .pipe(map((res: any) => res.data));
   }
 
-  getById(featureId: object): Observable<Feature> {
+  getById(featureId: number | string): Observable<Feature> {
     return this.apiService.get<Feature>(`${this.endPoint}/${featureId}`);
   }
 
@@ -36,7 +36,7 @@ export class FeatureService {
     );
   }
 
-  delete(featureId: object) {
+  delete(featureId: number | string) {
     return this.apiService.delete<Feature>(`${this.endPoint}/${featureId}`);
   }
 }

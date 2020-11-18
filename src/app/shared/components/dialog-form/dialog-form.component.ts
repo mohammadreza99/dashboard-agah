@@ -1,5 +1,10 @@
 import { Component, OnInit, Optional } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import {
+  FormGroup,
+  FormControl,
+  Validators,
+  ValidatorFn,
+} from '@angular/forms';
 import { DynamicDialogRef, DynamicDialogConfig } from 'primeng';
 
 @Component({
@@ -14,16 +19,18 @@ export class DialogFormComponent implements OnInit {
   ) {}
 
   form = new FormGroup({});
+  validators: ValidatorFn[] = [];
 
   ngOnInit() {
     for (const item of this.dialogConfig.data) {
       this.form.addControl(item.formControlName, new FormControl(undefined));
       if (item.errors) {
         for (const error of item.errors) {
-          this.form.controls[item.formControlName].setValidators([
-            Validators[error.type],
-          ]);
+          this.validators.push(Validators[error.type]);
         }
+        this.form.controls[item.formControlName].setValidators([
+          ...this.validators,
+        ]);
       }
       if (item.type === 'dropdown') {
         (item.dropdownItems as Array<any>).unshift({
@@ -31,8 +38,22 @@ export class DialogFormComponent implements OnInit {
           value: null,
         });
       }
+      if (item.type === 'link') {
+        this.form.controls[item.formControlName].setValidators([
+          ...this.validators,
+          Validators.pattern(
+            '[Hh][Tt][Tt][Pp][Ss]?://(?:(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)(?:.(?:[a-zA-Z\u00a1-\uffff0-9]+-?)*[a-zA-Z\u00a1-\uffff0-9]+)*(?:.(?:[a-zA-Z\u00a1-\uffff]{2,}))(?::d{2,5})?(?:/[^s]*)?'
+          ),
+        ]);
+      }
       if (item.value) {
-        this.form.get(item.formControlName).setValue(item.value);
+        if (item.type == 'date-picker') {
+          this.form
+            .get(item.formControlName)
+            .setValue((item.value.toDate() as Date).toISOString());
+        } else {
+          this.form.get(item.formControlName).setValue(item.value);
+        }
       }
     }
   }

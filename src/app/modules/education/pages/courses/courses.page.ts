@@ -1,14 +1,21 @@
 import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { TableComponent } from '@app/shared/components/table/table.component';
+import { TableComponent } from '@shared/components/table/table.component';
 import { Observable } from 'rxjs';
-import { Course, Teacher } from '@app/shared/models/education';
 import { ColDef } from 'ag-grid-community';
-import { DataService } from '@app/core/services/data.service';
-import { DialogFormService } from '@app/core/services/dialog-form.service';
+import { DataService } from '@core/services/data.service';
+import { DialogFormService } from '@core/services/dialog-form.service';
 import { Router } from '@angular/router';
-import { DialogFormConfig } from '@app/shared/models/dialog-form-config';
-import { CourseService } from '@app/core/http/course/course.service';
-import { TeacherService } from '@app/core/http/tracher/teacher.service';
+import { CourseService } from '@core/http/course/course.service';
+import { TeacherService } from '@core/http/tracher/teacher.service';
+import {
+  Course,
+  Teacher,
+  DialogFormConfig,
+  Category,
+  Tag,
+} from '@shared/models';
+import { CategoryService } from '@app/core/http/cateogry/category.service';
+import { TagService } from '@app/core/http/tag/tag.service';
 
 @Component({
   selector: 'ag-courses',
@@ -19,14 +26,45 @@ export class CoursesPage implements OnInit {
   @ViewChild(TableComponent, { static: false }) table: TableComponent;
 
   rowData$: Observable<Course[]>;
-  columnDefs: ColDef[];
   availableTeachers: Teacher[];
+  availableCategories: Category[];
+  availableTags: Tag[];
+  columnDefs = [
+    {
+      field: 'id',
+      headerName: 'شناسه',
+      maxWidth: 90,
+      editable: false,
+    },
+    {
+      field: 'title',
+      headerName: 'عنوان',
+      editable: false,
+    },
+    {
+      field: 'teacher.last_name',
+      headerName: 'استاد',
+      editable: false,
+    },
+    {
+      field: 'category.label',
+      headerName: 'دسته بندی',
+      editable: false,
+    },
+    {
+      field: 'content',
+      headerName: 'توضیحات',
+      editable: false,
+    },
+  ];
 
   constructor(
     private courseService: CourseService,
     private dataService: DataService,
     private teacherService: TeacherService,
+    private categoryService: CategoryService,
     private dialogFormService: DialogFormService,
+    private tagService: TagService,
     private vcRef: ViewContainerRef,
     private router: Router
   ) {}
@@ -35,44 +73,15 @@ export class CoursesPage implements OnInit {
     this.loadData();
   }
 
+  getRowData() {
+    this.rowData$ = this.courseService.get();
+  }
+
   async loadData() {
     this.availableTeachers = await this.teacherService.get().toPromise();
-    this.rowData$ = this.courseService.get();
-    this.columnDefs = [
-      {
-        field: 'id',
-        headerName: 'شناسه',
-        editable: false,
-      },
-      {
-        field: 'title',
-        headerName: 'عنوان',
-      },
-      {
-        field: 'teacher_id',
-        headerName: 'استاد',
-        cellRenderer: (params) => {
-          return this.teacherCellRenderer(params);
-        },
-        cellEditor: 'agSelectCellEditor',
-        cellEditorParams: {
-          values: this.availableTeachers.map(
-            (teacher) => teacher.first_name + ' ' + teacher.last_name
-          ),
-        },
-        onCellValueChanged: (params) => {
-          params.data.teacher_id = getByTitleCellRenderer(
-            params.data.teacher_id,
-            this.availableTeachers
-          );
-        },
-      },
-      {
-        field: 'content',
-        headerName: 'توضیحات',
-        cellEditor: 'agLargeTextCellEditor',
-      },
-    ];
+    this.availableCategories = await this.categoryService.get().toPromise();
+    this.availableTags = await this.tagService.get().toPromise();
+    this.getRowData();
   }
 
   addCourse() {
@@ -83,20 +92,23 @@ export class CoursesPage implements OnInit {
           this.courseService.post(course).subscribe((res) => {
             this.table.addTransaction(course);
             this.dataService.successfullMessage(this.vcRef);
+            this.getRowData();
           });
         }
       });
   }
 
-  teacherCellRenderer(params) {
-    return getByIdCellRenderer(params.data.teacher_id, this.availableTeachers);
-  }
-
-  formConfig(): DialogFormConfig[] {
-    return [
+  formConfig(value?: Course): DialogFormConfig[] {
+    const newsConfig: DialogFormConfig[] = [
+      {
+        type: 'hidden',
+        value: value?.id,
+        formControlName: 'id',
+      },
       {
         type: 'text',
         label: 'عنوان',
+        value: value?.title,
         labelWidth: 110,
         formControlName: 'title',
         errors: [{ type: 'required', message: 'این فیلد الزامیست' }],
@@ -105,6 +117,7 @@ export class CoursesPage implements OnInit {
         type: 'dropdown',
         label: 'استاد',
         labelWidth: 110,
+        value: value?.teacher_id,
         dropdownItems: this.availableTeachers.map((item) => {
           return {
             label: item.first_name + ' ' + item.last_name,
@@ -115,11 +128,44 @@ export class CoursesPage implements OnInit {
         errors: [{ type: 'required', message: 'این فیلد الزامیست' }],
       },
       {
+        type: 'dropdown',
+        label: 'دسته بندی',
+        labelWidth: 110,
+        value: value?.category_id,
+        dropdownItems: this.availableCategories.map((item) => {
+          return {
+            label: item.label,
+            value: item.id,
+          };
+        }),
+        formControlName: 'category_id',
+        errors: [{ type: 'required', message: 'این فیلد الزامیست' }],
+      },
+      {
+        type: 'multi-select',
+        label: 'تگ ها',
+        labelWidth: 110,
+        value: value?.tags,
+        formControlName: 'tags',
+        multiSelectItems: this.availableTags.map((item) => {
+          return { value: item.id, label: item.tag };
+        }),
+        errors: [{ type: 'required', message: 'این فیلد الزامیست' }],
+      },
+      {
         type: 'textarea',
         label: 'توضیحات',
         labelWidth: 110,
+        value: value?.content,
         formControlName: 'content',
         errors: [{ type: 'required', message: 'این فیلد الزامیست' }],
+      },
+      {
+        type: 'checkbox',
+        label: 'جزو بهترین دوره ها باشد',
+        value: value?.best || false,
+        labelWidth: 110,
+        formControlName: 'best',
       },
       {
         type: 'image-picker',
@@ -129,20 +175,10 @@ export class CoursesPage implements OnInit {
         errors: [{ type: 'required', message: 'این فیلد الزامیست' }],
       },
     ];
-  }
-
-  onCellValueChanged(event) {
-    const course = new Course();
-    course.id = event.data.id;
-    if (event.colDef.field !== 'image') {
-      const field = event.colDef.field;
-      const value = event.data[field];
-      course[field] = value;
+    if (value) {
+      newsConfig.splice(7, 1);
     }
-    this.courseService.patch(course).subscribe(() => {
-      this.table.updateTransaction(course);
-      this.dataService.successfullMessage(this.vcRef);
-    });
+    return newsConfig;
   }
 
   onImageSelect(e) {
@@ -166,6 +202,25 @@ export class CoursesPage implements OnInit {
           });
         });
         break;
+      case 'edit':
+        this.courseService.getById(rowData.id).subscribe((course) => {
+          const c: any = {
+            ...course,
+            tags: course.tags.map((item) => item.id),
+          };
+          this.dialogFormService
+            .show('ویرایش', this.formConfig(c), '1000px')
+            .onClose.subscribe((result) => {
+              if (result) {
+                this.courseService.patch(result).subscribe((res) => {
+                  this.table.updateTransaction(course);
+                  this.dataService.successfullMessage(this.vcRef);
+                  this.getRowData();
+                });
+              }
+            });
+        });
+        break;
       case 'add-content':
         this.router.navigate([
           '/dashboard/education/course-content',
@@ -174,24 +229,4 @@ export class CoursesPage implements OnInit {
         break;
     }
   }
-}
-
-function getByIdCellRenderer(condtion: any, items: any) {
-  let value;
-  items.forEach((item) => {
-    if (item.id === condtion) {
-      value = item.first_name + ' ' + item.last_name;
-    }
-  });
-  return value;
-}
-
-function getByTitleCellRenderer(condtion: any, items: any) {
-  let value;
-  items.forEach((item) => {
-    if (item.first_name + ' ' + item.last_name === condtion) {
-      value = item.id;
-    }
-  });
-  return value;
 }

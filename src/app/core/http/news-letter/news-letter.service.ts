@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from '@core/http/api.service';
-import { NewsLetter } from '@app/shared/models/news-letter.model';
+import { NewsLetter } from '@shared/models';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -18,7 +18,7 @@ export class NewsLetterService {
       .pipe(map((res: any) => res.data));
   }
 
-  getById(newsLetterId: object): Observable<NewsLetter> {
+  getById(newsLetterId: number | string): Observable<NewsLetter> {
     return this.apiService.get<NewsLetter>(`${this.endPoint}/${newsLetterId}`);
   }
 
@@ -35,7 +35,7 @@ export class NewsLetterService {
     );
   }
 
-  delete(newsLetterId: object) {
+  delete(newsLetterId: number | string) {
     return this.apiService.delete<NewsLetter>(
       `${this.endPoint}/${newsLetterId}`
     );

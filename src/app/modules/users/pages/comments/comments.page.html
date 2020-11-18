@@ -2,6 +2,8 @@
   <ag-table
     [columnDefs]="columnDefs"
     [rowData]="rowData$ | async"
+    [paginationPageSize]="14"
+    [pagination]="true"
     [actionsConfig]="[
       {action:'publish',icon:'fa fa-external-link-alt',headerName:'انتشار',color:'success'},
       {action:'unpublish',icon:'fa fa-do-not-enter',headerName:'عدم انتشار',color:'warning'},

@@ -1,10 +1,8 @@
 import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { TableComponent } from '@app/shared/components/table/table.component';
-import { Observable, of } from 'rxjs';
-import { Contact } from '@app/shared/models/contact.model';
+import { TableComponent } from '@shared/components/table/table.component';
 import { ColDef } from 'ag-grid-community';
-import { ContactService } from '@app/core/http/contact/contact.service';
-import { DataService } from '@app/core/services/data.service';
+import { ContactService } from '@core/http/contact/contact.service';
+import { DataService } from '@core/services/data.service';
 
 @Component({
   selector: 'ag-contacts',
@@ -14,8 +12,29 @@ import { DataService } from '@app/core/services/data.service';
 export class ContactsPage implements OnInit {
   @ViewChild(TableComponent, { static: false }) table: TableComponent;
 
-  rowData$: Observable<Contact>;
-  columnDefs: ColDef[];
+  rowData: any[];
+  columnDefs: ColDef[] = [
+    {
+      field: 'address',
+      headerName: 'آدرس',
+    },
+    {
+      field: 'email',
+      headerName: 'ایمیل',
+    },
+    {
+      field: 'phone',
+      headerName: 'تلفن',
+    },
+    {
+      field: 'latitude',
+      headerName: 'latitude',
+    },
+    {
+      field: 'longitude',
+      headerName: 'longitude',
+    },
+  ];
 
   constructor(
     private contactService: ContactService,
@@ -24,42 +43,17 @@ export class ContactsPage implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.generateColumns();
-  }
-
-  async generateColumns() {
-    this.rowData$ = this.contactService.get();
-    this.columnDefs = [
-      {
-        field: 'address',
-        headerName: 'آدرس',
-      },
-      {
-        field: 'email',
-        headerName: 'ایمیل',
-      },
-      {
-        field: 'phone',
-        headerName: 'تلفن',
-      },
-      {
-        field: 'latitude',
-        headerName: 'latitude',
-      },
-      {
-        field: 'longitude',
-        headerName: 'longitude',
-      },
-    ];
+    this.contactService.get().subscribe((res: any) => {
+      this.rowData = [res];
+    });
   }
 
   onCellValueChanged(event) {
-    const contact = new Contact();
-    const field = event.colDef.field;
-    const value = event.data[field];
-    contact[field] = value;
-    this.contactService.post(contact).subscribe(() => {
-      this.table.updateTransaction(contact);
+    delete event.data.created_at;
+    delete event.data.updated_at;
+    delete event.data.id;
+    this.contactService.patch(event.data).subscribe(() => {
+      this.table.updateTransaction(event.data);
       this.dataService.successfullMessage(this.vcRef);
     });
   }

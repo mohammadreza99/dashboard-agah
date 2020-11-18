@@ -1,12 +1,11 @@
 import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { TableComponent } from '@app/shared/components/table/table.component';
+import { TableComponent } from '@shared/components/table/table.component';
 import { Observable } from 'rxjs';
-import { UserSelect, UserInsert } from '@app/shared/models/user.model';
 import { ColDef } from 'ag-grid-community';
-import { UserService } from '@app/core/http/user/user.service';
-import { DataService } from '@app/core/services/data.service';
-import { DialogFormService } from '@app/core/services/dialog-form.service';
-import { DialogFormConfig } from '@app/shared/models/dialog-form-config';
+import { UserService } from '@core/http/user/user.service';
+import { DataService } from '@core/services/data.service';
+import { DialogFormService } from '@core/services/dialog-form.service';
+import { UserSelect, UserInsert, DialogFormConfig } from '@shared/models';
 
 @Component({
   selector: 'ag-users',
@@ -21,10 +20,11 @@ export class UsersPage implements OnInit {
     {
       field: 'id',
       headerName: 'شناسه',
+      maxWidth: 90,
       editable: false,
     },
     {
-      field: 'name',
+      field: 'username',
       headerName: 'نام',
       editable: false,
     },
@@ -52,6 +52,10 @@ export class UsersPage implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.getRowData();
+  }
+
+  getRowData() {
     this.rowData$ = this.userService.get();
   }
 
@@ -63,6 +67,7 @@ export class UsersPage implements OnInit {
           this.userService.post(user).subscribe((res) => {
             this.table.addTransaction(user);
             this.dataService.successfullMessage(this.vcRef);
+            this.getRowData();
           });
         }
       });

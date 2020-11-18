@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { Director } from '@shared/models/director.model';
+import { Director } from '@shared/models';
 import { ApiService } from '@core/http/api.service';
 
 @Injectable({
@@ -16,7 +16,7 @@ export class DirectorService {
     return this.apiService.get<Director[]>(this.endPoint);
   }
 
-  getById(directorId: object): Observable<Director> {
+  getById(directorId: number | string): Observable<Director> {
     return this.apiService.get<Director>(`${this.endPoint}/${directorId}`);
   }
 
@@ -33,7 +33,7 @@ export class DirectorService {
     );
   }
 
-  delete(directorId: object) {
+  delete(directorId: number | string) {
     return this.apiService.delete<Director>(`${this.endPoint}/${directorId}`);
   }
 }

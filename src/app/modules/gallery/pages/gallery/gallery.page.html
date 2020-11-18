@@ -1,0 +1,99 @@
+<!-- <ag-page-container title="تگ ها">
+  <prm-button
+    color="success"
+    label="افزودن"
+    icon="fa fa-plus"
+    (click)="addGallery()"
+  ></prm-button>
+  <ag-table
+    [columnDefs]="columnDefs"
+    [rowData]="rowData$ | async"
+    [actionsConfig]="[{action:'delete',icon:'fa fa-times',headerName:'حذف',color:'danger'}]"
+    (actionClick)="onActionClick($event)"
+  >
+  </ag-table>
+</ag-page-container> -->
+<ag-page-container title="گالری">
+  <prm-button
+    color="success"
+    label="افزودن"
+    icon="fa fa-plus"
+    (click)="showDialog = true"
+  ></prm-button>
+  <table class="table text-right">
+    <thead>
+      <tr>
+        <th>تصاویر</th>
+        <th class="title-c">عنوان</th>
+        <th>شناسه</th>
+        <th>حذف</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of rowData$ | async">
+        <td class="align-middle">
+          <multi-image-picker
+            [readonly]="true"
+            [images]="item.images"
+          ></multi-image-picker>
+        </td>
+        <td class="align-middle border-left text-center">
+          <p-inplace closable="closable" (onDeactivate)="onEditTitle(item)">
+            <div pInplaceDisplay>
+              <p class="my-3">
+                {{item.title}} <i class="text-muted fa fa-pen"></i>
+              </p>
+            </div>
+            <span pInplaceContent>
+              <input type="text" [(ngModel)]="item.title" pInputText />
+            </span>
+          </p-inplace>
+        </td>
+        <td class="align-middle border-left text-center">{{item.id}}</td>
+        <td class="align-middle border-left text-center">
+          <prm-button
+            (click)="onDeleteClick(item)"
+            icon="fa fa-times"
+            color="danger"
+          ></prm-button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</ag-page-container>
+
+<p-dialog
+  [style]="{width: '1000px'}"
+  title="افزودن گالری"
+  [appendTo]="'body'"
+  [modal]="true"
+  [draggable]="false"
+  [(visible)]="showDialog"
+>
+  <multi-image-picker
+    (onChange)="onSelectImage($event)"
+    class="d-block mb-3"
+  ></multi-image-picker>
+  <prm-input-text
+    [(ngModel)]="galleryTitle"
+    label="عنوان"
+    labelWidth="110"
+  ></prm-input-text>
+  <div
+    class="d-flex justify-content-start align-content-center border-top pt-2 mt-5 bg-light"
+  >
+    <prm-button
+      label="ذخیره"
+      icon="fa fa-plus"
+      color="success"
+      class="mr-2"
+      (click)="onSubmitDialogClick()"
+    ></prm-button>
+    <prm-button
+      label="انصراف"
+      icon="fa fa-times"
+      color="danger"
+      (click)="showDialog = false"
+    ></prm-button>
+  </div>
+</p-dialog>

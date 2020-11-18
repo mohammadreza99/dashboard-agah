@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { Department } from '@shared/models/department.model';
+import { Department } from '@shared/models';
 import { ApiService } from '@core/http/api.service';
 
 @Injectable({
@@ -16,7 +16,7 @@ export class DepartmentService {
     return this.apiService.get<Department[]>(this.endPoint);
   }
 
-  getById(departmentId: object): Observable<Department> {
+  getById(departmentId: number | string): Observable<Department> {
     return this.apiService.get<Department>(`${this.endPoint}/${departmentId}`);
   }
 
@@ -33,7 +33,7 @@ export class DepartmentService {
     );
   }
 
-  delete(departmentId: object) {
+  delete(departmentId: number | string) {
     return this.apiService.delete<Department>(
       `${this.endPoint}/${departmentId}`
     );

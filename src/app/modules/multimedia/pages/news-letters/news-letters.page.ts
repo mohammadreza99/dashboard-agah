@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { TableComponent } from '@app/shared/components/table/table.component';
+import { TableComponent } from '@shared/components/table/table.component';
 import { Observable } from 'rxjs';
-import { NewsLetter } from '@app/shared/models/news-letter.model';
 import { ColDef } from 'ag-grid-community';
-import { NewsLetterService } from '@app/core/http/news-letter/news-letter.service';
-import { DataService } from '@app/core/services/data.service';
-import { DialogFormService } from '@app/core/services/dialog-form.service';
-import { DialogFormConfig } from '@app/shared/models/dialog-form-config';
+import { NewsLetterService } from '@core/http/news-letter/news-letter.service';
+import { DataService } from '@core/services/data.service';
+import { DialogFormService } from '@core/services/dialog-form.service';
+import { NewsLetter, DialogFormConfig } from '@shared/models';
+import * as moment from 'jalali-moment';
 
 @Component({
   selector: 'ag-news-letters',
@@ -21,6 +21,7 @@ export class NewsLettersPage implements OnInit {
     {
       field: 'id',
       headerName: 'شناسه',
+      maxWidth: 90,
       editable: false,
     },
     {
@@ -58,6 +59,10 @@ export class NewsLettersPage implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.getRowData();
+  }
+
+  getRowData() {
     this.rowData$ = this.newsLetterService.get();
   }
 
@@ -69,6 +74,7 @@ export class NewsLettersPage implements OnInit {
           this.newsLetterService.post(newsLetter).subscribe((res) => {
             this.table.addTransaction(newsLetter);
             this.dataService.successfullMessage(this.vcRef);
+            this.getRowData();
           });
         }
       });
@@ -88,6 +94,7 @@ export class NewsLettersPage implements OnInit {
         label: 'زمان',
         labelWidth: 110,
         formControlName: 'schedule',
+        value: moment(),
         errors: [{ type: 'required', message: 'این فیلد الزامیست' }],
       },
       {

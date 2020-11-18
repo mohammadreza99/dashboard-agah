@@ -1,15 +1,14 @@
 import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { TableComponent } from '@app/shared/components/table/table.component';
+import { TableComponent } from '@shared/components/table/table.component';
 import { Observable } from 'rxjs';
-import { Workshop, Teacher } from '@app/shared/models/education';
 import { ColDef } from 'ag-grid-community';
 import * as moment from 'jalali-moment';
+import { WorkshopService } from '@core/http/workshop/workshop.service';
+import { DataService } from '@core/services/data.service';
+import { TeacherService } from '@core/http/tracher/teacher.service';
+import { DialogFormService } from '@core/services/dialog-form.service';
+import { Workshop, Teacher, DialogFormConfig } from '@shared/models';
 
-import { WorkshopService } from '@app/core/http/workshop/workshop.service';
-import { DataService } from '@app/core/services/data.service';
-import { TeacherService } from '@app/core/http/tracher/teacher.service';
-import { DialogFormService } from '@app/core/services/dialog-form.service';
-import { DialogFormConfig } from '@app/shared/models/dialog-form-config';
 @Component({
   selector: 'ag-workshop',
   templateUrl: './workshop.page.html',
@@ -34,14 +33,19 @@ export class WorkshopPage implements OnInit {
     this.loadData();
   }
 
+  getRowData() {
+    this.rowData$ = this.workshopService.get();
+  }
+
   async loadData() {
     this.availableTeachers = await this.teacherService.get().toPromise();
-    this.rowData$ = this.workshopService.get();
+    this.getRowData();
     this.columnDefs = [
       {
         field: 'id',
         headerName: 'شناسه',
         editable: false,
+        maxWidth: 90,
       },
       {
         field: 'title',
@@ -82,13 +86,14 @@ export class WorkshopPage implements OnInit {
               this.workshopService.patch(workshop).subscribe(() => {
                 this.table.updateTransaction(workshop);
                 this.dataService.successfullMessage(this.vcRef);
+                this.getRowData();
               });
             }
           },
         },
       },
       {
-        field: 'location',
+        field: 'address',
         headerName: 'آدرس',
         cellEditor: 'agLargeTextCellEditor',
       },
@@ -144,22 +149,26 @@ export class WorkshopPage implements OnInit {
         errors: [{ type: 'required', message: 'این فیلد الزامیست' }],
       },
       {
-        type: 'text',
+        type: 'link',
         label: 'لینک',
         labelWidth: 110,
         formControlName: 'link',
-        errors: [{ type: 'required', message: 'این فیلد الزامیست' }],
+        errors: [
+          { type: 'required', message: 'این فیلد الزامیست' },
+          { type: 'pattern', message: 'لینک وارد شده صحیح نیست' },
+        ],
       },
       {
         type: 'text',
         label: 'آدرس',
         labelWidth: 110,
-        formControlName: 'location',
+        formControlName: 'address',
         errors: [{ type: 'required', message: 'این فیلد الزامیست' }],
       },
       {
         type: 'date-picker',
         label: 'زمان',
+        value:moment(),
         labelWidth: 110,
         formControlName: 'time',
         errors: [{ type: 'required', message: 'این فیلد الزامیست' }],

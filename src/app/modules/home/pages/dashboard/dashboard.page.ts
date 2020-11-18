@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DialogFormService } from '@app/core/services/dialog-form.service';
+import { DialogFormService } from '@core/services/dialog-form.service';
 
 declare let particlesJS: any;
 @Component({
@@ -108,6 +108,7 @@ export class DashboardPage implements OnInit {
     },
     retina_detect: true,
   };
+
   ngOnInit() {
     particlesJS('particles-js', this.ParticlesConfig, () => {});
   }

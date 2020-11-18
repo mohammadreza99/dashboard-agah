@@ -9,7 +9,7 @@
     [columnDefs]="columnDefs"
     [rowData]="rowData$ | async"
     [imagesConfig]="[{field:'image',headerName:'عکس',editable:true}]"
-    [actionsConfig]="[{action:'delete',icon:'fa fa-times',headerName:'حذف',color:'danger'}]"
+    [actionsConfig]="[{action:'delete',icon:'fa fa-times',headerName:'حذف',color:'danger'},{action:'edit-content',icon:'fa fa-pen',headerName:'ویرایش محتوا',color:'primary'}]"
     (cellValueChanged)="onCellValueChanged($event)"
     (imageSelect)="onImageSelect($event)"
     (actionClick)="onActionClick($event)"

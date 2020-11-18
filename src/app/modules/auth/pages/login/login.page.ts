@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { AuthService } from '@app/core/authentication/auth.service';
+import { AuthService } from '@core/authentication/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -28,6 +28,7 @@ export class LoginPage implements OnInit {
         .subscribe((res: any) => {
           if (res?.token) {
             this.authService.saveToken(res.token);
+            this.authService.saveUserName(res.username);
             this.router.navigate(['/dashboard/agah/vision']);
           }
         });

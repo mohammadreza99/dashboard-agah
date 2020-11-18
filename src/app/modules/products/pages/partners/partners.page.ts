@@ -1,12 +1,11 @@
 import { Component, OnInit, ViewContainerRef, ViewChild } from '@angular/core';
-import { PartnerService } from '@app/core/http/partner/partner.service';
-import { Partner } from '@app/shared/models/product.model';
-import { DataService } from '@app/core/services/data.service';
+import { PartnerService } from '@core/http/partner/partner.service';
+import { DataService } from '@core/services/data.service';
 import { Observable } from 'rxjs';
-import { TableComponent } from '@app/shared/components/table/table.component';
-import { DialogFormService } from '@app/core/services/dialog-form.service';
-import { DialogFormConfig } from '@app/shared/models/dialog-form-config';
+import { TableComponent } from '@shared/components/table/table.component';
+import { DialogFormService } from '@core/services/dialog-form.service';
 import { ColDef } from 'ag-grid-community';
+import { Partner, DialogFormConfig } from '@shared/models';
 
 @Component({
   selector: 'ag-partners',
@@ -21,6 +20,7 @@ export class PartnersPage implements OnInit {
     {
       field: 'id',
       headerName: 'شناسه',
+      maxWidth: 90,
       editable: false,
     },
     {
@@ -37,6 +37,10 @@ export class PartnersPage implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.getRowData();
+  }
+
+  getRowData() {
     this.rowData$ = this.partnerService.get();
   }
 
@@ -48,6 +52,7 @@ export class PartnersPage implements OnInit {
           this.partnerService.post(partner).subscribe((res) => {
             this.table.addTransaction(partner);
             this.dataService.successfullMessage(this.vcRef);
+            this.getRowData();
           });
         }
       });

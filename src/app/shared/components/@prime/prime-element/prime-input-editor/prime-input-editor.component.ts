@@ -14,7 +14,8 @@ import { PrimeInputBaseComponent } from '../prime-input-base/prime-input-base.co
     },
   ],
 })
-export class PrimeInputEditorComponent extends PrimeInputBaseComponent
+export class PrimeInputEditorComponent
+  extends PrimeInputBaseComponent
   implements OnInit, AfterViewInit {
   ngOnInit() {
     super.ngOnInit();
@@ -24,8 +25,8 @@ export class PrimeInputEditorComponent extends PrimeInputBaseComponent
     super.ngAfterViewInit();
   }
 
-  _onTextChange() {
-    if (this.hasValueAccessor) this.controlOnChange(this.value);
-    this.onChange.emit(this.value);
+  _onTextChange(event) {
+    if (this.hasValueAccessor) this.controlOnChange(event);
+    this.onChange.emit(event);
   }
 }

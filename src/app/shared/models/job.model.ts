@@ -13,7 +13,7 @@ export class JobItem extends BaseEntity {
 }
 
 export class JobRequest extends BaseEntity {
-  job_id: object;
+  job_id: number | string;
   first_name: string;
   last_name: string;
   birthday: Date;

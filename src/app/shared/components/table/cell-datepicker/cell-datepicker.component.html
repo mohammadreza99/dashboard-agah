@@ -2,12 +2,17 @@
 <label
   *ngIf="editable"
   style="cursor: pointer"
-  class="p-1 mr-2 border bg-light"
+  class="p-1 mb-0 mr-2 border bg-light"
   (click)="onClick($event)"
   >تغییر</label
 >
 
-<p-dialog [appendTo]="'body'" [modal]="true" [(visible)]="showDialog">
+<p-dialog
+  [draggable]="false"
+  [appendTo]="'body'"
+  [modal]="true"
+  [(visible)]="showDialog"
+>
   <prm-date-time-picker
     (onChange)="dateChange($event)"
     [inline]="true"

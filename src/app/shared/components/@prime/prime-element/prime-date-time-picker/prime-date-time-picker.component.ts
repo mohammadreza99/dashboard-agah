@@ -5,8 +5,6 @@ import {
   Input,
   Output,
   EventEmitter,
-  OnChanges,
-  SimpleChanges,
 } from '@angular/core';
 import { IDatePickerConfig } from 'ng2-jalali-date-picker';
 import * as moment from 'jalali-moment';
@@ -19,8 +17,9 @@ import { PrimeDirection } from '../../prime-type/prime-direction';
   templateUrl: './prime-date-time-picker.component.html',
   styleUrls: ['./prime-date-time-picker.component.scss'],
 })
-export class PrimeDateTimePickerComponent implements OnInit, OnChanges {
+export class PrimeDateTimePickerComponent implements OnInit {
   constructor(public el: ElementRef) {}
+
   @Input() datePickerMode: PrimeDatePickerMode = 'day';
   @Input() inline: boolean = false;
   @Input() disabled: boolean = false;
@@ -94,7 +93,6 @@ export class PrimeDateTimePickerComponent implements OnInit, OnChanges {
     'پنج شنبه',
     'جمعه',
   ];
-  flag = true;
 
   ngOnInit(): void {
     if (this.readonly) {
@@ -104,10 +102,6 @@ export class PrimeDateTimePickerComponent implements OnInit, OnChanges {
     setTimeout(() => {
       if (this.date) this._date = this.date;
     }, 0);
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (this.date) this._date = changes.date.currentValue;
   }
 
   getStrWeekDay(momentObj: moment.Moment): string {
@@ -178,16 +172,9 @@ export class PrimeDateTimePickerComponent implements OnInit, OnChanges {
           break;
         }
       }
-      if (this.flag) {
-        this.dateChange.emit(date);
-        this.flag = false;
-      }
-      // this.onChange.emit(date);
+      this.dateChange.emit(result);
+      this.onChange.emit(dateObj);
     }
-  }
-
-  _onInlineChange(event) {
-    this.onChange.emit(event);
   }
 
   _onOpen() {
@@ -216,5 +203,8 @@ export class PrimeDateTimePickerComponent implements OnInit, OnChanges {
 
   _onBlur() {
     this.onBlur.emit();
+  }
+  _onInlineChange(event) {
+    this.onChange.emit(event);
   }
 }

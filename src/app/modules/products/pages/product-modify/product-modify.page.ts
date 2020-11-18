@@ -1,20 +1,14 @@
 import { Component, OnInit, ViewContainerRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
 import * as moment from 'jalali-moment';
 import { ProductService } from '@core/http/product/product.service';
-import {
-  Product,
-  Process,
-  Feature,
-  Partner,
-} from '@shared/models/product.model';
-import { DataService } from '@app/core/services/data.service';
+import { DataService } from '@core/services/data.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { TabView } from 'primeng';
-import { ProcessService } from '@app/core/http/process/process.service';
-import { FeatureService } from '@app/core/http/feature/feature.service';
-import { PartnerService } from '@app/core/http/partner/partner.service';
+import { ProcessService } from '@core/http/process/process.service';
+import { FeatureService } from '@core/http/feature/feature.service';
+import { PartnerService } from '@core/http/partner/partner.service';
+import { Feature, Partner, Process } from '@shared/models';
 
 @Component({
   selector: 'ag-product-modify',
@@ -79,16 +73,14 @@ export class ProductModifyPage implements OnInit {
 
   async editProduct(id) {
     const product = await this.productService.getById(id).toPromise();
+    this.pageTitle = 'ویرایش محصول';
     this.basicInfoForm.patchValue({
-      id: product.id,
+      id: id,
       title: product.title,
       description: product.description,
       website: product.website,
       feature_description: product.feature_description,
-      time_estimate: moment(
-        moment(new Date(product.time_estimate)).format('jYYYY,jMM,jDD'),
-        'jYYYY,jMM,jDD'
-      ),
+      time_estimate: moment(product.time_estimate),
       features: product.features,
       partners: product.partners,
     });
@@ -104,13 +96,15 @@ export class ProductModifyPage implements OnInit {
 
   onSubmitBasicInfo() {
     const controls = this.basicInfoForm.controls;
+
     if (this.basicInfoForm.valid) {
       this.product.id = controls.id?.value || null;
       this.product.title = controls.title.value;
       this.product.website = controls.website.value;
       this.product.description = controls.description.value;
       this.product.feature_description = controls.feature_description.value;
-      this.product.time_estimate = controls.time_estimate.value;
+      this.product.time_estimate = (controls.time_estimate
+        .value as Date).toISOString();
       this.product.features = Array.from(
         controls.features.value.map((f) => f.id)
       );
@@ -123,13 +117,17 @@ export class ProductModifyPage implements OnInit {
 
   onSaveClick() {
     this.product.processes = Array.from(
-      this.selectedProcesses.map((f) => f.id)
+      this.selectedProcesses?.map((f) => f.id)
     );
 
     if (this.editMode) {
-      this.productService.patch(this.product).subscribe();
+      this.productService
+        .patch(this.product)
+        .subscribe(() => this.dataService.successfullMessage(this.vcRef));
     } else {
-      this.productService.post(this.product).subscribe();
+      this.productService
+        .post(this.product)
+        .subscribe(() => this.dataService.successfullMessage(this.vcRef));
     }
   }
 

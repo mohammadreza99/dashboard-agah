@@ -1,6 +1,5 @@
 import { Type } from '@angular/core';
 import { DialogFormComponent } from './components/dialog-form/dialog-form.component';
-import { ImagePickerComponent } from './components/image-picker/image-picker.component';
 import { TagComponent } from './components/tag/tag.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { PageContainerComponent } from './components/page-container/page-container.component';
@@ -10,11 +9,9 @@ import { CellButtonComponent } from './components/table/cell-button/cell-button.
 import { CellImageComponent } from './components/table/cell-image/cell-image.component';
 import { CellDatepickerComponent } from './components/table/cell-datepicker/cell-datepicker.component';
 import { CellFileComponent } from './components/table/cell-file/cell-file.component';
-import { ParticlesDirective } from './particles.directive';
 
 export const COMPONENTS: Type<any>[] = [
   DialogFormComponent,
-  ImagePickerComponent,
   TagComponent,
   ToolbarComponent,
   TableComponent,
@@ -24,5 +21,4 @@ export const COMPONENTS: Type<any>[] = [
   CellFileComponent,
   PageContainerComponent,
   ContentFormComponent,
-  ParticlesDirective,
 ];

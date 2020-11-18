@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { ApiService } from '@core/http/api.service';
-import { Vision } from '@shared/models/vision.model';
+import { Vision } from '@shared/models';
 
 @Injectable({
   providedIn: 'root',

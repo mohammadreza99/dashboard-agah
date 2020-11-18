@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DialogService, DynamicDialogRef } from 'primeng';
 
-import { DialogFormConfig } from '@app/shared/models/dialog-form-config';
+import { DialogFormConfig } from '@shared/models';
 import { DialogFormComponent } from '@shared/components/dialog-form/dialog-form.component';
 
 @Injectable({

@@ -1,13 +1,12 @@
 import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { TableComponent } from '@app/shared/components/table/table.component';
+import { TableComponent } from '@shared/components/table/table.component';
 import { Observable } from 'rxjs';
 import { ColDef } from 'ag-grid-community';
-import { DataService } from '@app/core/services/data.service';
-import { DialogFormService } from '@app/core/services/dialog-form.service';
+import { DataService } from '@core/services/data.service';
+import { DialogFormService } from '@core/services/dialog-form.service';
 import { ActivatedRoute, Route } from '@angular/router';
-import { DialogFormConfig } from '@app/shared/models/dialog-form-config';
-import { JobItemDetails, JobItem } from '@app/shared/models/job.model';
-import { JobService } from '@app/core/http/job/job.service';
+import { JobService } from '@core/http/job/job.service';
+import { JobItemDetails, JobItem, DialogFormConfig } from '@shared/models';
 
 @Component({
   selector: 'ag-job-details',
@@ -22,6 +21,7 @@ export class JobDetailsPage implements OnInit {
     {
       field: 'id',
       headerName: 'شناسه',
+      maxWidth: 90,
       editable: false,
     },
     {
@@ -44,10 +44,14 @@ export class JobDetailsPage implements OnInit {
     this.loadData();
   }
 
+  getRowData(id) {
+    this.rowData$ = this.jobService.getDetails(id);
+  }
+
   async loadData() {
     const id = this.route.snapshot.paramMap.get('id');
     this.job = await this.jobService.getById(id).toPromise();
-    this.rowData$ = this.jobService.getDetails(id);
+    this.getRowData(id);
     this.pageTitle = `افزودن جزییات شغل - ${this.job.title}`;
   }
 
@@ -61,6 +65,7 @@ export class JobDetailsPage implements OnInit {
             .subscribe((res) => {
               this.table.addTransaction(jobItemDetails);
               this.dataService.successfullMessage(this.vcRef);
+              this.getRowData(this.job.id);
             });
         }
       });
@@ -145,11 +150,20 @@ export class JobDetailsPage implements OnInit {
         });
         break;
       case 'edit-details':
-        this.dialogFormService.show(
-          'ویرایش جزئیات',
-          this.editFormConfig(rowData.details),
-          '1200px'
-        );
+        this.dialogFormService
+          .show('ویرایش جزئیات', this.editFormConfig(rowData.details), '1200px')
+          .onClose.subscribe((jobItemDetails: JobItemDetails) => {
+            if (jobItemDetails) {
+              const jobDetails = new JobItemDetails();
+              jobDetails.id = rowData.id;
+              jobDetails.details = jobItemDetails.details;
+              this.jobService
+                .patchDetails(this.job.id, jobDetails)
+                .subscribe((res) => {
+                  this.dataService.successfullMessage(this.vcRef);
+                });
+            }
+          });
         break;
     }
   }

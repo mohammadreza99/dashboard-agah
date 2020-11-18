@@ -1,8 +1,29 @@
 <prm-input-container [config]="containerConfig">
-  <p-editor
+  <editor
+    class="flex-grow-1"
+    [ngModel]="value"
+    apiKey="cx8angtq1qbtd9czizi0o4hyph3whqppkh020c0qapw0ti8l"
+    [init]="{
+      height: 320,
+      plugins: [
+        'advlist autolink lists link image charmap print',
+        'preview anchor searchreplace visualblocks code',
+        'fullscreen insertdatetime media table paste',
+        'help wordcount'
+      ],
+      toolbar:
+        'undo redo | formatselect | bold italic underline | \
+      alignleft aligncenter alignright alignjustify | \
+      bullist numlist outdent indent | help code'
+    }"
+    (ngModelChange)="_onTextChange($event)"
+  >
+  </editor>
+
+  <!-- <p-editor
     [(ngModel)]="value"
     [placeholder]="placeholder"
     [style]="{ height: '320px' }"
-    (onTextChange)="_onTextChange()"
-  ></p-editor>
+    (onTextChange)="_onTextChange($event)"
+  ></p-editor> -->
 </prm-input-container>

@@ -1,3 +1,5 @@
 export class BaseEntity {
-  id?: object;
+  id?: string | number;
+  created_at?: Date;
+  updated_at?: Date;
 }

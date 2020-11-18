@@ -1,23 +1,26 @@
-<span class="wrapper">
-  <img [src]="imageToShow || 'assets/images/file.jpg'" style="height: 34px" />
-  <label
-    *ngIf="editable"
-    style="cursor: pointer"
-    class="p-1 mr-2 border bg-light"
-    [for]="'input' + id"
-    >تغییر</label
-  >
-  <span
-    (click)="viewFile()"
-    style="cursor: pointer"
-    class="p-1 mr-2 border bg-light"
-    >مشاهده</span
-  >
+<span class="wrapper d-flex w-100 justify-content-between align-items-center">
+  <img [src]="imageToShow || 'assets/images/file.jpg'" />
+  <div>
+    <label
+      *ngIf="editable"
+      style="cursor: pointer"
+      class="p-1 mb-0 border bg-light"
+      [for]="'input' + id"
+      >تغییر</label
+    >
+
+    <label
+      (click)="viewFile()"
+      style="cursor: pointer"
+      class="p-1 mr-2 mb-0 border bg-light"
+      >مشاهده</label
+    >
+  </div>
   <input
     [attr.accept]="accept"
     (change)="onSelectImage($event)"
     [id]="'input' + id"
     type="file"
-    style="position: fixed; top: -100em"
+    style="position: fixed; top: -100em; opacity: 0"
   />
 </span>

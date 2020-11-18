@@ -1,12 +1,11 @@
 import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { TableComponent } from '@app/shared/components/table/table.component';
+import { TableComponent } from '@shared/components/table/table.component';
 import { Observable } from 'rxjs';
-import { NewsLetterUser } from '@app/shared/models/news-letter.model';
 import { ColDef } from 'ag-grid-community';
-import { NewsLetterUserService } from '@app/core/http/news-letter-user/news-letter-user.service';
-import { DataService } from '@app/core/services/data.service';
-import { DialogFormService } from '@app/core/services/dialog-form.service';
-import { DialogFormConfig } from '@app/shared/models/dialog-form-config';
+import { NewsLetterUserService } from '@core/http/news-letter-user/news-letter-user.service';
+import { DataService } from '@core/services/data.service';
+import { DialogFormService } from '@core/services/dialog-form.service';
+import { NewsLetterUser, DialogFormConfig } from '@shared/models';
 
 @Component({
   selector: 'ag-news-letter-users',
@@ -21,6 +20,7 @@ export class NewsLetterUsersPage implements OnInit {
     {
       field: 'id',
       headerName: 'شناسه',
+      maxWidth: 90,
       editable: false,
     },
     {
@@ -38,6 +38,10 @@ export class NewsLetterUsersPage implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.getRowData();
+  }
+
+  getRowData() {
     this.rowData$ = this.newsLetterUserService.get();
   }
 
@@ -49,6 +53,7 @@ export class NewsLetterUsersPage implements OnInit {
           this.newsLetterUserService.post(newsLetterUser).subscribe((res) => {
             this.table.addTransaction(newsLetterUser);
             this.dataService.successfullMessage(this.vcRef);
+            this.getRowData();
           });
         }
       });

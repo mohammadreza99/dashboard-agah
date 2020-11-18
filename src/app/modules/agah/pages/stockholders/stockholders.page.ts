@@ -1,12 +1,11 @@
 import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { TableComponent } from '@app/shared/components/table/table.component';
+import { TableComponent } from '@shared/components/table/table.component';
 import { Observable } from 'rxjs';
-import { Stockholder } from '@app/shared/models/stockholder.model';
 import { ColDef } from 'ag-grid-community';
-import { StockholderService } from '@app/core/http/stockholder/stockholder.service';
-import { DataService } from '@app/core/services/data.service';
-import { DialogFormService } from '@app/core/services/dialog-form.service';
-import { DialogFormConfig } from '@app/shared/models/dialog-form-config';
+import { StockholderService } from '@core/http/stockholder/stockholder.service';
+import { DataService } from '@core/services/data.service';
+import { DialogFormService } from '@core/services/dialog-form.service';
+import { Stockholder, DialogFormConfig } from '@shared/models';
 
 @Component({
   selector: 'ag-stockholders',
@@ -21,6 +20,7 @@ export class StockholdersPage implements OnInit {
     {
       field: 'id',
       headerName: 'شناسه',
+      maxWidth: 90,
       editable: false,
     },
     {

@@ -1,13 +1,12 @@
 import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { TableComponent } from '@app/shared/components/table/table.component';
+import { TableComponent } from '@shared/components/table/table.component';
 import { Observable } from 'rxjs';
-import { JobItem } from '@app/shared/models/job.model';
 import { ColDef } from 'ag-grid-community';
-import { DataService } from '@app/core/services/data.service';
-import { DialogFormService } from '@app/core/services/dialog-form.service';
-import { DialogFormConfig } from '@app/shared/models/dialog-form-config';
-import { JobService } from '@app/core/http/job/job.service';
+import { DataService } from '@core/services/data.service';
+import { DialogFormService } from '@core/services/dialog-form.service';
+import { JobService } from '@core/http/job/job.service';
 import { Router } from '@angular/router';
+import { JobItem, DialogFormConfig } from '@shared/models';
 
 @Component({
   selector: 'ag-jobs',
@@ -22,6 +21,7 @@ export class JobsPage implements OnInit {
     {
       field: 'id',
       headerName: 'شناسه',
+      maxWidth: 90,
       editable: false,
     },
     {
@@ -44,6 +44,10 @@ export class JobsPage implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.getRowData();
+  }
+
+  getRowData() {
     this.rowData$ = this.jobService.get();
   }
 
@@ -55,6 +59,7 @@ export class JobsPage implements OnInit {
           this.jobService.post(job).subscribe((res) => {
             this.table.addTransaction(job);
             this.dataService.successfullMessage(this.vcRef);
+            this.getRowData();
           });
         }
       });

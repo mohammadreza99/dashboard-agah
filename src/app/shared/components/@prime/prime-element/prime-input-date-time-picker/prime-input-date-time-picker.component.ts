@@ -4,12 +4,10 @@ import {
   forwardRef,
   AfterViewInit,
   Input,
-  OnChanges,
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { IDatePickerConfig } from 'ng2-jalali-date-picker';
 import { Moment } from 'jalali-moment';
-import * as moment from 'jalali-moment';
 
 import { PrimeInputBaseComponent } from '../prime-input-base/prime-input-base.component';
 import { PrimeDatePickerMode } from '../../prime-type/prime-date-picker';
@@ -29,6 +27,8 @@ import { PrimeDatePickerMode } from '../../prime-type/prime-date-picker';
 export class PrimeInputDateTimePickerComponent
   extends PrimeInputBaseComponent
   implements OnInit, AfterViewInit {
+  // constructor() { super() }
+
   @Input() datePickerMode: PrimeDatePickerMode = 'day';
   @Input() minDate: Moment | string;
   @Input() maxDate: Moment | string;
@@ -45,6 +45,8 @@ export class PrimeInputDateTimePickerComponent
     super.ngAfterViewInit();
   }
 
+  
+
   __onBlur() {
     setTimeout(() => {
       super._onBlur();
@@ -53,11 +55,7 @@ export class PrimeInputDateTimePickerComponent
 
   _onChange(args) {
     this.value = args;
-    const result = this.value._d as Date;
-    result.setDate(result.getDate() + 1);
-    if (this.hasValueAccessor) {
-      this.controlOnChange(result.toISOString());
-    }
+    if (this.hasValueAccessor) this.controlOnChange(this.value);
     this.onChange.emit(this.value);
   }
 }

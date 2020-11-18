@@ -115,11 +115,21 @@ export class DataService {
           routerLink: ['/dashboard/multimedia/news-letters'],
           icon: 'pi pi-minus',
         },
+        {
+          label: 'تگ ها',
+          routerLink: ['/dashboard/multimedia/tags'],
+          icon: 'pi pi-minus',
+        },
       ],
     },
     {
       label: 'آموزش',
       items: [
+        {
+          label: 'دسته بندی ها',
+          routerLink: ['/dashboard/education/categories'],
+          icon: 'pi pi-minus',
+        },
         {
           label: 'اساتید',
           routerLink: ['/dashboard/education/teachers'],

@@ -1,13 +1,13 @@
 import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { Product, Partner } from '@shared/models/product.model';
 import { ProductService } from '@core/http/product/product.service';
-import { DataService } from '@app/core/services/data.service';
-import { PartnerService } from '@app/core/http/partner/partner.service';
+import { DataService } from '@core/services/data.service';
+import { PartnerService } from '@core/http/partner/partner.service';
 import { Router } from '@angular/router';
 import { ColDef } from 'ag-grid-community';
-import { TableComponent } from '@app/shared/components/table/table.component';
+import { TableComponent } from '@shared/components/table/table.component';
+import { Product, Partner } from '@shared/models';
 
 @Component({
   selector: 'ag-products-list',
@@ -28,6 +28,7 @@ export class ProductsListPage implements OnInit {
     {
       field: 'id',
       headerName: 'شناسه',
+      maxWidth: 90,
       editable: false,
     },
     {

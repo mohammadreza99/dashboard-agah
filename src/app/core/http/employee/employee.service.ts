@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { ApiService } from '@core/http/api.service';
-import { Employee } from '@shared/models/employee.model';
+import { Employee } from '@shared/models';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +16,7 @@ export class EmployeeService {
     return this.apiService.get<Employee[]>(this.endPoint);
   }
 
-  getById(employeeId: object): Observable<Employee> {
+  getById(employeeId: number | string): Observable<Employee> {
     return this.apiService.get<Employee>(`${this.endPoint}/${employeeId}`);
   }
 
@@ -33,7 +33,7 @@ export class EmployeeService {
     );
   }
 
-  delete(employeeId: object) {
+  delete(employeeId: number | string) {
     return this.apiService.delete<Employee>(`${this.endPoint}/${employeeId}`);
   }
 }

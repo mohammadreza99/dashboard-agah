@@ -1,12 +1,11 @@
 import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { TableComponent } from '@app/shared/components/table/table.component';
+import { TableComponent } from '@shared/components/table/table.component';
 import { Observable } from 'rxjs';
-import { CompanyPosition } from '@app/shared/models/company-position.model';
 import { ColDef } from 'ag-grid-community';
-import { CompanyPositionService } from '@app/core/http/company-position/company-position.service';
-import { DataService } from '@app/core/services/data.service';
-import { DialogFormService } from '@app/core/services/dialog-form.service';
-import { DialogFormConfig } from '@app/shared/models/dialog-form-config';
+import { CompanyPositionService } from '@core/http/company-position/company-position.service';
+import { DataService } from '@core/services/data.service';
+import { DialogFormService } from '@core/services/dialog-form.service';
+import { CompanyPosition, DialogFormConfig } from '@shared/models';
 
 @Component({
   selector: 'ag-positions',
@@ -21,6 +20,7 @@ export class PositionsPage implements OnInit {
     {
       field: 'id',
       headerName: 'شناسه',
+      maxWidth: 90,
       editable: false,
     },
     {

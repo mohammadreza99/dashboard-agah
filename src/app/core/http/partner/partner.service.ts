@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { ApiService } from '@core/http/api.service';
-import { Partner } from '@shared/models/product.model';
+import { Partner } from '@shared/models';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -19,7 +19,7 @@ export class PartnerService {
       .pipe(map((res: any) => res.data));
   }
 
-  getById(partnerId: object): Observable<Partner> {
+  getById(partnerId: number | string): Observable<Partner> {
     return this.apiService.get<Partner>(`${this.endPoint}/${partnerId}`);
   }
 
@@ -36,7 +36,7 @@ export class PartnerService {
     );
   }
 
-  delete(partnerId: object) {
+  delete(partnerId: number | string) {
     return this.apiService.delete<Partner>(`${this.endPoint}/${partnerId}`);
   }
 }

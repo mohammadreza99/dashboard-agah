@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { ApiService } from '@core/http/api.service';
-import { Stockholder } from '@shared/models/stockholder.model';
+import { Stockholder } from '@shared/models';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +16,7 @@ export class StockholderService {
     return this.apiService.get<Stockholder[]>(this.endPoint);
   }
 
-  getById(stockholderId: object): Observable<Stockholder> {
+  getById(stockholderId: number | string): Observable<Stockholder> {
     return this.apiService.get<Stockholder>(
       `${this.endPoint}/${stockholderId}`
     );
@@ -35,7 +35,7 @@ export class StockholderService {
     );
   }
 
-  delete(stockholderId: object) {
+  delete(stockholderId: number | string) {
     return this.apiService.delete<Stockholder>(
       `${this.endPoint}/${stockholderId}`
     );

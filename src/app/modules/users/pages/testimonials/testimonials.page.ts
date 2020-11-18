@@ -1,12 +1,11 @@
 import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { TableComponent } from '@app/shared/components/table/table.component';
+import { TableComponent } from '@shared/components/table/table.component';
 import { Observable } from 'rxjs';
-import { Testimonial } from '@app/shared/models/testimonial.model';
 import { ColDef } from 'ag-grid-community';
-import { TestimonialService } from '@app/core/http/testimonial/testimonial.service';
-import { DataService } from '@app/core/services/data.service';
-import { DialogFormService } from '@app/core/services/dialog-form.service';
-import { DialogFormConfig } from '@app/shared/models/dialog-form-config';
+import { TestimonialService } from '@core/http/testimonial/testimonial.service';
+import { DataService } from '@core/services/data.service';
+import { DialogFormService } from '@core/services/dialog-form.service';
+import { Testimonial, DialogFormConfig } from '@shared/models';
 
 @Component({
   selector: 'ag-testimonials',
@@ -21,6 +20,7 @@ export class TestimonialsPage implements OnInit {
     {
       field: 'id',
       headerName: 'شناسه',
+      maxWidth: 90,
       editable: false,
     },
     {
@@ -50,6 +50,10 @@ export class TestimonialsPage implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.getRowData();
+  }
+
+  getRowData() {
     this.rowData$ = this.testimonialService.get();
   }
 
@@ -61,6 +65,7 @@ export class TestimonialsPage implements OnInit {
           this.testimonialService.post(testimonial).subscribe((res) => {
             this.table.addTransaction(testimonial);
             this.dataService.successfullMessage(this.vcRef);
+            this.getRowData();
           });
         }
       });

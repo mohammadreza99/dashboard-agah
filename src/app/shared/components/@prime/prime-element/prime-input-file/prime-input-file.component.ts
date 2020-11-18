@@ -28,15 +28,15 @@ import { FileUpload } from 'primeng';
     },
   ],
 })
-export class PrimeInputFileComponent extends PrimeInputBaseComponent
+export class PrimeInputFileComponent
+  extends PrimeInputBaseComponent
   implements OnInit, AfterViewInit {
-
   @ViewChild('upload', { static: true }) upload: FileUpload;
 
   @Input() url: string;
   @Input() multiple: boolean = false;
   @Input() auto: boolean = false;
-  @Input() accept: string = '';
+  @Input() accept: string = 'image/*';
   @Input() method: string = 'POST';
   @Input() captionText: string = '';
   @Input() maxFileSize: number = null;

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CellButtonComponent } from './cell-button/cell-button.component';
-import { ColDef, GridOptions } from 'ag-grid-community';
+import { ColDef } from 'ag-grid-community';
 import { CellImageComponent } from './cell-image/cell-image.component';
 import { CellDatepickerComponent } from './cell-datepicker/cell-datepicker.component';
 import { CellFileComponent } from './cell-file/cell-file.component';
@@ -27,6 +27,8 @@ export class TableComponent implements OnInit {
   @Input() enableFilter: boolean = true;
   @Input() enableSorting: boolean = true;
   @Input() pagination: boolean = false;
+  @Input() draggable: boolean = true;
+  @Input() paginationPageSize: number;
   @Input() actionsConfig: any[];
   @Input() imagesConfig: any[];
   @Input() objectConfig: any[];
@@ -46,6 +48,9 @@ export class TableComponent implements OnInit {
   @Output() objectChange = new EventEmitter();
   @Output() multiObjectChange = new EventEmitter();
   @Output() multiObjectRemove = new EventEmitter();
+  @Output() rowDragEnter = new EventEmitter();
+  @Output() rowDragMove = new EventEmitter();
+  @Output() rowDragEnd = new EventEmitter();
 
   ngOnInit(): void {
     if (this.objectConfig) {
@@ -121,11 +126,16 @@ export class TableComponent implements OnInit {
         this.columnDefs.push({
           headerName: config.headerName,
           editable: false,
+          sortable: false,
+          minWidth: 250,
+          maxWidth: 250,
+          filter: false,
           cellRenderer: 'imageRenderer',
           cellRendererParams: {
             onSelect: this.onSelectImage.bind(this),
             field: config.field,
             editable: config.editable,
+            accept: config.accept,
           },
         });
       });
@@ -136,6 +146,10 @@ export class TableComponent implements OnInit {
         this.columnDefs.push({
           headerName: action.headerName,
           editable: false,
+          filter: false,
+          sortable: false,
+          minWidth: 80,
+          maxWidth: 80,
           cellRenderer: 'buttonRenderer',
           cellRendererParams: {
             onClick: this.onActionClick.bind(this),

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 
-import { DataService } from '@app/core/services/data.service';
+import { DataService } from '@core/services/data.service';
 
 @Component({
   selector: 'ag-cell-image',
@@ -43,7 +43,7 @@ export class CellImageComponent implements ICellRendererAngularComp, OnInit {
   }
 
   getImage(imageUrl: string) {
-    const headers = { respسonseType: 'blob' };
+    const headers = { responseType: 'blob' };
     return this.dataService.getImage(imageUrl, headers);
   }
 

@@ -4,13 +4,6 @@
       <toolbar class="page-header">
         <left>
           <prm-button
-            label="ذخیره"
-            icon="fa fa-plus"
-            color="success"
-            class="mr-2"
-            (click)="onSaveClick()"
-          ></prm-button>
-          <prm-button
             label="انصراف"
             icon="fa fa-times"
             color="danger"
@@ -30,14 +23,14 @@
             (ngSubmit)="onSubmitBasicInfo()"
           >
             <input formControlName="id" type="hidden" />
-            <prm-input-text
+            <prm-input-editor
               class="col-8 mb-4"
               formControlName="title"
               [errors]="[{type:'required',message:'این فیلد الزامیست.'}]"
               labelWidth="80"
               label="عنوان"
             >
-            </prm-input-text>
+            </prm-input-editor>
             <prm-input-text
               class="col-8 mb-4"
               formControlName="website"
@@ -95,13 +88,13 @@
               [errors]="[{type:'required',message:'این فیلد الزامیست.'}]"
             ></ag-single-image-picker>
 
-            <prm-input-textarea
+            <prm-input-editor
               class="col-8 mb-4"
               formControlName="description"
               [errors]="[{type:'required',message:'این فیلد الزامیست.'}]"
               labelWidth="80"
               label="توضیحات"
-            ></prm-input-textarea>
+            ></prm-input-editor>
 
             <prm-button
               class="col-8 mb-4"

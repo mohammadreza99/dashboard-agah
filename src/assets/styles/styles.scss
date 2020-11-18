@@ -1,5 +1,5 @@
 @import "./fonts/fonts.scss";
-@import "bootstrap.scss";
+@import "./vendor/bootstrap.scss";
 @import "theme.scss";
 
 html,
@@ -27,8 +27,12 @@ body {
       border: 1px solid #dee2e6 !important;
     }
   }
-  
+
   *:focus {
     outline: none;
+  }
+
+  .ui-panelmenu .ui-panelmenu-header > a:focus {
+    box-shadow: none;
   }
 }

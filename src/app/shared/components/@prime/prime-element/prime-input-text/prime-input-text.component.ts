@@ -25,6 +25,7 @@ export class PrimeInputTextComponent
   extends PrimeInputBaseComponent
   implements OnInit, AfterViewInit {
   @Input() type: string;
+  @Input() numberOnly: boolean;
 
   ngOnInit() {
     super.ngOnInit();

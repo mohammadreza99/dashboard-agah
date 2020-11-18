@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 import { ApiService } from '@core/http/api.service';
-import { CompanyPosition } from '@shared/models/company-position.model';
+import { CompanyPosition } from '@shared/models';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +16,7 @@ export class CompanyPositionService {
     return this.apiService.get<CompanyPosition[]>(this.endPoint);
   }
 
-  getById(positionId: object): Observable<CompanyPosition> {
+  getById(positionId: number | string): Observable<CompanyPosition> {
     return this.apiService.get<CompanyPosition>(
       `${this.endPoint}/${positionId}`
     );
@@ -36,7 +35,7 @@ export class CompanyPositionService {
     );
   }
 
-  delete(companyPositionId: object) {
+  delete(companyPositionId: number | string) {
     return this.apiService.delete<CompanyPosition>(
       `${this.endPoint}/${companyPositionId}`
     );

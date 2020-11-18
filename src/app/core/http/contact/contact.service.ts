@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { Contact } from '@shared/models/contact.model';
+import { ContactUsInfo } from '@shared/models';
 import { ApiService } from '@core/http/api.service';
 
 @Injectable({
@@ -12,12 +12,16 @@ export class ContactService {
 
   private readonly endPoint = 'contacts';
 
-  get(): Observable<Contact> {
-    return this.apiService.get<Contact>(this.endPoint);
+  get() {
+    return this.apiService.get<ContactUsInfo>(this.endPoint);
   }
 
-  post(contact: Contact): Observable<Contact> {
+  post(contact: ContactUsInfo): Observable<ContactUsInfo> {
     const formData = this.apiService.getFormData(contact);
-    return this.apiService.post<Contact>(`${this.endPoint}`, formData);
+    return this.apiService.post<ContactUsInfo>(`${this.endPoint}`, formData);
+  }
+
+  patch(contact: ContactUsInfo): Observable<ContactUsInfo> {
+    return this.apiService.post<ContactUsInfo>(`${this.endPoint}`, contact);
   }
 }

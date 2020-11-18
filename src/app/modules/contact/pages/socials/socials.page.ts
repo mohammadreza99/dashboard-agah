@@ -1,12 +1,11 @@
 import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { TableComponent } from '@app/shared/components/table/table.component';
+import { TableComponent } from '@shared/components/table/table.component';
 import { Observable } from 'rxjs';
-import { SocialNetwork } from '@app/shared/models/social-network.model';
 import { ColDef } from 'ag-grid-community';
-import { SocialNetworkService } from '@app/core/http/social-network/social-network.service';
-import { DataService } from '@app/core/services/data.service';
-import { DialogFormService } from '@app/core/services/dialog-form.service';
-import { DialogFormConfig } from '@app/shared/models/dialog-form-config';
+import { SocialNetworkService } from '@core/http/social-network/social-network.service';
+import { DataService } from '@core/services/data.service';
+import { DialogFormService } from '@core/services/dialog-form.service';
+import { SocialNetwork, DialogFormConfig } from '@shared/models';
 
 @Component({
   selector: 'ag-socials',
@@ -21,6 +20,7 @@ export class SocialsPage implements OnInit {
     {
       field: 'id',
       headerName: 'شناسه',
+      maxWidth: 90,
       editable: false,
     },
     {

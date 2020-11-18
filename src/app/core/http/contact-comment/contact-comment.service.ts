@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ContactComment } from '@app/shared/models/contact-comment';
+import { ContactComment } from '@shared/models';
 import { ApiService } from '../api.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -18,7 +18,7 @@ export class ContactCommentService {
       .pipe(map((res: any) => res.data));
   }
 
-  getById(contactCommentId: object): Observable<ContactComment> {
+  getById(contactCommentId: number | string): Observable<ContactComment> {
     return this.apiService.get<ContactComment>(
       `${this.endPoint}/${contactCommentId}`
     );
@@ -29,7 +29,7 @@ export class ContactCommentService {
     return this.apiService.post<ContactComment>(`${this.endPoint}`, formData);
   }
 
-  delete(contactCommentId: object) {
+  delete(contactCommentId: number | string) {
     return this.apiService.delete<ContactComment>(
       `${this.endPoint}/${contactCommentId}`
     );

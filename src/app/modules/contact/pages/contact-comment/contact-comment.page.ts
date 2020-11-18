@@ -1,12 +1,11 @@
 import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { TableComponent } from '@app/shared/components/table/table.component';
+import { TableComponent } from '@shared/components/table/table.component';
 import { Observable } from 'rxjs';
-import { ContactComment } from '@app/shared/models/contact-comment';
 import { ColDef } from 'ag-grid-community';
-import { ContactCommentService } from '@app/core/http/contact-comment/contact-comment.service';
-import { DataService } from '@app/core/services/data.service';
-import { DialogFormService } from '@app/core/services/dialog-form.service';
-import { DialogFormConfig } from '@app/shared/models/dialog-form-config';
+import { ContactCommentService } from '@core/http/contact-comment/contact-comment.service';
+import { DataService } from '@core/services/data.service';
+import { DialogFormService } from '@core/services/dialog-form.service';
+import { ContactComment, DialogFormConfig } from '@shared/models';
 
 @Component({
   selector: 'ag-contact-comment',
@@ -21,15 +20,16 @@ export class ContactCommentPage implements OnInit {
     {
       field: 'id',
       headerName: 'شناسه',
+      maxWidth: 90,
       editable: false,
     },
     {
-      field: 'name',
+      field: 'user.name',
       headerName: 'نام',
       editable: false,
     },
     {
-      field: 'email',
+      field: 'user.email',
       headerName: 'ایمیل',
       editable: false,
     },

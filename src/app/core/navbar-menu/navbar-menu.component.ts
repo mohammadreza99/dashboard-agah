@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { Router } from '@angular/router';
-import { PrimeConfirmService } from '@app/shared/components/@prime/prime-service/prime-confirm.service';
+import { PrimeConfirmService } from '@shared/components/@prime/prime-service/prime-confirm.service';
 
 @Component({
   selector: 'navbar-menu',
@@ -44,6 +44,7 @@ export class NavbarMenuComponent implements OnInit {
     { label: 'انگلیسی', value: 'en' },
     { label: 'فارسی', value: 'fa' },
   ];
+  userName: string;
 
   constructor(
     private router: Router,
@@ -51,7 +52,9 @@ export class NavbarMenuComponent implements OnInit {
     private confirmService: PrimeConfirmService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.userName = localStorage.getItem('username');
+  }
 
   changeTheme(event) {
     document.querySelector('body').classList.toggle('dark');
@@ -59,5 +62,6 @@ export class NavbarMenuComponent implements OnInit {
 
   languegeChange(event) {
     localStorage.setItem('lang', event.value);
+    document.location.reload();
   }
 }

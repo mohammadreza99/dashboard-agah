@@ -1,13 +1,12 @@
 import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { TableComponent } from '@app/shared/components/table/table.component';
+import { TableComponent } from '@shared/components/table/table.component';
 import { Observable } from 'rxjs';
-import { CourseContent, Course } from '@app/shared/models/education';
 import { ColDef } from 'ag-grid-community';
-import { CourseService } from '@app/core/http/course/course.service';
-import { DataService } from '@app/core/services/data.service';
-import { DialogFormService } from '@app/core/services/dialog-form.service';
+import { CourseService } from '@core/http/course/course.service';
+import { DataService } from '@core/services/data.service';
+import { DialogFormService } from '@core/services/dialog-form.service';
 import { ActivatedRoute } from '@angular/router';
-import { DialogFormConfig } from '@app/shared/models/dialog-form-config';
+import { CourseContent, Course, DialogFormConfig } from '@shared/models';
 
 @Component({
   selector: 'ag-course-contents',
@@ -22,6 +21,7 @@ export class CourseContentsPage implements OnInit {
     {
       field: 'id',
       headerName: 'شناسه',
+      maxWidth: 90,
       editable: false,
     },
     {
@@ -52,10 +52,14 @@ export class CourseContentsPage implements OnInit {
     this.loadData();
   }
 
+  getRowData(id) {
+    this.rowData$ = this.courseService.getContent(id);
+  }
+
   async loadData() {
     const id = this.route.snapshot.paramMap.get('id');
     this.course = await this.courseService.getById(id).toPromise();
-    this.rowData$ = this.courseService.getContent(id);
+    this.getRowData(id);
     this.pageTitle = `افزودن محتوای دروس - ${this.course.title}`;
   }
 
@@ -69,6 +73,7 @@ export class CourseContentsPage implements OnInit {
             .subscribe((res) => {
               this.table.addTransaction(courseContent);
               this.dataService.successfullMessage(this.vcRef);
+              this.getRowData(this.course.id);
             });
         }
       });
@@ -95,13 +100,15 @@ export class CourseContentsPage implements OnInit {
         label: 'شماره هفته',
         labelWidth: 110,
         formControlName: 'week',
+        numberOnly: true,
         errors: [{ type: 'required', message: 'این فیلد الزامیست' }],
       },
       {
         type: 'image-picker',
-        label: 'عکس',
+        label: 'فیلم',
         labelWidth: 110,
         formControlName: 'video',
+        accept: 'video/*',
         errors: [{ type: 'required', message: 'این فیلد الزامیست' }],
       },
     ];

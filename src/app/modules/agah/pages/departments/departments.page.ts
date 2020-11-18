@@ -1,12 +1,11 @@
 import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { TableComponent } from '@app/shared/components/table/table.component';
+import { TableComponent } from '@shared/components/table/table.component';
 import { Observable } from 'rxjs';
-import { Department } from '@app/shared/models/department.model';
 import { ColDef } from 'ag-grid-community';
-import { DepartmentService } from '@app/core/http/department/department.service';
-import { DataService } from '@app/core/services/data.service';
-import { DialogFormService } from '@app/core/services/dialog-form.service';
-import { DialogFormConfig } from '@app/shared/models/dialog-form-config';
+import { DepartmentService } from '@core/http/department/department.service';
+import { DataService } from '@core/services/data.service';
+import { DialogFormService } from '@core/services/dialog-form.service';
+import { Department, DialogFormConfig } from '@shared/models';
 
 @Component({
   selector: 'ag-departments',
@@ -21,6 +20,7 @@ export class DepartmentsPage implements OnInit {
     {
       field: 'id',
       headerName: 'شناسه',
+      maxWidth: 90,
       editable: false,
     },
     {

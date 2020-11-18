@@ -8,6 +8,16 @@
       />
       <prm-input-text
         *ngSwitchCase="'text'"
+        [numberOnly]="item.numberOnly"
+        [label]="item.label ? item.label : ''"
+        [labelWidth]="item.labelWidth"
+        [placeholder]="item.placeholder ? item.placeholder : ''"
+        [readonly]="item.readonly"
+        [formControlName]="item.formControlName"
+        [errors]="item.errors"
+      ></prm-input-text>
+      <prm-input-text
+        *ngSwitchCase="'link'"
         [label]="item.label ? item.label : ''"
         [labelWidth]="item.labelWidth"
         [placeholder]="item.placeholder ? item.placeholder : ''"
@@ -34,6 +44,16 @@
         [errors]="item.errors"
         [items]="item.dropdownItems"
       ></prm-input-dropdown>
+      <prm-input-multi-select
+        *ngSwitchCase="'multi-select'"
+        [label]="item.label ? item.label : ''"
+        [labelWidth]="item.labelWidth"
+        [placeholder]="item.placeholder ? item.placeholder : ''"
+        [readonly]="item.readonly"
+        [formControlName]="item.formControlName"
+        [errors]="item.errors"
+        [items]="item.multiSelectItems"
+      ></prm-input-multi-select>
       <prm-input-color-picker
         *ngSwitchCase="'color-picker'"
         [label]="item.label ? item.label : ''"
@@ -57,7 +77,16 @@
         [formControlName]="item.formControlName"
         [errors]="item.errors"
         [urlToShow]="item.urlToShow"
+        [accept]="item.accept || 'image/*'"
       ></ag-single-image-picker>
+      <ag-multi-image-picker
+        *ngSwitchCase="'multi-image-picker'"
+        [label]="item.label ? item.label : ''"
+        [labelWidth]="item.labelWidth"
+        [formControlName]="item.formControlName"
+        [errors]="item.errors"
+        [urlToShow]="item.urlToShow"
+      ></ag-multi-image-picker>
       <prm-input-editor
         *ngSwitchCase="'editor'"
         [label]="item.label ? item.label : ''"
@@ -65,8 +94,15 @@
         [formControlName]="item.formControlName"
         [errors]="item.errors"
       ></prm-input-editor>
+      <prm-input-checkbox-single
+        *ngSwitchCase="'checkbox'"
+        [label]="item.label ? item.label : ''"
+        [labelWidth]="item.labelWidth"
+        [formControl]="form.get(item.formControlName)"
+      ></prm-input-checkbox-single>
       <prm-input-tags
         *ngSwitchCase="'tags'"
+        hint="(type + enter)"
         [field]="item.field"
         [label]="item.label ? item.label : ''"
         [labelWidth]="item.labelWidth"
@@ -75,13 +111,13 @@
     </div>
   </ng-container>
   <div
-    class="d-flex justify-content-start align-content-center border-top pt-2 mt-5 bg-light"
+    class="d-flex justify-content-start align-content-center border-top pt-2 mt-5"
   >
     <prm-button
       label="ذخیره"
       icon="fa fa-plus"
       color="success"
-      class="mr-2"  
+      class="mr-2"
       type="submit"
     ></prm-button>
     <prm-button

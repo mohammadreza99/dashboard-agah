@@ -2,11 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { ApiService } from '@core/http/api.service';
-import {
-  JobRequest,
-  JobItem,
-  JobItemDetails,
-} from '@app/shared/models/job.model';
+import { JobRequest, JobItem, JobItemDetails } from '@shared/models';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -24,7 +20,7 @@ export class JobService {
       .pipe(map((res: any) => res.data));
   }
 
-  getById(jobId: string) {
+  getById(jobId: string | number) {
     return this.apiService.get<JobItem>(`${this.jobsEndPoint}/${jobId}`);
   }
 
@@ -41,17 +37,17 @@ export class JobService {
     );
   }
 
-  delete(jobId: object) {
+  delete(jobId: number | string) {
     return this.apiService.delete<JobItem>(`${this.jobsEndPoint}/${jobId}`);
   }
 
-  getDetails(jobId: string) {
+  getDetails(jobId: string | number) {
     return this.apiService
       .get<JobItemDetails[]>(`${this.jobsEndPoint}/${jobId}/details`)
       .pipe(map((res: any) => res.data));
   }
 
-  postDetails(jobId: object, jobDetails: JobItemDetails) {
+  postDetails(jobId: number | string, jobDetails: JobItemDetails) {
     const formData = this.apiService.getFormData(jobDetails);
     return this.apiService.post<JobItemDetails>(
       `${this.jobsEndPoint}/${jobId}/details`,
@@ -59,7 +55,7 @@ export class JobService {
     );
   }
 
-  patchDetails(jobId: object, jobDetails: JobItemDetails) {
+  patchDetails(jobId: number | string, jobDetails: JobItemDetails) {
     const formData = this.apiService.getFormData(jobDetails, true);
     return this.apiService.post<JobItemDetails>(
       `${this.jobsEndPoint}/${jobId}/details/${jobDetails.id}`,
@@ -67,7 +63,7 @@ export class JobService {
     );
   }
 
-  deleteDetails(jobId: object, jobDetailsId: object) {
+  deleteDetails(jobId: number | string, jobDetailsId: number | string) {
     return this.apiService.delete<JobItem>(
       `${this.jobsEndPoint}/${jobId}/details/${jobDetailsId}`
     );
@@ -79,13 +75,13 @@ export class JobService {
       .pipe(map((res: any) => res.data));
   }
 
-  deleteRequest(jobRequestId: object) {
+  deleteRequest(jobRequestId: number | string) {
     return this.apiService.delete<JobRequest>(
       `${this.jobRequestEndPoint}/${jobRequestId}`
     );
   }
 
-  confirmRequest(jobRequestId: object) {
+  confirmRequest(jobRequestId: number | string) {
     return this.apiService.patch<JobRequest>(
       `${this.jobRequestEndPoint}/${jobRequestId}/confirm`,
       null

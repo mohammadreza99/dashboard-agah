@@ -50,7 +50,7 @@ export class PrimeInputBaseComponent
   @Input() disabled: boolean;
   @Input() readonly: boolean;
   @Input() name: string;
-  @Input() value: any;
+  @Input() value: any = null;
   @Input() maxlength: number;
   @Input() labelPosition: PrimeLabelPosition = 'side';
   @Input() hint: string = null;

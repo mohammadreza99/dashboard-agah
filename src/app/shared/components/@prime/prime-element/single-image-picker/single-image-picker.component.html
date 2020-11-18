@@ -1,13 +1,11 @@
 <prm-input-container [config]="containerConfig">
   <div class="image-preview rounded border border-secondary">
-    <div class="p-2">
-      <img
-        class="mb-3 rounded"
-        [src]="imageToShow"
-      />
+    <div class="p-2" *ngIf="accept == 'image/*'">
+      <img class="mb-3 rounded" [src]="imageToShow" />
     </div>
     <div class="d-flex align-content-center">
       <prm-input-file
+        [accept]="accept"
         [disabled]="disabled"
         [errors]="errors"
         (onSelect)="onSelectImage($event)"

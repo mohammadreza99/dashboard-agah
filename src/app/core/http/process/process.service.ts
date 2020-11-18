@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { ApiService } from '@core/http/api.service';
-import { Process } from '@shared/models/product.model';
+import { Process } from '@shared/models';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +19,7 @@ export class ProcessService {
       .pipe(map((res: any) => res.data));
   }
 
-  getById(processId: object): Observable<Process> {
+  getById(processId: number | string): Observable<Process> {
     return this.apiService.get<Process>(`${this.endPoint}/${processId}`);
   }
 
@@ -36,7 +36,7 @@ export class ProcessService {
     );
   }
 
-  delete(processId: object) {
+  delete(processId: number | string) {
     return this.apiService.delete<Process>(`${this.endPoint}/${processId}`);
   }
 }

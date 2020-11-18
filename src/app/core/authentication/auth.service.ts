@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { ApiService } from '@core/http/api.service';
-import { UserLogin } from '@shared/models/user.model';
+import { UserLogin } from '@shared/models';
 
 @Injectable({
   providedIn: 'root',
@@ -22,6 +22,14 @@ export class AuthService {
 
   getToken(): string {
     return localStorage.getItem('token');
+  }
+
+  saveUserName(username: string) {
+    localStorage.setItem('username', username);
+  }
+
+  getUserName(): string {
+    return localStorage.getItem('username');
   }
 
   isAuthenticated(): boolean {

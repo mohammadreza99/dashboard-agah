@@ -17,3 +17,7 @@ export class UserLogin {
   email: string;
   password: string | number;
 }
+
+export class NewsLetterUser extends BaseEntity {
+  email: string;
+}

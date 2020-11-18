@@ -9,9 +9,8 @@
     [columnDefs]="columnDefs"
     [rowData]="rowData$ | async"
     [imagesConfig]="[{field:'image',headerName:'عکس',editable:true}]"
-    [actionsConfig]="[{action:'edit-content',icon:'fa fa-pen',headerName:'ویرایش محتوا',color:'primary'},
+    [actionsConfig]="[{action:'edit',icon:'fa fa-pen',headerName:'ویرایش',color:'primary'},
     {action:'delete',icon:'fa fa-times',headerName:'حذف',color:'danger'}]"
-    (cellValueChanged)="onCellValueChanged($event)"
     (imageSelect)="onImageSelect($event)"
     (actionClick)="onActionClick($event)"
   >

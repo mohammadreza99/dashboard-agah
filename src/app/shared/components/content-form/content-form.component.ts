@@ -1,7 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Post } from '@app/shared/models/post.model';
-import { News } from '@app/shared/models/news.model';
+import { News, Post } from '@shared/models';
 
 @Component({
   selector: 'ag-content-form',

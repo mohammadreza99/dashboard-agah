@@ -7,7 +7,9 @@
   ></prm-button>
   <ag-table
     [columnDefs]="columnDefs"
-    [rowData]="rowData$ | async"
+    [rowData]="rowData"
+    [paginationPageSize]="10"
+    [pagination]="true"
     [imagesConfig]="[{field:'image',headerName:'عکس',editable:true}]"
     [actionsConfig]="[{action:'delete',icon:'fa fa-times',headerName:'حذف',color:'danger'}]"
     (cellValueChanged)="onCellValueChanged($event)"

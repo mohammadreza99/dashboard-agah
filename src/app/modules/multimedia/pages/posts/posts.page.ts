@@ -1,12 +1,14 @@
 import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Observable } from 'rxjs';
-import { PostService } from '@app/core/http/post/post.service';
-import { DataService } from '@app/core/services/data.service';
-import { Post } from '@app/shared/models/post.model';
-import { TableComponent } from '@app/shared/components/table/table.component';
+import { SelectItem } from 'primeng';
 import { ColDef } from 'ag-grid-community';
-import { DialogFormService } from '@app/core/services/dialog-form.service';
-import { DialogFormConfig } from '@app/shared/models/dialog-form-config';
+
+import { PostService } from '@core/http/post/post.service';
+import { DataService } from '@core/services/data.service';
+import { TableComponent } from '@shared/components/table/table.component';
+import { DialogFormService } from '@core/services/dialog-form.service';
+import { TagService } from '@core/http/tag/tag.service';
+import { Post, DialogFormConfig, Tag } from '@shared/models';
 
 @Component({
   selector: 'ag-posts',
@@ -21,28 +23,41 @@ export class PostsPage implements OnInit {
     {
       field: 'id',
       headerName: 'شناسه',
+      maxWidth: 90,
       editable: false,
     },
     {
       field: 'title',
       headerName: 'عنوان',
+      editable: false,
     },
     {
       field: 'summary',
       headerName: 'خلاصه',
-      cellEditor: 'agLargeTextCellEditor',
+      editable: false,
     },
   ];
+  availableTags: Tag[];
 
   constructor(
     private postService: PostService,
     private dataService: DataService,
     private dialogFormService: DialogFormService,
+    private tagService: TagService,
     private vcRef: ViewContainerRef
   ) {}
 
   ngOnInit(): void {
+    this.getRowData();
+    this.loadTags();
+  }
+
+  getRowData() {
     this.rowData$ = this.postService.get();
+  }
+
+  async loadTags() {
+    this.availableTags = await this.tagService.get().toPromise();
   }
 
   addPost() {
@@ -53,26 +68,55 @@ export class PostsPage implements OnInit {
           this.postService.post(post).subscribe((res) => {
             this.table.addTransaction(post);
             this.dataService.successfullMessage(this.vcRef);
+            this.getRowData();
           });
         }
       });
   }
 
-  formConfig(): DialogFormConfig[] {
-    return [
+  formConfig(value?: Post): DialogFormConfig[] {
+    const postConfig: DialogFormConfig[] = [
       {
-        type: 'text',
+        type: 'hidden',
+        value: value?.id,
+        formControlName: 'id',
+      },
+      {
+        type: 'editor',
         label: 'عنوان',
         labelWidth: 110,
+        value: value?.title,
         formControlName: 'title',
         errors: [{ type: 'required', message: 'این فیلد الزامیست' }],
       },
       {
-        type: 'textarea',
+        type: 'link',
+        label: 'لینک کوتاه',
+        value: value?.short_link,
+        labelWidth: 110,
+        formControlName: 'short_link',
+        errors: [
+          { type: 'required', message: 'این فیلد الزامیست' },
+          { type: 'pattern', message: 'لینک وارد شده صحیح نیست' },
+        ],
+      },
+      {
+        type: 'text',
         label: 'خلاصه',
+        value: value?.summary,
         labelWidth: 110,
         formControlName: 'summary',
         errors: [{ type: 'required', message: 'این فیلد الزامیست' }],
+      },
+      {
+        type: 'multi-select',
+        label: 'تگ ها',
+        labelWidth: 110,
+        formControlName: 'tags',
+        value: value?.tags,
+        multiSelectItems: this.availableTags.map((item) => {
+          return { value: item.id, label: item.tag };
+        }),
       },
       {
         type: 'image-picker',
@@ -85,37 +129,22 @@ export class PostsPage implements OnInit {
         type: 'editor',
         label: 'متن',
         labelWidth: 110,
+        value: value?.content,
         formControlName: 'content',
         errors: [{ type: 'required', message: 'این فیلد الزامیست' }],
       },
-    ];
-  }
-
-  editFormConfig(value: string): DialogFormConfig[] {
-    return [
       {
-        type: 'editor',
-        label: 'متن',
+        type: 'checkbox',
+        label: 'جزو مقالات برگزیده باشد',
+        value: value?.featured || false,
         labelWidth: 110,
-        formControlName: 'content',
-        errors: [{ type: 'required', message: 'این فیلد الزامیست' }],
-        value: value,
+        formControlName: 'featured',
       },
     ];
-  }
-
-  onCellValueChanged(event) {
-    const post = new Post();
-    post.id = event.data.id;
-    if (event.colDef.field !== 'image') {
-      const field = event.colDef.field;
-      const value = event.value;
-      post[field] = value;
+    if (value) {
+      postConfig.splice(5, 1);
     }
-    this.postService.patch(post).subscribe(() => {
-      this.table.updateTransaction(post);
-      this.dataService.successfullMessage(this.vcRef);
-    });
+    return postConfig;
   }
 
   onImageSelect(e) {
@@ -139,19 +168,17 @@ export class PostsPage implements OnInit {
           });
         });
         break;
-      case 'edit-content':
+      case 'edit':
         this.postService.getById(rowData.id).subscribe((post) => {
+          const p: any = { ...post, tags: post.tags.map((item) => item.id) };
           this.dialogFormService
-            .show('ویرایش', this.editFormConfig(post.content), '1000px')
-            .onClose.subscribe((result) => {
+            .show('ویرایش', this.formConfig(p), '1000px')
+            .onClose.subscribe((result: any) => {
               if (result) {
-                const n = {
-                  id: rowData.id,
-                  content: result.content,
-                } as Post;
-                this.postService.patch(n).subscribe((res) => {
+                this.postService.patch(result).subscribe((res) => {
                   this.table.updateTransaction(post);
                   this.dataService.successfullMessage(this.vcRef);
+                  this.getRowData();
                 });
               }
             });

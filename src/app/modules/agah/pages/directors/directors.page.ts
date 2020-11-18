@@ -1,14 +1,12 @@
 import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { TableComponent } from '@app/shared/components/table/table.component';
-import { CompanyPosition } from '@app/shared/models/company-position.model';
+import { TableComponent } from '@shared/components/table/table.component';
 import { Observable } from 'rxjs';
-import { Director } from '@app/shared/models/director.model';
 import { ColDef } from 'ag-grid-community';
-import { DirectorService } from '@app/core/http/director/director.service';
-import { DataService } from '@app/core/services/data.service';
-import { CompanyPositionService } from '@app/core/http/company-position/company-position.service';
-import { DialogFormService } from '@app/core/services/dialog-form.service';
-import { DialogFormConfig } from '@app/shared/models/dialog-form-config';
+import { DirectorService } from '@core/http/director/director.service';
+import { DataService } from '@core/services/data.service';
+import { CompanyPositionService } from '@core/http/company-position/company-position.service';
+import { DialogFormService } from '@core/services/dialog-form.service';
+import { Director, CompanyPosition, DialogFormConfig } from '@shared/models';
 
 @Component({
   selector: 'ag-directors',
@@ -111,11 +109,14 @@ export class DirectorsPage implements OnInit {
         errors: [{ type: 'required', message: 'این فیلد الزامیست' }],
       },
       {
-        type: 'text',
+        type: 'link',
         label: 'لینکدین',
         labelWidth: 110,
         formControlName: 'linkedin',
-        errors: [{ type: 'required', message: 'این فیلد الزامیست' }],
+        errors: [
+          { type: 'required', message: 'این فیلد الزامیست' },
+          { type: 'pattern', message: 'لینک وارد شده صحیح نیست' },
+        ],
       },
       {
         type: 'dropdown',
